@@ -3,17 +3,28 @@ import {
   ConflictException,
   Injectable,
   UnauthorizedException,
+  NotFoundException,
 } from '@nestjs/common';
 import { randomBytes, scryptSync, timingSafeEqual } from 'crypto';
 import { SignInRequestDto, SignInResponseDto } from '@/dtos/auth/signIn.dto';
 import { SignUpRequestDto, SignUpResponseDto } from '@/dtos/auth/signUp.dto';
 import { AuthRepository } from '@/repositories/auth.repository';
+import { ConfigService } from '@nestjs/config';
+import * as bcrypt from 'bcrypt';
+import { JwtPayload } from '@/dtos/jwt.dto';
+import { JwtService } from '@nestjs/jwt';
+import { TBUserDefault } from "@/entities/user/user_default.entity";
 
 const DEFAULT_USER_ROLE = 1;
+const ROUNDS = 10;
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly authRepository: AuthRepository) {}
+  constructor(
+    private readonly authRepository: AuthRepository,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+  ) {}
 
   public async signUp(payload: SignUpRequestDto): Promise<SignUpResponseDto> {
     this.validateSignUpPayload(payload);
@@ -33,7 +44,7 @@ export class AuthService {
     await this.authRepository.createUser(
       {
         email: payload.email,
-        password: this.hashPassword(payload.password),
+        password: await this.hashPassword(payload.password),
         userName: payload.userName,
         userRole: DEFAULT_USER_ROLE,
       },
@@ -48,18 +59,48 @@ export class AuthService {
 
   public async signIn(payload: SignInRequestDto): Promise<SignInResponseDto> {
     if (!payload.email || !payload.password) {
-      throw new BadRequestException('Email and password are required');
+      throw new BadRequestException('Missing email or password');
     }
 
     const user = await this.authRepository.findByEmail(payload.email);
-    if (!user || !this.verifyPassword(payload.password, user.password)) {
+    if (
+      !user ||
+      !(await this.verifyPassword(payload.password, user.password))
+    ) {
       throw new UnauthorizedException('Invalid email or password');
     }
+    try {
+      const jwtPayload: JwtPayload = {
+        sub: user.id,
+        username: user.userName,
+        email: user.email,
+        status: user.status,
+        role: user.userRole,
+        isEmailVerified: user.isEmailVerified,
+      };
+      const rememberMe = payload.rememberMe || false;
+      const accessToken = this.jwtService.sign(jwtPayload, {
+        expiresIn: rememberMe ? '1h' : '1d',
+      });
 
-    return {
-      accessToken: this.generateToken(),
-      refreshToken: this.generateToken(),
-    };
+      const result: SignInResponseDto = {
+        message: 'Sign in successfully',
+        accessToken,
+      };
+
+      if (rememberMe) {
+        const refreshTokenPayload = { ...jwtPayload, type: 'refresh' };
+        const refreshToken = this.jwtService.sign(refreshTokenPayload, {
+          secret: this.configService.getOrThrow<string>('JWT_REFRESH_SECRET'),
+          expiresIn: '7d',
+        });
+        result.refreshToken = refreshToken;
+      }
+
+      return result;
+    } catch (error) {
+      throw new UnauthorizedException('Failed to generate access token');
+    }
   }
 
   private validateSignUpPayload(payload: SignUpRequestDto): void {
@@ -74,26 +115,46 @@ export class AuthService {
     }
   }
 
-  private hashPassword(password: string): string {
-    const salt = randomBytes(16).toString('hex');
-    const hash = scryptSync(password, salt, 64).toString('hex');
-
-    return `${salt}:${hash}`;
+  private async hashPassword(password: string): Promise<string> {
+    return await bcrypt.hash(password, ROUNDS);
   }
 
-  private verifyPassword(password: string, storedPassword: string): boolean {
-    const [salt, hash] = storedPassword.split(':');
-    if (!salt || !hash) {
-      return password === storedPassword;
+  private async verifyPassword(
+    password: string,
+    storedPassword: string,
+  ): Promise<boolean> {
+    return await bcrypt.compare(password, storedPassword);
+  }
+
+  public async refreshToken(refreshToken: string): Promise<SignInResponseDto> {
+    try {
+      const decoded = this.jwtService.verify(refreshToken, {
+        secret: this.configService.getOrThrow<string>('JWT_REFRESH_SECRET'),
+      });
+
+      if (decoded.type !== 'refresh') {
+        throw new UnauthorizedException('Invalid refresh token');
+      }
+
+      const jwtPayload: JwtPayload = {
+        sub: decoded.sub,
+        username: decoded.username,
+        email: decoded.email,
+        status: decoded.status,
+        role: decoded.role,
+        isEmailVerified: decoded.isEmailVerified,
+      };
+
+      const accessToken = this.jwtService.sign(jwtPayload, {
+        expiresIn: '1d',
+      });
+
+      return {
+        message: 'Token refreshed successfully',
+        accessToken,
+      };
+    } catch (error) {
+      throw new UnauthorizedException('Invalid or expired refresh token');
     }
-
-    const hashBuffer = Buffer.from(hash, 'hex');
-    const inputHashBuffer = scryptSync(password, salt, 64);
-
-    return timingSafeEqual(hashBuffer, inputHashBuffer);
-  }
-
-  private generateToken(): string {
-    return randomBytes(48).toString('hex');
   }
 }

@@ -30,6 +30,7 @@
       "@common/*": ["./src/common/*"],
       "@migrations/*": ["./src/migrations/*"],
       "@modules/*": ["./src/modules/*"],
+      "@dtos/*": ["./src/dtos/*"],
     }
   },
   "include": ["src/**/*"],

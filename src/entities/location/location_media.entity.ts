@@ -7,7 +7,7 @@ export class TBLocationMedia extends BaseEntity {
     type: 'varchar',
     length: 50,
     nullable: false,
-    comment: 'Loại media (hình ảnh, video, ...)',
+    comment: 'Loai media',
   })
   type: string;
 
@@ -15,10 +15,13 @@ export class TBLocationMedia extends BaseEntity {
     type: 'varchar',
     length: 500,
     nullable: false,
-    comment: 'URL của media',
+    comment: 'URL cua media',
   })
   url: string;
 
-  @Column({ type: 'int', nullable: false, comment: 'Thứ tự hiển thị' })
+  @Column({ type: 'int', nullable: false, comment: 'Thu tu hien thi' })
   displayOrder: number;
+
+  @Column({ type: 'int', nullable: true, comment: 'Primary key' })
+  locationId?: number;
 }

@@ -25,6 +25,12 @@ export class TBUserDefault extends BaseEntity {
   @Column({ type: 'int', nullable: false, comment: 'Vai tro' })
   userRole: number;
 
+  @Column({ type: 'int', nullable: false, comment: 'Trang thai' })
+  status: number;
+
+  @Column({ type: 'boolean', default: false, comment: 'Trang thai xac thuc email' })
+  isEmailVerified: boolean;
+
   @Column({ type: 'int', nullable: true, comment: 'Primary key' })
   userProfileId?: number;
 }

@@ -5,6 +5,7 @@ export class SignInRequestDto {
 }
 
 export class SignInResponseDto {
+  message: string;
   accessToken: string;
-  refreshToken: string;
+  refreshToken?: string;
 }
