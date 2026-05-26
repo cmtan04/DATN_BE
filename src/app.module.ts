@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from './data-source';
 import { AuthModule } from './modules/auth.module';
 import { LocationModule } from './modules/location.module';
+import { UserModule } from './modules/user.module';
 import { JwtAuthGuard } from './common/jwt/jwt.guard';
 import { APP_GUARD } from '@nestjs/core';
 
@@ -15,6 +16,7 @@ import { APP_GUARD } from '@nestjs/core';
     TypeOrmModule.forRoot(dataSourceOptions),
     AuthModule,
     LocationModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [

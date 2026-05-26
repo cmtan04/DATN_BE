@@ -28,7 +28,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     // Chuyển đổi dữ liệu từ Token Payload sang DTO phản hồi tiêu chuẩn của User
     return {
       id: payload.sub,
-      username: payload.username,
       email: payload.email,
       password: '', // Không trả password trong token/request user
       fullName: payload.fullName,

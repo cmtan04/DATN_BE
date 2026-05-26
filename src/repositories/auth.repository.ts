@@ -16,10 +16,8 @@ export class AuthRepository {
     return await this.user.findOne({ where: { email } });
   };
 
-  public findByUserName = async (
-    userName: string,
-  ): Promise<TBUserDefault | null> => {
-    return await this.user.findOne({ where: { userName } });
+  public findById = async (id: number): Promise<TBUserDefault | null> => {
+    return await this.user.findOne({ where: { id } });
   };
 
   public createUser = async (

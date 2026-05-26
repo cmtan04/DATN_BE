@@ -17,10 +17,7 @@ export class TBUserProfile extends BaseEntity {
     nullable: true,
     comment: 'URL avatar',
   })
-  avatarUrl?: string;
-
-  @Column({ type: 'varchar', length: 255, nullable: true, comment: 'URL bìa' })
-  coverUrl?: string;
+  avatarUrl?: string | null;
 
   @Column({
     type: 'varchar',

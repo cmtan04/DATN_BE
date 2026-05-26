@@ -3,9 +3,7 @@ import {
   ConflictException,
   Injectable,
   UnauthorizedException,
-  NotFoundException,
 } from '@nestjs/common';
-import { randomBytes, scryptSync, timingSafeEqual } from 'crypto';
 import { SignInRequestDto, SignInResponseDto } from '@/dtos/auth/signIn.dto';
 import { SignUpRequestDto, SignUpResponseDto } from '@/dtos/auth/signUp.dto';
 import { AuthRepository } from '@/repositories/auth.repository';
@@ -13,7 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { JwtPayload } from '@/dtos/jwt.dto';
 import { JwtService } from '@nestjs/jwt';
-import { TBUserDefault } from "@/entities/user/user_default.entity";
+import { UserStatus } from '@assets/enum/user.enum';
 
 const DEFAULT_USER_ROLE = 1;
 const ROUNDS = 10;
@@ -34,19 +32,12 @@ export class AuthService {
       throw new ConflictException('Email already exists');
     }
 
-    const existedUserName = await this.authRepository.findByUserName(
-      payload.userName,
-    );
-    if (existedUserName) {
-      throw new ConflictException('Username already exists');
-    }
-
     await this.authRepository.createUser(
       {
         email: payload.email,
         password: await this.hashPassword(payload.password),
-        userName: payload.userName,
         userRole: DEFAULT_USER_ROLE,
+        status: UserStatus.ACTIVE,
       },
       {
         fullName: payload.fullName,
@@ -69,10 +60,14 @@ export class AuthService {
     ) {
       throw new UnauthorizedException('Invalid email or password');
     }
+
+    if (user.status !== UserStatus.ACTIVE) {
+      throw new UnauthorizedException('User account is not active');
+    }
+
     try {
       const jwtPayload: JwtPayload = {
         sub: user.id,
-        username: user.userName,
         email: user.email,
         status: user.status,
         role: user.userRole,
@@ -107,7 +102,6 @@ export class AuthService {
     if (
       !payload.email ||
       !payload.password ||
-      !payload.userName ||
       !payload.fullName ||
       !payload.phoneNumber
     ) {
@@ -136,13 +130,17 @@ export class AuthService {
         throw new UnauthorizedException('Invalid refresh token');
       }
 
+      const user = await this.authRepository.findById(Number(decoded.sub));
+      if (!user || user.status !== UserStatus.ACTIVE) {
+        throw new UnauthorizedException('User account is not active');
+      }
+
       const jwtPayload: JwtPayload = {
-        sub: decoded.sub,
-        username: decoded.username,
-        email: decoded.email,
-        status: decoded.status,
-        role: decoded.role,
-        isEmailVerified: decoded.isEmailVerified,
+        sub: user.id,
+        email: user.email,
+        status: user.status,
+        role: user.userRole,
+        isEmailVerified: user.isEmailVerified,
       };
 
       const accessToken = this.jwtService.sign(jwtPayload, {
