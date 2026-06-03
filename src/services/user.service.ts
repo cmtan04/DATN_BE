@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import {
   GetCurrentUserResponseDto,
+  SubmitOwnerRequestResponseDto,
   UpdateCurrentUserRequestDto,
   UpdateCurrentUserResponseDto,
 } from '@/dtos/user/user.dto';
@@ -12,10 +13,15 @@ import {
   UpdateUserProfileData,
   UserRepository,
 } from '@/repositories/user.repository';
+import { NotificationService } from './notification.service';
+import { OwnerRequestStatus, UserRole } from '@assets/enum/user.enum';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly notificationService: NotificationService,
+  ) {}
 
   public async getCurrentUser(
     userId: number,
@@ -34,6 +40,71 @@ export class UserService {
     await this.userRepository.updateProfile(profile.id, updateData);
 
     return await this.getCurrentUser(user.id);
+  }
+
+  public async submitOwnerRequest(
+    userId: number,
+  ): Promise<SubmitOwnerRequestResponseDto> {
+    const { user, profile } = await this.getUserAndProfile(userId);
+    const ownerRequestStatus =
+      user.ownerRequestStatus ?? OwnerRequestStatus.NONE;
+
+    if (user.userRole === UserRole.ADMIN) {
+      throw new BadRequestException('Admin cannot apply to become owner');
+    }
+
+    if (
+      user.userRole === UserRole.OWNER ||
+      ownerRequestStatus === OwnerRequestStatus.APPROVED
+    ) {
+      if (ownerRequestStatus !== OwnerRequestStatus.APPROVED) {
+        await this.userRepository.updateOwnerRequest(user.id, {
+          ownerRequestStatus: OwnerRequestStatus.APPROVED,
+          userRole: UserRole.OWNER,
+        });
+      }
+
+      return await this.getCurrentUser(user.id);
+    }
+
+    if (ownerRequestStatus === OwnerRequestStatus.PENDING) {
+      return await this.getCurrentUser(user.id);
+    }
+
+    if (
+      user.userRole !== UserRole.USER ||
+      ![
+        OwnerRequestStatus.NONE,
+        OwnerRequestStatus.REJECTED,
+      ].includes(ownerRequestStatus)
+    ) {
+      throw new BadRequestException('Invalid owner request status');
+    }
+
+    await this.userRepository.updateOwnerRequest(user.id, {
+      ownerRequestStatus: OwnerRequestStatus.PENDING,
+      userRole: UserRole.USER,
+    });
+
+    await this.notifyAdminsOwnerRequestCreated(
+      profile.fullName || user.email,
+    );
+
+    return await this.getCurrentUser(user.id);
+  }
+
+  private async notifyAdminsOwnerRequestCreated(
+    requesterName: string,
+  ): Promise<void> {
+    const admins = await this.userRepository.findAdmins();
+
+    await this.notificationService.createMany(
+      admins.map((admin) => ({
+        userId: admin.id,
+        title: 'Yeu cau chu phong moi',
+        message: `Ban vua nhan duoc yeu cau dang ki lam chu phong tu ${requesterName}.`,
+      })),
+    );
   }
 
   private async getUserAndProfile(userId: number) {

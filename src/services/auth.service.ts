@@ -11,9 +11,9 @@ import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { JwtPayload } from '@/dtos/jwt.dto';
 import { JwtService } from '@nestjs/jwt';
-import { UserStatus } from '@assets/enum/user.enum';
+import { UserRole, UserStatus } from '@assets/enum/user.enum';
 
-const DEFAULT_USER_ROLE = 1;
+const DEFAULT_USER_ROLE = UserRole.USER;
 const ROUNDS = 10;
 
 @Injectable()

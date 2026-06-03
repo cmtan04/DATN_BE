@@ -31,6 +31,18 @@
 $ npm install
 ```
 
+## Environment
+
+Payment checkout uses payOS. Configure these variables in `.env`:
+
+```bash
+PAYOS_CLIENT_ID=
+PAYOS_API_KEY=
+PAYOS_CHECKSUM_KEY=
+PAYMENT_TOKEN_SECRET=
+WEB_URL=
+```
+
 ## Compile and run the project
 
 ```bash

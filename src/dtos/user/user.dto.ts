@@ -1,4 +1,8 @@
-import { UserRole, UserStatus } from '@assets/enum/user.enum';
+import {
+  OwnerRequestStatus,
+  UserRole,
+  UserStatus,
+} from '@assets/enum/user.enum';
 
 export class UserDecoratorDtoResponse {
   id: number;
@@ -23,6 +27,7 @@ export interface GetCurrentUserResponseDto {
   email: string;
   userRole: UserRole;
   status: UserStatus;
+  ownerRequestStatus: OwnerRequestStatus;
   profile: UserProfileResponseDto | null;
 }
 
@@ -33,3 +38,5 @@ export class UpdateCurrentUserRequestDto {
 }
 
 export type UpdateCurrentUserResponseDto = GetCurrentUserResponseDto;
+
+export type SubmitOwnerRequestResponseDto = GetCurrentUserResponseDto;

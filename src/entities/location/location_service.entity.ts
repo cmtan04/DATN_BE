@@ -1,15 +1,22 @@
 import { Column, Entity } from 'typeorm';
-import { BaseEntity } from '../base.entity';
 
 @Entity('tb_location_service')
-export class TBLocationService extends BaseEntity {
+export class TBLocationService {
   @Column({
-    type: 'varchar',
-    length: 255,
+    type: 'int',
     nullable: false,
-    comment: 'Tên dịch vụ',
+    comment: 'ID địa điểm',
+    primary: true,
   })
-  name: string;
+  locationId: number;
+
+  @Column({
+    type: 'int',
+    nullable: false,
+    comment: 'ID dịch vụ',
+    primary: true,
+  })
+  serviceId: number;
 
   @Column({ type: 'int', nullable: true, comment: 'Giá' })
   price?: number;

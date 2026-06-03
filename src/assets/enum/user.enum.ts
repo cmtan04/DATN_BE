@@ -9,3 +9,10 @@ export enum UserRole {
   OWNER = 1,
   USER = 2,
 }
+
+export enum OwnerRequestStatus {
+  NONE = 0,
+  PENDING = 1,
+  APPROVED = 2,
+  REJECTED = 3,
+}

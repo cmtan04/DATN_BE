@@ -1,10 +1,16 @@
 import * as dotenv from 'dotenv';
 import { DataSource, DataSourceOptions } from 'typeorm';
+import { SeederOptions } from 'typeorm-extension';
 import { TBLocationAddress } from './entities/location/location-address.entity';
 import { TBLocationMedia } from './entities/location/location_media.entity';
 import { TBLocationService } from './entities/location/location_service.entity';
 import { TBLocationType } from './entities/location/location_type.entity';
 import { TBLocation } from './entities/location/location.entity';
+import { TBService } from './entities/service.entity';
+import { TBNotification } from './entities/notifications.entity';
+import { TBBooking } from './entities/booking.entity';
+import { TBPayment } from './entities/payment.entity';
+import { TBPayosWebhookEvent } from './entities/payos-webhook-event.entity';
 import { TBUserDefault } from './entities/user/user_default.entity';
 import { TBUserProfile } from './entities/user/user_profile.entity';
 
@@ -24,6 +30,11 @@ const baseDataSourceOptions: DataSourceOptions = {
     TBLocationMedia,
     TBLocationService,
     TBLocationType,
+    TBBooking,
+    TBNotification,
+    TBPayment,
+    TBPayosWebhookEvent,
+    TBService,
     TBUserDefault,
     TBUserProfile,
   ],
@@ -34,9 +45,10 @@ export const dataSourceOptions: DataSourceOptions = {
   synchronize: process.env.TYPEORM_SYNC === 'true',
 };
 
-export const cliDataSourceOptions: DataSourceOptions = {
+export const cliDataSourceOptions: DataSourceOptions & SeederOptions = {
   ...baseDataSourceOptions,
   migrations: ['src/migrations/*.ts'],
+  seeds: ['src/seed/**/*{.ts,.js}'],
 };
 
 const dataSource = new DataSource(cliDataSourceOptions);

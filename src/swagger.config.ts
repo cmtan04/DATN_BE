@@ -6,17 +6,18 @@ export function setupSwagger(app: INestApplication) {
     .setTitle('Hosting API')
     .setDescription('API documentation for Hosting System')
     .setVersion('1.0')
-    // .addBearerAuth(
-    //   {
-    //     type: 'http',
-    //     scheme: 'bearer',
-    //     bearerFormat: 'JWT',
-    //     name: 'JWT',
-    //     description: 'Enter JWT token',
-    //     in: 'header',
-    //   },
-    //   'JWT-auth',
-    // )
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'JWT-auth',
+    )
+    .addSecurityRequirements('JWT-auth')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

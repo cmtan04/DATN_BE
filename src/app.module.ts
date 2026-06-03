@@ -1,26 +1,33 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from './data-source';
 import { AuthModule } from './modules/auth.module';
 import { LocationModule } from './modules/location.module';
 import { UserModule } from './modules/user.module';
+import { AdminModule } from './modules/admin.module';
+import { NotificationModule } from './modules/notification.module';
+import { PaymentModule } from './modules/payment.module';
+import { CloudinaryModule } from './modules/cloudinary.module';
 import { JwtAuthGuard } from './common/jwt/jwt.guard';
 import { APP_GUARD } from '@nestjs/core';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    EventEmitterModule.forRoot(),
     TypeOrmModule.forRoot(dataSourceOptions),
     AuthModule,
     LocationModule,
     UserModule,
+    AdminModule,
+    NotificationModule,
+    PaymentModule,
+    CloudinaryModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [
-    AppService,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,

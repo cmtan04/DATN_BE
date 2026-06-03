@@ -65,7 +65,6 @@ Khong commit `.env` hoac secret that. Neu can them bien moi truong, cap nhat tai
 Truoc khi ket thuc thay doi backend, chay it nhat:
 
 1. `npm run build`
-2. `npm run lint`
 
 Neu thay doi lien quan database, kiem tra migration hoac it nhat verify `src/data-source.ts` load du entity moi. Neu them test, Jest cau hinh tim file `*.spec.ts` trong `src/`.
 

@@ -3,7 +3,6 @@ import { Column, Entity } from 'typeorm';
 
 @Entity('tb_location')
 export class TBLocation extends BaseEntity {
-
   @Column({
     type: 'varchar',
     length: 255,
@@ -11,6 +10,13 @@ export class TBLocation extends BaseEntity {
     comment: 'Ten dia diem',
   })
   name: string;
+
+  @Column({
+    type: 'text',
+    nullable: true,
+    comment: 'Mo ta dia diem',
+  })
+  description?: string | null;
 
   @Column({ type: 'int', nullable: false, comment: 'ID nguoi so huu' })
   ownerId: number;
@@ -34,6 +40,9 @@ export class TBLocation extends BaseEntity {
 
   @Column({ type: 'int', nullable: true, comment: 'Primary key' })
   locationTypeId?: number;
+
+  @Column({ type: 'int', nullable: false, comment: 'So luong phong' })
+  quantity: number;
 
   @Column({
     type: 'decimal',

@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Patch } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
 import {
   GetCurrentUserResponseDto,
+  SubmitOwnerRequestResponseDto,
   UpdateCurrentUserRequestDto,
   UpdateCurrentUserResponseDto,
 } from '@/dtos/user/user.dto';
@@ -24,5 +25,12 @@ export class UserController {
     @Body() payload: UpdateCurrentUserRequestDto,
   ): Promise<UpdateCurrentUserResponseDto> {
     return await this.userService.updateCurrentUser(userId, payload);
+  }
+
+  @Post('me/owner-request')
+  public async submitOwnerRequest(
+    @User('id') userId: number,
+  ): Promise<SubmitOwnerRequestResponseDto> {
+    return await this.userService.submitOwnerRequest(userId);
   }
 }

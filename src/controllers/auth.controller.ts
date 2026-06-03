@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Get } from '@nestjs/common';
 import { SignInRequestDto, SignInResponseDto } from '@/dtos/auth/signIn.dto';
 import { SignUpRequestDto, SignUpResponseDto } from '@/dtos/auth/signUp.dto';
 import { AuthService } from '@/services/auth.service';
@@ -30,5 +30,11 @@ export class AuthController {
     @Body() payload: { refreshToken: string },
   ): Promise<SignInResponseDto> {
     return await this.authService.refreshToken(payload.refreshToken);
+  }
+
+  @Get("health")
+  @Public()
+  public async healthCheck(): Promise<{ status: string }> {
+    return { status: "OK" };
   }
 }

@@ -18,4 +18,12 @@ export class TBLocationType extends BaseEntity {
     comment: 'Mã loại địa điểm',
   })
   code: string;
+
+  @Column({
+    type: 'boolean',
+    nullable: false,
+    default: false,
+    comment: 'Có thể có nhiều phòng',
+  })
+  canHaveMultiRoom: boolean;
 }
