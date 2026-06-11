@@ -2,25 +2,21 @@ import {
   Body,
   Controller,
   Get,
+  Post,
   Param,
   ParseIntPipe,
-  Post,
   Query,
-  UploadedFiles,
-  UseInterceptors,
 } from '@nestjs/common';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { ApiBody } from '@nestjs/swagger';
 import {
+  CreateLocationRequestDto,
   CreateLocationResponseDto,
-  CreateServiceRequestDto,
-  LocationUploadFile,
-  ServiceResponseDto,
 } from '@/dtos/location/createLocation.dto';
-import type { CreateLocationPayloadInput } from '@/dtos/location/createLocation.dto';
 import {
   GetLocationsQueryDto,
   GetLocationsResponseDto,
   LocationDetailResponseDto,
+  LocationTypeResponseDto,
 } from '@/dtos/location/getLocations.dto';
 import { LocationService } from '@/services/location.service';
 import { Public } from '@/common/jwt/public.decorator';
@@ -39,22 +35,23 @@ export class LocationController {
     return await this.locationService.getLocations(query);
   }
 
+  @Post()
+  public async createLocation(
+    @User('id') ownerId: number,
+    @User('role') userRole: UserRole,
+    @Body() payload: CreateLocationRequestDto,
+  ): Promise<CreateLocationResponseDto> {
+    return await this.locationService.createLocation(
+      ownerId,
+      userRole,
+      payload,
+    );
+  }
+
   @Get('location-types')
   @Public()
-  public async getLocationTypes(): Promise<any> {
+  public async getLocationTypes(): Promise<LocationTypeResponseDto[]> {
     return await this.locationService.getLocationTypes();
-  }
-
-  @Get('services')
-  public async getServices(): Promise<ServiceResponseDto[]> {
-    return await this.locationService.getServices();
-  }
-
-  @Post('services')
-  public async createService(
-    @Body() payload: CreateServiceRequestDto,
-  ): Promise<ServiceResponseDto> {
-    return await this.locationService.createService(payload);
   }
 
   @Get('owner/me')
@@ -62,22 +59,6 @@ export class LocationController {
     @User('id') ownerId: number,
   ): Promise<GetLocationsResponseDto> {
     return await this.locationService.getOwnerLocations(ownerId);
-  }
-
-  @Post()
-  @UseInterceptors(FilesInterceptor('images', 8))
-  public async createLocation(
-    @User('id') ownerId: number,
-    @User('role') userRole: UserRole,
-    @Body() payload: CreateLocationPayloadInput,
-    @UploadedFiles() images?: LocationUploadFile[],
-  ): Promise<CreateLocationResponseDto> {
-    return await this.locationService.createLocation(
-      ownerId,
-      userRole,
-      payload,
-      images,
-    );
   }
 
   @Get(':id')

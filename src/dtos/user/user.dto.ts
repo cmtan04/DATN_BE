@@ -3,6 +3,13 @@ import {
   UserRole,
   UserStatus,
 } from '@assets/enum/user.enum';
+import { Transform } from 'class-transformer';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MaxLength,
+} from 'class-validator';
 
 export class UserDecoratorDtoResponse {
   id: number;
@@ -32,8 +39,30 @@ export interface GetCurrentUserResponseDto {
 }
 
 export class UpdateCurrentUserRequestDto {
+  @IsOptional()
+  @Transform(({ value }) =>
+    typeof value === 'string' ? value.trim() : value,
+  )
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(255)
   fullName?: string;
+
+  @IsOptional()
+  @Transform(({ value }) =>
+    typeof value === 'string' ? value.trim() : value,
+  )
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(50)
   phoneNumber?: string;
+
+  @IsOptional()
+  @Transform(({ value }) =>
+    typeof value === 'string' ? value.trim() : value,
+  )
+  @IsString()
+  @MaxLength(500)
   avatarUrl?: string;
 }
 

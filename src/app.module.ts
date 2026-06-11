@@ -9,6 +9,7 @@ import { AdminModule } from './modules/admin.module';
 import { NotificationModule } from './modules/notification.module';
 import { PaymentModule } from './modules/payment.module';
 import { CloudinaryModule } from './modules/cloudinary.module';
+import { ServiceModule } from './modules/service.module';
 import { JwtAuthGuard } from './common/jwt/jwt.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { EventEmitterModule } from '@nestjs/event-emitter';
@@ -25,6 +26,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     NotificationModule,
     PaymentModule,
     CloudinaryModule,
+    ServiceModule,
   ],
   controllers: [],
   providers: [

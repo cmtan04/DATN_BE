@@ -1,8 +1,12 @@
 import { Body, Controller, Post, Get } from '@nestjs/common';
-import { SignInRequestDto, SignInResponseDto } from '@/dtos/auth/signIn.dto';
+import {
+  RefreshTokenRequestDto,
+  SignInRequestDto,
+  SignInResponseDto,
+} from '@/dtos/auth/signIn.dto';
 import { SignUpRequestDto, SignUpResponseDto } from '@/dtos/auth/signUp.dto';
 import { AuthService } from '@/services/auth.service';
-import { Public } from "@/common/jwt/public.decorator";
+import { Public } from '@/common/jwt/public.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -27,14 +31,14 @@ export class AuthController {
   @Post('refresh-token')
   @Public()
   public async refreshToken(
-    @Body() payload: { refreshToken: string },
+    @Body() payload: RefreshTokenRequestDto,
   ): Promise<SignInResponseDto> {
     return await this.authService.refreshToken(payload.refreshToken);
   }
 
-  @Get("health")
+  @Get('health')
   @Public()
   public async healthCheck(): Promise<{ status: string }> {
-    return { status: "OK" };
+    return { status: 'OK' };
   }
 }

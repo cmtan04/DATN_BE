@@ -7,37 +7,28 @@ import { existsSync, mkdirSync, unlinkSync, writeFileSync } from 'fs';
 import { extname, join } from 'path';
 import {
   CreateLocationMediaInput,
-  CreateLocationPayloadInput,
   CreateLocationRequestDto,
   CreateLocationServiceRequestDto,
   CreateLocationResponseDto,
-  CreateServiceRequestDto,
-  LocationUploadFile,
-  ServiceResponseDto,
 } from '@/dtos/location/createLocation.dto';
 import {
-  GetLocationsFilter,
   GetLocationsQueryDto,
   GetLocationsResponseDto,
   LocationDetailResponseDto,
   LocationSortBy,
   LocationSortOrder,
+  LocationTypeResponseDto,
 } from '@/dtos/location/getLocations.dto';
 import { UserRole } from '@assets/enum/user.enum';
 import { LocationRepository } from '@/repositories/location.repository';
+import { ServiceRepository } from '@/repositories/service.repository';
+import { TBService } from '@/entities/service.entity';
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 10;
 const MAX_LIMIT = 100;
 const DEFAULT_SORT_BY: LocationSortBy = 'createdAt';
 const DEFAULT_SORT_ORDER: LocationSortOrder = 'DESC';
-const VALID_SORT_BY: LocationSortBy[] = [
-  'price',
-  'area',
-  'rating',
-  'createdAt',
-];
-const VALID_SORT_ORDER: LocationSortOrder[] = ['ASC', 'DESC'];
 
 const MAX_IMAGE_COUNT = 8;
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
@@ -48,69 +39,41 @@ const CLOUDINARY_LOCATION_FOLDER = 'locations';
 
 @Injectable()
 export class LocationService {
-  constructor(private readonly locationRepository: LocationRepository) {}
-
-  public async getServices(): Promise<ServiceResponseDto[]> {
-    return await this.locationRepository.findAllServices();
-  }
-
-  public async createService(
-    payload: CreateServiceRequestDto,
-  ): Promise<ServiceResponseDto> {
-    const name = this.readRequiredString(payload.name, 'service name', 255);
-
-    return await this.locationRepository.findOrCreateServiceByName(name);
-  }
+  constructor(
+    private readonly locationRepository: LocationRepository,
+    private readonly serviceRepository: ServiceRepository,
+  ) {}
 
   public async getOwnerLocations(
     ownerId: number,
   ): Promise<GetLocationsResponseDto> {
-    return await this.locationRepository.findLocations({
-      page: 1,
-      limit: MAX_LIMIT,
+    return await this.locationRepository.getLocations(
+      {
+        page: 1,
+        limit: MAX_LIMIT,
+
+        sortBy: DEFAULT_SORT_BY,
+        sortOrder: DEFAULT_SORT_ORDER,
+      },
       ownerId,
-      sortBy: DEFAULT_SORT_BY,
-      sortOrder: DEFAULT_SORT_ORDER,
-    });
+    );
   }
 
   public async createLocation(
     ownerId: number,
     userRole: UserRole,
-    rawPayload: CreateLocationPayloadInput,
-    images: LocationUploadFile[] = [],
+    payload: CreateLocationRequestDto,
   ): Promise<CreateLocationResponseDto> {
     if (userRole !== UserRole.OWNER) {
       throw new ForbiddenException('Only owners can create rooms');
     }
 
-    const payload = await this.normalizeCreateLocationPayload(rawPayload);
-    const media =
-      images.length > 0
-        ? this.prepareImageMedia(images)
-        : this.normalizeDirectLocationMedia(payload.media);
-    const savedFiles: string[] = [];
-
     try {
-      if (images.length > 0) {
-        this.ensureUploadsDirectory();
-        images.forEach((image, index) => {
-          const filePath = join(
-            UPLOADS_DIR,
-            media[index].url.split('/').pop() ?? '',
-          );
-          writeFileSync(filePath, image.buffer);
-          savedFiles.push(filePath);
-        });
-      }
-
       return await this.locationRepository.createLocation({
         ...payload,
         ownerId,
-        media,
       });
     } catch (error) {
-      this.cleanupSavedFiles(savedFiles);
       throw error;
     }
   }
@@ -118,46 +81,7 @@ export class LocationService {
   public async getLocations(
     query: GetLocationsQueryDto,
   ): Promise<GetLocationsResponseDto> {
-    return await this.locationRepository.findLocations(
-      this.normalizeQuery(query),
-    );
-  }
-
-  private normalizeQuery(query: GetLocationsQueryDto): GetLocationsFilter {
-    const page = query.page && query.page > 0 ? query.page : DEFAULT_PAGE;
-    const parsedLimit = query.limit ?? DEFAULT_LIMIT;
-    const sortBy = query.sortBy ?? DEFAULT_SORT_BY;
-    const sortOrder = query.sortOrder?.toUpperCase() ?? DEFAULT_SORT_ORDER;
-
-    if (!VALID_SORT_BY.includes(sortBy)) {
-      throw new BadRequestException('Invalid sortBy');
-    }
-
-    if (!VALID_SORT_ORDER.includes(sortOrder as LocationSortOrder)) {
-      throw new BadRequestException('Invalid sortOrder');
-    }
-
-    const filter: GetLocationsFilter = {
-      page,
-      limit: Math.min(parsedLimit, MAX_LIMIT),
-      minPrice: query.minPrice ?? undefined,
-      maxPrice: query.maxPrice ?? undefined,
-      minArea: query.minArea ?? undefined,
-      maxArea: query.maxArea ?? undefined,
-      locationTypeId: query.locationTypeId ?? undefined,
-      addressRegion: query.addressRegion?.trim() || undefined,
-      keyword: query.keyword?.trim() || undefined,
-      sortBy,
-      sortOrder: sortOrder as LocationSortOrder,
-      lat: query.lat ?? undefined,
-      lng: query.lng ?? undefined,
-      radiusKm: query.radiusKm ?? undefined,
-    };
-
-    this.validateRange(filter.minPrice, filter.maxPrice, 'price');
-    this.validateRange(filter.minArea, filter.maxArea, 'area');
-
-    return filter;
+    return await this.locationRepository.getLocations(query);
   }
 
   private async normalizeCreateLocationPayload(
@@ -189,7 +113,7 @@ export class LocationService {
     }
 
     const existedServiceIds =
-      await this.locationRepository.findExistingServiceIds(uniqueServiceIds);
+      await this.serviceRepository.findExistingIds(uniqueServiceIds);
     const missingServiceIds = uniqueServiceIds.filter(
       (serviceId) => !existedServiceIds.includes(serviceId),
     );
@@ -206,6 +130,10 @@ export class LocationService {
       price: this.readPositiveInteger(value.price, 'price'),
       priceUnit: this.readRequiredString(value.priceUnit, 'priceUnit', 50),
       area: this.readPositiveInteger(value.area, 'area'),
+      maxGuestCount: this.readPositiveInteger(
+        value.maxGuestCount,
+        'maxGuestCount',
+      ),
       quantity: this.readPositiveInteger(value.quantity, 'quantity'),
       locationTypeId,
       address: {
@@ -252,7 +180,9 @@ export class LocationService {
     return this.parseCreatePayloadString(rawPayload);
   }
 
-  private parseCreatePayloadString(rawPayload: string): Record<string, unknown> {
+  private parseCreatePayloadString(
+    rawPayload: string,
+  ): Record<string, unknown> {
     try {
       const parsed = JSON.parse(rawPayload) as unknown;
 
@@ -270,6 +200,7 @@ export class LocationService {
     value: unknown,
     index: number,
   ): CreateLocationServiceRequestDto {
+    const serviceId = serviceRepository.createServices(value as string);
     const service = this.readObject(value, `services[${index}]`);
     const serviceId = this.readPositiveInteger(
       service.serviceId,
@@ -287,39 +218,6 @@ export class LocationService {
       priceUnit: this.readOptionalString(service.priceUnit, 50),
       isActive: service.isActive !== false,
     };
-  }
-
-  private prepareImageMedia(images: LocationUploadFile[] = []) {
-    if (images.length === 0) {
-      throw new BadRequestException('At least one image is required');
-    }
-
-    if (images.length > MAX_IMAGE_COUNT) {
-      throw new BadRequestException(`Upload at most ${MAX_IMAGE_COUNT} images`);
-    }
-
-    return images.map((image, index) => {
-      if (!ALLOWED_IMAGE_MIME_TYPES.includes(image.mimetype)) {
-        throw new BadRequestException(
-          'Only JPEG, PNG, and WebP images are allowed',
-        );
-      }
-
-      if (image.size > MAX_IMAGE_SIZE) {
-        throw new BadRequestException('Each image must be 5MB or smaller');
-      }
-
-      const extension = this.getSafeImageExtension(image);
-      const fileName = `${Date.now()}-${index}-${Math.round(
-        Math.random() * 1_000_000_000,
-      )}${extension}`;
-
-      return {
-        type: 'image',
-        url: `${PUBLIC_UPLOADS_PREFIX}/${fileName}`,
-        displayOrder: index + 1,
-      };
-    });
   }
 
   private normalizeDirectLocationMedia(
@@ -412,7 +310,9 @@ export class LocationService {
       segments[1] !== 'image' ||
       uploadIndex < 0
     ) {
-      throw new BadRequestException(`${fieldName} must be a Cloudinary image URL`);
+      throw new BadRequestException(
+        `${fieldName} must be a Cloudinary image URL`,
+      );
     }
 
     const publicIdSegments = segments.slice(uploadIndex + 1);
@@ -426,35 +326,6 @@ export class LocationService {
         `${fieldName} must be in the locations folder`,
       );
     }
-  }
-
-  private getSafeImageExtension(image: LocationUploadFile): string {
-    const fallbackByMimeType: Record<string, string> = {
-      'image/jpeg': '.jpg',
-      'image/png': '.png',
-      'image/webp': '.webp',
-    };
-    const extension = extname(image.originalname).toLowerCase();
-
-    return ['.jpg', '.jpeg', '.png', '.webp'].includes(extension)
-      ? extension
-      : fallbackByMimeType[image.mimetype];
-  }
-
-  private ensureUploadsDirectory(): void {
-    if (!existsSync(UPLOADS_DIR)) {
-      mkdirSync(UPLOADS_DIR, { recursive: true });
-    }
-  }
-
-  private cleanupSavedFiles(filePaths: string[]): void {
-    filePaths.forEach((filePath) => {
-      try {
-        unlinkSync(filePath);
-      } catch {
-        // Best-effort cleanup; original error should stay visible to caller.
-      }
-    });
   }
 
   private readObject(
@@ -536,33 +407,15 @@ export class LocationService {
     return numberValue;
   }
 
-  private validateRange(
-    minValue: number | undefined,
-    maxValue: number | undefined,
-    fieldName: string,
-  ): void {
-    if (
-      minValue !== undefined &&
-      maxValue !== undefined &&
-      minValue > maxValue
-    ) {
-      throw new BadRequestException(
-        `min ${fieldName} must be <= max ${fieldName}`,
-      );
-    }
-  }
-
-  public async getLocationById(
-    id: number,
-  ): Promise<LocationDetailResponseDto> {
+  public async getLocationById(id: number): Promise<LocationDetailResponseDto> {
     if (id <= 0) {
       throw new BadRequestException('Invalid location ID');
     }
     return await this.locationRepository.findLocationDetailById(id);
   }
 
-  public async getLocationTypes(): Promise<any> {
-    return await this.locationRepository.findLocationTypes();
+  public async getLocationTypes(): Promise<LocationTypeResponseDto[]> {
+    return await this.locationRepository.getAllLocationTypes();
   }
 
   public async getRelatedLocations(

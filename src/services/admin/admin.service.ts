@@ -13,12 +13,6 @@ import {
 import { NotificationService } from '../notification.service';
 import { OwnerRequestStatus, UserRole } from '@assets/enum/user.enum';
 
-const HOST_STATUS_QUERY_VALUES: AdminHostStatusQuery[] = [
-  'pending',
-  'approved',
-  'rejected',
-];
-
 @Injectable()
 export class AdminService {
   constructor(
@@ -31,7 +25,6 @@ export class AdminService {
     status?: AdminHostStatusQuery,
   ): Promise<AdminHostResponseDto[]> {
     this.assertAdmin(adminRole);
-    this.validateHostStatusQuery(status);
 
     return await this.userRepository.findHosts(status);
   }
@@ -80,12 +73,6 @@ export class AdminService {
   private assertAdmin(role: UserRole): void {
     if (role !== UserRole.ADMIN) {
       throw new ForbiddenException('Only admin can manage hosts');
-    }
-  }
-
-  private validateHostStatusQuery(status?: AdminHostStatusQuery): void {
-    if (status && !HOST_STATUS_QUERY_VALUES.includes(status)) {
-      throw new BadRequestException('Invalid host status');
     }
   }
 

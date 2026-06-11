@@ -5,6 +5,7 @@ import {
 } from '@assets/enum/payment.enum';
 import { TBBooking } from '@/entities/booking.entity';
 import { TBLocation } from '@/entities/location/location.entity';
+import { TBLocationAvailability } from '@/entities/location_availability.entity';
 import { TBPayosWebhookEvent } from '@/entities/payos-webhook-event.entity';
 import { TBPayment } from '@/entities/payment.entity';
 import { Injectable } from '@nestjs/common';
@@ -47,6 +48,8 @@ export class PaymentRepository {
     private readonly paymentRepository: Repository<TBPayment>,
     @InjectRepository(TBLocation)
     private readonly locationRepository: Repository<TBLocation>,
+    @InjectRepository(TBLocationAvailability)
+    private readonly locationAvailabilityRepository: Repository<TBLocationAvailability>,
   ) {}
 
   public async findLocationForBooking(
@@ -55,19 +58,18 @@ export class PaymentRepository {
     return await this.locationRepository.findOne({ where: { id: locationId } });
   }
 
-  public async hasConfirmedBookingOverlap(
+  public async hasLocationAvailabilityConflict(
     locationId: number,
+    quantity: number,
     startDate: string,
     endDate: string,
   ): Promise<boolean> {
-    const count = await this.bookingRepository
-      .createQueryBuilder('booking')
-      .where('booking.locationId = :locationId', { locationId })
-      .andWhere('booking.status = :status', {
-        status: BookingStatus.CONFIRMED,
-      })
-      .andWhere('booking.startDate < :endDate', { endDate })
-      .andWhere('booking.endDate > :startDate', { startDate })
+    const count = await this.locationAvailabilityRepository
+      .createQueryBuilder('availability')
+      .where('availability.locationId = :locationId', { locationId })
+      .andWhere('availability.date >= :startDate', { startDate })
+      .andWhere('availability.date < :endDate', { endDate })
+      .andWhere('availability.bookedCount >= :quantity', { quantity })
       .getCount();
 
     return count > 0;
@@ -329,11 +331,20 @@ export class PaymentRepository {
     orderCode: number,
   ): Promise<PaymentTransitionResult> {
     const paymentRepository = manager.getRepository(TBPayment);
+    const bookingRepository = manager.getRepository(TBBooking);
     const payment = await paymentRepository.findOne({
       where: { payosOrderCode: orderCode },
     });
 
     if (!payment || payment.status !== PaymentStatus.UNPAID) {
+      return { transitioned: false };
+    }
+
+    const booking = await bookingRepository.findOne({
+      where: { id: payment.bookingId, status: BookingStatus.PENDING_PAYMENT },
+    });
+
+    if (!booking) {
       return { transitioned: false };
     }
 
@@ -346,9 +357,15 @@ export class PaymentRepository {
       return { transitioned: false };
     }
 
-    await manager.getRepository(TBBooking).update(
+    await bookingRepository.update(
       { id: payment.bookingId, status: BookingStatus.PENDING_PAYMENT },
       { status: BookingStatus.CONFIRMED },
+    );
+    await this.incrementLocationAvailabilityInManager(
+      manager,
+      booking.locationId,
+      booking.startDate,
+      booking.endDate,
     );
 
     return {
@@ -357,6 +374,44 @@ export class PaymentRepository {
       bookingId: payment.bookingId,
       paymentId: payment.id,
     };
+  }
+
+  private async incrementLocationAvailabilityInManager(
+    manager: EntityManager,
+    locationId: number,
+    startDate: string,
+    endDate: string,
+  ): Promise<void> {
+    const occupiedDates = this.buildOccupiedDates(startDate, endDate);
+
+    if (occupiedDates.length === 0) {
+      return;
+    }
+
+    const valuesClause = occupiedDates.map(() => '(?, ?, 1)').join(', ');
+    const parameters = occupiedDates.flatMap((date) => [locationId, date]);
+
+    await manager.query(
+      `
+        INSERT INTO \`tb_location_availability\` (\`locationId\`, \`date\`, \`bookedCount\`)
+        VALUES ${valuesClause}
+        ON DUPLICATE KEY UPDATE \`bookedCount\` = \`bookedCount\` + 1
+      `,
+      parameters,
+    );
+  }
+
+  private buildOccupiedDates(startDate: string, endDate: string): string[] {
+    const dates: string[] = [];
+    const cursor = new Date(`${startDate}T00:00:00.000Z`);
+    const end = new Date(`${endDate}T00:00:00.000Z`);
+
+    while (cursor < end) {
+      dates.push(cursor.toISOString().slice(0, 10));
+      cursor.setUTCDate(cursor.getUTCDate() + 1);
+    }
+
+    return dates;
   }
 
   private async markPayosOrderTerminalStatusInManager(

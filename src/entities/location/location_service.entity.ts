@@ -1,8 +1,8 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity('tb_location_service')
 export class TBLocationService {
-  @Column({
+  @PrimaryColumn({
     type: 'int',
     nullable: false,
     comment: 'ID địa điểm',
@@ -10,7 +10,7 @@ export class TBLocationService {
   })
   locationId: number;
 
-  @Column({
+  @PrimaryColumn({
     type: 'int',
     nullable: false,
     comment: 'ID dịch vụ',

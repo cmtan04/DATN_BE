@@ -4,6 +4,7 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
+import { CreateUploadSignatureRequestDto } from '@/dtos/upload.dto';
 import cloudinary, {
   configureCloudinary,
 } from '@common/cloudinary/cloudinary.config';
@@ -12,11 +13,6 @@ import { UploadApiOptions, UploadApiResponse } from 'cloudinary';
 
 export type CloudinaryResourceType = 'image' | 'video';
 export type CloudinaryUploadPurpose = 'general' | 'location';
-
-export interface CreateUploadSignatureRequest {
-  resourceType: CloudinaryResourceType;
-  purpose: CloudinaryUploadPurpose;
-}
 
 export interface CreateUploadSignatureResponse {
   cloudName: string;
@@ -99,15 +95,16 @@ export class CloudinaryService {
   }
 
   public createUploadSignature(
-    payload: CreateUploadSignatureRequest,
+    payload: CreateUploadSignatureRequestDto,
   ): CreateUploadSignatureResponse {
-    const resourceType = this.readResourceType(payload.resourceType);
-    const purpose = this.readUploadPurpose(payload.purpose);
     const cloudName = this.readRequiredEnv('CLOUDINARY_CLOUD_NAME');
     const apiKey = this.readRequiredEnv('CLOUDINARY_API_KEY');
     const apiSecret = this.readRequiredEnv('CLOUDINARY_API_SECRET');
     const timestamp = Math.floor(Date.now() / 1000);
-    const folder = this.resolveUploadFolder(resourceType, purpose);
+    const folder = this.resolveUploadFolder(
+      payload.resourceType,
+      payload.purpose,
+    );
     const signature = cloudinary.utils.api_sign_request(
       {
         folder,
@@ -122,11 +119,12 @@ export class CloudinaryService {
       timestamp,
       signature,
       folder,
-      resourceType,
-      uploadUrl: `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`,
-      maxFileSize: resourceType === 'image' ? MAX_IMAGE_SIZE : MAX_VIDEO_SIZE,
+      resourceType: payload.resourceType,
+      uploadUrl: `https://api.cloudinary.com/v1_1/${cloudName}/${payload.resourceType}/upload`,
+      maxFileSize:
+        payload.resourceType === 'image' ? MAX_IMAGE_SIZE : MAX_VIDEO_SIZE,
       allowedMimeTypes:
-        resourceType === 'image'
+        payload.resourceType === 'image'
           ? ALLOWED_IMAGE_MIME_TYPES
           : ALLOWED_VIDEO_MIME_TYPES,
     };
@@ -183,22 +181,6 @@ export class CloudinaryService {
 
     // 4. Trả về kết quả
     return mediaUrl;
-  }
-
-  private readResourceType(value: unknown): CloudinaryResourceType {
-    if (value === 'image' || value === 'video') {
-      return value;
-    }
-
-    throw new BadRequestException('resourceType must be image or video');
-  }
-
-  private readUploadPurpose(value: unknown): CloudinaryUploadPurpose {
-    if (value === 'general' || value === 'location') {
-      return value;
-    }
-
-    throw new BadRequestException('purpose must be general or location');
   }
 
   private resolveUploadFolder(

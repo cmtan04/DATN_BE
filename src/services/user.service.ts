@@ -130,24 +130,15 @@ export class UserService {
     const updateData: UpdateUserProfileData = {};
 
     if (payload.fullName !== undefined) {
-      const fullName = payload.fullName.trim();
-      if (!fullName) {
-        throw new BadRequestException('fullName must not be empty');
-      }
-      updateData.fullName = fullName;
+      updateData.fullName = payload.fullName;
     }
 
     if (payload.phoneNumber !== undefined) {
-      const phoneNumber = payload.phoneNumber.trim();
-      if (!phoneNumber) {
-        throw new BadRequestException('phoneNumber must not be empty');
-      }
-      updateData.phoneNumber = phoneNumber;
+      updateData.phoneNumber = payload.phoneNumber;
     }
 
     if (payload.avatarUrl !== undefined) {
-      const avatarUrl = payload.avatarUrl.trim();
-      updateData.avatarUrl = avatarUrl || null;
+      updateData.avatarUrl = payload.avatarUrl || null;
     }
 
     if (Object.keys(updateData).length === 0) {

@@ -29,6 +29,8 @@ interface SeedLocation {
   price: number;
   priceUnit: string;
   area: number;
+  maxGuestCount: number;
+  quantity: number;
   averageRating: number;
   mediaUrls: string[];
 }
@@ -247,6 +249,8 @@ export default class TestDataSeeder implements Seeder {
         price: 3200000,
         priceUnit: 'VND/thang',
         area: 22,
+        maxGuestCount: 2,
+        quantity: 4,
         averageRating: 4.3,
         mediaUrls: [
           'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267',
@@ -260,6 +264,8 @@ export default class TestDataSeeder implements Seeder {
         price: 8500000,
         priceUnit: 'VND/thang',
         area: 45,
+        maxGuestCount: 4,
+        quantity: 2,
         averageRating: 4.7,
         mediaUrls: [
           'https://images.unsplash.com/photo-1493809842364-78817add7ffb',
@@ -273,6 +279,8 @@ export default class TestDataSeeder implements Seeder {
         price: 12000000,
         priceUnit: 'VND/thang',
         area: 80,
+        maxGuestCount: 6,
+        quantity: 1,
         averageRating: 4.5,
         mediaUrls: [
           'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2',
@@ -286,6 +294,8 @@ export default class TestDataSeeder implements Seeder {
         price: 1500000,
         priceUnit: 'VND/thang',
         area: 18,
+        maxGuestCount: 1,
+        quantity: 8,
         averageRating: 4.0,
         mediaUrls: [
           'https://images.unsplash.com/photo-1555854877-bab0e564b8d5',
@@ -298,6 +308,8 @@ export default class TestDataSeeder implements Seeder {
         price: 2800000,
         priceUnit: 'VND/thang',
         area: 20,
+        maxGuestCount: 2,
+        quantity: 3,
         averageRating: 4.2,
         mediaUrls: [
           'https://images.unsplash.com/photo-1560185127-6ed189bf02f4',
@@ -310,6 +322,8 @@ export default class TestDataSeeder implements Seeder {
         price: 6200000,
         priceUnit: 'VND/thang',
         area: 35,
+        maxGuestCount: 3,
+        quantity: 2,
         averageRating: 4.6,
         mediaUrls: [
           'https://images.unsplash.com/photo-1560448075-bb485b067938',
@@ -322,6 +336,8 @@ export default class TestDataSeeder implements Seeder {
         price: 4800000,
         priceUnit: 'VND/thang',
         area: 28,
+        maxGuestCount: 2,
+        quantity: 3,
         averageRating: 4.4,
         mediaUrls: [
           'https://images.unsplash.com/photo-1560440021-33f9b867899d',
@@ -334,6 +350,8 @@ export default class TestDataSeeder implements Seeder {
         price: 15000000,
         priceUnit: 'VND/thang',
         area: 95,
+        maxGuestCount: 8,
+        quantity: 1,
         averageRating: 4.8,
         mediaUrls: [
           'https://images.unsplash.com/photo-1512917774080-9991f1c4c750',
@@ -357,6 +375,8 @@ export default class TestDataSeeder implements Seeder {
           price: seedLocation.price,
           priceUnit: seedLocation.priceUnit,
           area: seedLocation.area,
+          maxGuestCount: seedLocation.maxGuestCount,
+          quantity: seedLocation.quantity,
           averageRating: seedLocation.averageRating,
           locationTypeId: locationTypes[seedLocation.typeCode].id,
           locationAddressId: addresses[seedLocation.address].id,

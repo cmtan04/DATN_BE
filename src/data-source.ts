@@ -6,6 +6,7 @@ import { TBLocationMedia } from './entities/location/location_media.entity';
 import { TBLocationService } from './entities/location/location_service.entity';
 import { TBLocationType } from './entities/location/location_type.entity';
 import { TBLocation } from './entities/location/location.entity';
+import { TBLocationAvailability } from './entities/location_availability.entity';
 import { TBService } from './entities/service.entity';
 import { TBNotification } from './entities/notifications.entity';
 import { TBBooking } from './entities/booking.entity';
@@ -24,8 +25,10 @@ const baseDataSourceOptions: DataSourceOptions = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
   charset: 'utf8mb4',
+  timezone: 'Z',
   entities: [
     TBLocation,
+    TBLocationAvailability,
     TBLocationAddress,
     TBLocationMedia,
     TBLocationService,

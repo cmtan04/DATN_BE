@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import 'dotenv/config';
@@ -15,6 +16,12 @@ declare const module: {
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,// để dùng @Type
+      whitelist: true,// để loại bỏ các thuộc tính không có trong dto 
+    }),
+  );
   app.enableCors();
   app.useStaticAssets(join(process.cwd(), 'uploads'), {
     prefix: '/uploads',

@@ -32,9 +32,6 @@ import type {
 } from '@payos/node';
 
 const CURRENCY = 'vnd';
-const MAX_CONTACT_LENGTH = 255;
-const MAX_PHONE_LENGTH = 50;
-const MAX_NOTE_LENGTH = 2000;
 
 @Injectable()
 export class PaymentService {
@@ -59,9 +56,14 @@ export class PaymentService {
       throw new NotFoundException('Location not found');
     }
 
+    if (input.guestCount > Number(location.maxGuestCount)) {
+      throw new BadRequestException('guestCount exceeds location capacity');
+    }
+
     const hasOverlap =
-      await this.paymentRepository.hasConfirmedBookingOverlap(
+      await this.paymentRepository.hasLocationAvailabilityConflict(
         input.locationId,
+        Number(location.quantity),
         input.startDate,
         input.endDate,
       );
@@ -318,31 +320,25 @@ export class PaymentService {
   ): Required<Omit<CheckoutPaymentRequestDto, 'note'>> & {
     note?: string | null;
   } {
-    const input = payload as unknown as Record<string, unknown>;
-    const startDate = this.readDate(input.startDate, 'startDate');
-    const endDate = this.readDate(input.endDate, 'endDate');
+    const startDate = this.readDate(payload.startDate, 'startDate');
+    const endDate = this.readDate(payload.endDate, 'endDate');
 
-    if (new Date(`${endDate}T00:00:00.000Z`) <= new Date(`${startDate}T00:00:00.000Z`)) {
+    if (
+      new Date(`${endDate}T00:00:00.000Z`) <=
+      new Date(`${startDate}T00:00:00.000Z`)
+    ) {
       throw new BadRequestException('endDate must be after startDate');
     }
 
     return {
-      locationId: this.readPositiveInteger(input.locationId, 'locationId'),
+      locationId: payload.locationId,
       startDate,
       endDate,
-      guestCount: this.readPositiveInteger(input.guestCount, 'guestCount'),
-      contactName: this.readRequiredString(
-        input.contactName,
-        'contactName',
-        MAX_CONTACT_LENGTH,
-      ),
-      contactPhone: this.readRequiredString(
-        input.contactPhone,
-        'contactPhone',
-        MAX_PHONE_LENGTH,
-      ),
-      contactEmail: this.readEmail(input.contactEmail),
-      note: this.readOptionalString(input.note, MAX_NOTE_LENGTH),
+      guestCount: payload.guestCount,
+      contactName: payload.contactName,
+      contactPhone: payload.contactPhone,
+      contactEmail: payload.contactEmail,
+      note: payload.note || null,
     };
   }
 
@@ -353,74 +349,14 @@ export class PaymentService {
 
     const date = new Date(`${value}T00:00:00.000Z`);
 
-    if (Number.isNaN(date.getTime())) {
+    if (
+      Number.isNaN(date.getTime()) ||
+      date.toISOString().slice(0, 10) !== value
+    ) {
       throw new BadRequestException(`${fieldName} is invalid`);
     }
 
     return value;
-  }
-
-  private readPositiveInteger(value: unknown, fieldName: string): number {
-    const numberValue = Number(value);
-
-    if (!Number.isInteger(numberValue) || numberValue <= 0) {
-      throw new BadRequestException(`${fieldName} must be a positive integer`);
-    }
-
-    return numberValue;
-  }
-
-  private readRequiredString(
-    value: unknown,
-    fieldName: string,
-    maxLength: number,
-  ): string {
-    if (typeof value !== 'string' || !value.trim()) {
-      throw new BadRequestException(`${fieldName} is required`);
-    }
-
-    const trimmed = value.trim();
-
-    if (trimmed.length > maxLength) {
-      throw new BadRequestException(`${fieldName} is too long`);
-    }
-
-    return trimmed;
-  }
-
-  private readOptionalString(
-    value: unknown,
-    maxLength: number,
-  ): string | null {
-    if (value === undefined || value === null || value === '') {
-      return null;
-    }
-
-    if (typeof value !== 'string') {
-      throw new BadRequestException('note is invalid');
-    }
-
-    const trimmed = value.trim();
-
-    if (trimmed.length > maxLength) {
-      throw new BadRequestException('note is too long');
-    }
-
-    return trimmed || null;
-  }
-
-  private readEmail(value: unknown): string {
-    const email = this.readRequiredString(
-      value,
-      'contactEmail',
-      MAX_CONTACT_LENGTH,
-    );
-
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      throw new BadRequestException('contactEmail is invalid');
-    }
-
-    return email;
   }
 
   private mapCheckUpdateResponse(pair: {

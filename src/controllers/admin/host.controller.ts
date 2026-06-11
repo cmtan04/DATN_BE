@@ -9,10 +9,12 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AdminService } from '@/services/admin/admin.service';
-import { UpdateHostStatusRequestDto } from '@/dtos/admin/host.dto';
+import {
+  AdminHostListQueryDto,
+  UpdateHostStatusRequestDto,
+} from '@/dtos/admin/host.dto';
 import type {
   AdminHostResponseDto,
-  AdminHostStatusQuery,
 } from '@/dtos/admin/host.dto';
 import { User } from '@/user.decorator';
 import { UserRole } from '@assets/enum/user.enum';
@@ -25,9 +27,9 @@ export class AdminHostController {
   @Get('/hosts')
   public async getHosts(
     @User('role') adminRole: UserRole,
-    @Query('status') status?: AdminHostStatusQuery,
+    @Query() query: AdminHostListQueryDto,
   ): Promise<AdminHostResponseDto[]> {
-    return await this.adminService.getHosts(adminRole, status);
+    return await this.adminService.getHosts(adminRole, query.status);
   }
 
   @Patch('/hosts/:userId/status')

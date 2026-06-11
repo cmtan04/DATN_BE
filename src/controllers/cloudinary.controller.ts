@@ -7,8 +7,8 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from '@/services/cloudinary.service';
+import { CreateUploadSignatureRequestDto } from '@/dtos/upload.dto';
 import type {
-  CreateUploadSignatureRequest,
   CreateUploadSignatureResponse,
 } from '@/services/cloudinary.service';
 import { ApiTags, ApiOperation, ApiConsumes, ApiBody } from '@nestjs/swagger';
@@ -37,7 +37,7 @@ export class CloudinaryController {
     },
   })
   public createUploadSignature(
-    @Body() payload: CreateUploadSignatureRequest,
+    @Body() payload: CreateUploadSignatureRequestDto,
   ): CreateUploadSignatureResponse {
     return this.cloudinaryService.createUploadSignature(payload);
   }

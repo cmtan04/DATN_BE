@@ -55,4 +55,7 @@ export class TBLocationAddress extends BaseEntity {
     comment: 'Vĩ độ',
   })
   lng: number;
+
+  @Column({ type: 'varchar', length: 255, nullable: false })
+  normalFullAddress: string;
 }

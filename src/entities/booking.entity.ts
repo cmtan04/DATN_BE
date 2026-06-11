@@ -22,6 +22,22 @@ export class TBBooking extends BaseEntity {
   @Column({ type: 'date', nullable: false, comment: 'Ngay ket thuc dat phong' })
   endDate: string;
 
+  @Column({
+    type: 'varchar',
+    length: 5,
+    nullable: false,
+    comment: 'Thoi gian check-in (HH:mm DD/MM/YYYY)',
+  })
+  checkInTime: string;
+
+  @Column({
+    type: 'varchar',
+    length: 5,
+    nullable: false,
+    comment: 'Thoi gian check-out (HH:mm DD/MM/YYYY )',
+  })
+  checkOutTime: string;
+
   @Column({ type: 'int', nullable: false, comment: 'So luong khach' })
   guestCount: number;
 

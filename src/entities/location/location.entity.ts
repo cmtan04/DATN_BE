@@ -35,6 +35,9 @@ export class TBLocation extends BaseEntity {
   @Column({ type: 'int', nullable: false, comment: 'Dien tich' })
   area: number;
 
+  @Column({ type: 'int', nullable: false, comment: 'So luong khach' })
+  maxGuestCount: number;
+
   @Column({ type: 'int', nullable: true, comment: 'Primary key' })
   locationAddressId?: number;
 
@@ -53,4 +56,7 @@ export class TBLocation extends BaseEntity {
     comment: 'Diem danh gia trung binh',
   })
   averageRating: number;
+
+  @Column({ type: 'boolean', nullable: false, default: true })
+  isActive: boolean;
 }

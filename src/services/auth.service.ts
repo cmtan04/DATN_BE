@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   ConflictException,
   Injectable,
   UnauthorizedException,
@@ -25,8 +24,6 @@ export class AuthService {
   ) {}
 
   public async signUp(payload: SignUpRequestDto): Promise<SignUpResponseDto> {
-    this.validateSignUpPayload(payload);
-
     const existedEmail = await this.authRepository.findByEmail(payload.email);
     if (existedEmail) {
       throw new ConflictException('Email already exists');
@@ -49,10 +46,6 @@ export class AuthService {
   }
 
   public async signIn(payload: SignInRequestDto): Promise<SignInResponseDto> {
-    if (!payload.email || !payload.password) {
-      throw new BadRequestException('Missing email or password');
-    }
-
     const user = await this.authRepository.findByEmail(payload.email);
     if (
       !user ||
@@ -95,17 +88,6 @@ export class AuthService {
       return result;
     } catch (error) {
       throw new UnauthorizedException('Failed to generate access token');
-    }
-  }
-
-  private validateSignUpPayload(payload: SignUpRequestDto): void {
-    if (
-      !payload.email ||
-      !payload.password ||
-      !payload.fullName ||
-      !payload.phoneNumber
-    ) {
-      throw new BadRequestException('Missing required sign up information');
     }
   }
 

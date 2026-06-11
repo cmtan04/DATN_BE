@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PaymentController } from '@/controllers/payment.controller';
 import { TBBooking } from '@/entities/booking.entity';
 import { TBLocation } from '@/entities/location/location.entity';
+import { TBLocationAvailability } from '@/entities/location_availability.entity';
 import { TBPayosWebhookEvent } from '@/entities/payos-webhook-event.entity';
 import { TBPayment } from '@/entities/payment.entity';
 import { NotificationModule } from '@/modules/notification.module';
@@ -19,6 +20,7 @@ import { PayosService } from '@/services/payos.service';
     TypeOrmModule.forFeature([
       TBBooking,
       TBLocation,
+      TBLocationAvailability,
       TBPayment,
       TBPayosWebhookEvent,
     ]),
