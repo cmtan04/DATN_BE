@@ -6,7 +6,7 @@ import {
 } from '@/dtos/auth/signIn.dto';
 import { SignUpRequestDto, SignUpResponseDto } from '@/dtos/auth/signUp.dto';
 import { AuthService } from '@/services/auth.service';
-import { Public } from '@/common/jwt/public.decorator';
+import { Public } from '@/common/decorators/public.decorator';
 
 @Controller('auth')
 export class AuthController {

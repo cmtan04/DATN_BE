@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
-import { IS_PUBLIC_KEY } from './public.decorator';
+import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -42,17 +42,17 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     // Nếu có lỗi xác thực hoặc không tìm thấy user (token sai/hết hạn)
     if (err || !user) {
       this.logger.error('Authentication failed!');
-      
+
       // Log thêm thông tin chi tiết nếu có (ví dụ: "jwt expired")
       if (info) {
         this.logger.error('Auth Info: ' + JSON.stringify(info));
       }
-      
+
       // Log lỗi kỹ thuật nếu có
       if (err) {
         this.logger.error('Auth Error: ' + JSON.stringify(err));
       }
-      
+
       // Ném lỗi 401 Unauthorized về phía Client
       throw err ?? new UnauthorizedException('Authentication failed');
     }

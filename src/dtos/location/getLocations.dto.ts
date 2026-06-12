@@ -103,7 +103,7 @@ export class GetLocationsQueryDto {
   @Min(0)
   maxArea?: number;
 
-  @ApiPropertyOptional({ description: 'Location type ID', example: '1' })
+  @ApiPropertyOptional({ description: 'Location type ID' })
   @IsOptional()
   @Type(() => Number)
   @IsInt()
@@ -170,8 +170,13 @@ export class GetLocationsQueryDto {
 export interface GetLocationAddressResponseDto {
   id: number;
   fullAddress: string;
+  province?: string;
+  district?: string;
+  country?: string;
+  region?: string;
   lat: number;
   lng: number;
+  normalFullAddress?: string;
 }
 
 export interface GetLocationOwnerResponseDto {

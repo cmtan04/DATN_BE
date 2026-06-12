@@ -13,10 +13,8 @@ import {
   AdminHostListQueryDto,
   UpdateHostStatusRequestDto,
 } from '@/dtos/admin/host.dto';
-import type {
-  AdminHostResponseDto,
-} from '@/dtos/admin/host.dto';
-import { User } from '@/user.decorator';
+import type { AdminHostResponseDto } from '@/dtos/admin/host.dto';
+import { User } from '@/common/decorators/user.decorator';
 import { UserRole } from '@assets/enum/user.enum';
 
 @Controller('admin')

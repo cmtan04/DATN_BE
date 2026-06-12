@@ -22,38 +22,42 @@ import {
 import { GetLocationDetailResponseDto } from './getLocations.dto';
 import { Trim } from '@/common/validators/validators';
 
+type LocationMediaType = 'image' | 'video';
+
+const LocationMediaTypeValues: LocationMediaType[] = ['image', 'video'];
+
 export class CreateLocationAddressRequestDto {
   @ApiProperty({ example: '123 Tran Phu, Ha Dong, Ha Noi' })
-  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
   @IsString()
+  @Trim()
   @IsNotEmpty()
   @MaxLength(255)
   fullAddress: string;
 
   @ApiProperty({ example: 'Ha Noi' })
-  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
   @IsString()
+  @Trim()
   @IsNotEmpty()
   @MaxLength(255)
   province: string;
 
   @ApiProperty({ example: 'Ha Dong' })
-  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
   @IsString()
+  @Trim()
   @IsNotEmpty()
   @MaxLength(255)
   district: string;
 
   @ApiProperty({ example: 'Viet Nam' })
-  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
   @IsString()
+  @Trim()
   @IsNotEmpty()
   @MaxLength(255)
   country: string;
 
   @ApiProperty({ example: 'Mien Bac' })
-  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
   @IsString()
+  @Trim()
   @IsNotEmpty()
   @MaxLength(255)
   region: string;
@@ -78,18 +82,11 @@ export class CreateLocationServiceRequestDto {
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  locationId: number;
-
-  @ApiProperty({ example: 1 })
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
   serviceId: number;
 
-  @ApiPropertyOptional({ example: true, default: true })
-  @IsOptional()
+  @ApiProperty({ example: true, default: true })
   @IsBoolean()
-  isFree?: boolean;
+  isFree: boolean;
 
   @ApiPropertyOptional({ example: 150000 })
   @IsOptional()
@@ -98,11 +95,12 @@ export class CreateLocationServiceRequestDto {
   @IsNumber()
   price?: number;
 
-  @ApiPropertyOptional({ example: 'day' })
-  @ValidateIf((object) => object.isFree === false)
+  @ApiPropertyOptional({ example: 'VND/tháng' })
   @IsOptional()
-  @Trim()
+  @ValidateIf((object) => object.isFree === false)
   @IsString()
+  @Trim()
+  @IsNotEmpty({ message: 'Price is required when the product is not free' })
   @MaxLength(50)
   priceUnit?: string;
 
@@ -114,17 +112,17 @@ export class CreateLocationServiceRequestDto {
 
 export class CreateLocationMediaRequestDto {
   @ApiProperty({ example: 'image' })
-  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
+  @Trim()
   @IsString()
-  @IsIn(['image'])
+  @IsIn(LocationMediaTypeValues)
   @MaxLength(50)
-  type: string;
+  type: LocationMediaType;
 
   @ApiProperty({
     example:
       'https://res.cloudinary.com/demo/image/upload/v1234567890/locations/sample.jpg',
   })
-  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
+  @Trim()
   @IsString()
   @IsUrl()
   @MaxLength(500)
@@ -140,7 +138,7 @@ export class CreateLocationMediaRequestDto {
 
 export class CreateLocationRequestDto {
   @ApiProperty({ example: 'Can ho view ho Tay' })
-  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
+  @Trim()
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
@@ -166,8 +164,8 @@ export class CreateLocationRequestDto {
   @Min(1)
   price: number;
 
-  @ApiProperty({ example: 'night' })
-  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
+  @ApiProperty({ example: 'VND/tháng' })
+  @Trim()
   @IsString()
   @IsNotEmpty()
   @MaxLength(50)
@@ -221,12 +219,6 @@ export class CreateLocationRequestDto {
 
 export class CreateLocationRepositoryDto extends CreateLocationRequestDto {
   ownerId: number;
-}
-
-export interface CreateLocationMediaInput {
-  type: string;
-  url: string;
-  displayOrder: number;
 }
 
 export type CreateLocationResponseDto = GetLocationDetailResponseDto;

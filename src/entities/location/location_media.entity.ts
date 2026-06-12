@@ -22,6 +22,6 @@ export class TBLocationMedia extends BaseEntity {
   @Column({ type: 'int', nullable: false, comment: 'Thu tu hien thi' })
   displayOrder: number;
 
-  @Column({ type: 'int', nullable: true, comment: 'Primary key' })
-  locationId?: number;
+  @Column({ type: 'int', nullable: false, comment: 'Id cua location' })
+  locationId: number;
 }

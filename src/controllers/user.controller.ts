@@ -6,7 +6,7 @@ import {
   UpdateCurrentUserResponseDto,
 } from '@/dtos/user/user.dto';
 import { UserService } from '@/services/user.service';
-import { User } from '@/user.decorator';
+import { User } from '@/common/decorators/user.decorator';
 
 @Controller('users')
 export class UserController {

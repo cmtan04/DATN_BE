@@ -22,43 +22,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Brackets, DataSource, In, Repository } from 'typeorm';
 import { TBService } from '@/entities/service.entity';
-
-interface LocationRawRow {
-  location_id: number;
-  location_name: string;
-  location_description: string | null;
-  location_ownerId: number;
-  location_price: number;
-  location_priceUnit: string;
-  location_area: number;
-  location_maxGuestCount: number;
-  location_averageRating: string | number;
-  location_createdAt: Date;
-  address_id: number | null;
-  address_fullAddress: string | null;
-  address_province: string | null;
-  address_district: string | null;
-  address_country: string | null;
-  address_region: string | null;
-  address_lat: string | number | null;
-  address_lng: string | number | null;
-  type_id: number | null;
-  type_name: string | null;
-  type_code: string | null;
-  type_canHaveMultiRoom: number | null;
-  media_id: number | null;
-  media_type: string | null;
-  media_url: string | null;
-  media_displayOrder: number | null;
-  owner_fullName: string | null;
-  owner_phone: string | null;
-}
-
-interface RelatedLocationSourceRawRow {
-  location_locationTypeId: number | null;
-  address_province: string | null;
-  address_district: string | null;
-}
+import { ServiceRepository } from './service.repository';
 
 const RELATED_LOCATIONS_LIMIT = 6;
 
@@ -80,9 +44,6 @@ export class LocationRepository {
 
   @InjectRepository(TBLocationType)
   private readonly locationType: Repository<TBLocationType>;
-
-  @InjectRepository(TBService)
-  private readonly service: Repository<TBService>;
 
   public async locationTypeExists(locationTypeId: number): Promise<boolean> {
     return await this.dataSource
@@ -124,7 +85,7 @@ export class LocationRepository {
   ): Promise<GetLocationServiceResponseDto[]> {
     const locationServices = await this.locationService
       .createQueryBuilder('ls')
-      .leftJoin('service', 's', 's.id = ls.serviceId') // Dùng leftJoin thay vì leftJoinAndSelect
+      .leftJoin('tb_service', 's', 's.id = ls.serviceId') // Dùng leftJoin thay vì leftJoinAndSelect
       .select([
         'ls.isFree AS isFree',
         'ls.price AS price',
@@ -393,7 +354,12 @@ export class LocationRepository {
     payload: CreateLocationRepositoryDto,
   ): Promise<GetLocationDetailResponseDto> {
     const address = await this.locationAddress.save(
-      this.locationAddress.create(payload.address),
+      this.locationAddress.create({
+        ...payload.address,
+        normalFullAddress: this.buildCleanedVietNameseString(
+          payload.address.fullAddress,
+        ),
+      }),
     );
     const location = await this.location.save(
       this.location.create({
@@ -411,14 +377,16 @@ export class LocationRepository {
       }),
     );
 
-    await this.locationMedia.save(
-      payload.media.map((media) =>
-        this.locationMedia.create({
-          ...media,
-          locationId: location.id,
-        }),
-      ),
-    );
+    if (payload.media && payload.media.length > 0) {
+      await this.locationMedia.save(
+        payload.media.map((media) =>
+          this.locationMedia.create({
+            ...media,
+            locationId: location.id,
+          }),
+        ),
+      );
+    }
 
     if (payload.services && payload.services.length > 0) {
       await this.locationService.save(

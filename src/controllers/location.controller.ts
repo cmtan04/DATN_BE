@@ -7,7 +7,6 @@ import {
   ParseIntPipe,
   Query,
 } from '@nestjs/common';
-import { ApiBody } from '@nestjs/swagger';
 import {
   CreateLocationRequestDto,
   CreateLocationResponseDto,
@@ -15,13 +14,14 @@ import {
 import {
   GetLocationsQueryDto,
   GetLocationsResponseDto,
-  LocationDetailResponseDto,
-  LocationTypeResponseDto,
+  GetLocationDetailResponseDto,
+  GetLocationTypeResponseDto,
 } from '@/dtos/location/getLocations.dto';
 import { LocationService } from '@/services/location.service';
-import { Public } from '@/common/jwt/public.decorator';
-import { User } from '@/user.decorator';
+import { Public } from '@/common/decorators/public.decorator';
+import { User } from '@/common/decorators/user.decorator';
 import { UserRole } from '@assets/enum/user.enum';
+import { Role } from '@/common/decorators/role.decorator';
 
 @Controller('locations')
 export class LocationController {
@@ -35,45 +35,25 @@ export class LocationController {
     return await this.locationService.getLocations(query);
   }
 
-  @Post()
-  public async createLocation(
-    @User('id') ownerId: number,
-    @User('role') userRole: UserRole,
-    @Body() payload: CreateLocationRequestDto,
-  ): Promise<CreateLocationResponseDto> {
-    return await this.locationService.createLocation(
-      ownerId,
-      userRole,
-      payload,
-    );
-  }
-
   @Get('location-types')
   @Public()
-  public async getLocationTypes(): Promise<LocationTypeResponseDto[]> {
+  public async getLocationTypes(): Promise<GetLocationTypeResponseDto[]> {
     return await this.locationService.getLocationTypes();
-  }
-
-  @Get('owner/me')
-  public async getOwnerLocations(
-    @User('id') ownerId: number,
-  ): Promise<GetLocationsResponseDto> {
-    return await this.locationService.getOwnerLocations(ownerId);
   }
 
   @Get(':id')
   @Public()
-  public async getLocationById(
+  public async getLocationDetail(
     @Param('id', ParseIntPipe) id: number,
-  ): Promise<LocationDetailResponseDto> {
-    return await this.locationService.getLocationById(id);
+  ): Promise<GetLocationDetailResponseDto | null> {
+    return await this.locationService.getLocationDetail(id);
   }
 
-  @Get(':id/related')
-  @Public()
-  public async getRelatedLocations(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<GetLocationsResponseDto> {
-    return await this.locationService.getRelatedLocations(id);
-  }
+  // @Get(':id/related')
+  // @Public()
+  // public async getRelatedLocations(
+  //   @Param('id', ParseIntPipe) id: number,
+  // ): Promise<GetLocationsResponseDto> {
+  //   return await this.locationService.getRelatedLocations(id);
+  // }
 }

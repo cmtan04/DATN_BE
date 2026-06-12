@@ -1,13 +1,13 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { Public } from '@/common/jwt/public.decorator';
+import { Public } from '@/common/decorators/public.decorator';
 import {
   CheckoutPaymentRequestDto,
   CheckoutPaymentResponseDto,
   PaymentCheckUpdateResponseDto,
 } from '@/dtos/payment/payment.dto';
 import { PaymentService } from '@/services/payment.service';
-import { User } from '@/user.decorator';
+import { User } from '@/common/decorators/user.decorator';
 import type { Webhook } from '@payos/node';
 
 @Controller('payments')

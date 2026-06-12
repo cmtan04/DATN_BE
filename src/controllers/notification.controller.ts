@@ -12,11 +12,11 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { JwtService } from '@nestjs/jwt';
 import { ApiTags } from '@nestjs/swagger';
 import { fromEvent, map, Observable } from 'rxjs';
-import { Public } from '@/common/jwt/public.decorator';
+import { Public } from '@/common/decorators/public.decorator';
 import { JwtPayload } from '@/dtos/jwt.dto';
 import { NotificationResponseDto } from '@/dtos/notification.dto';
 import { NotificationService } from '@/services/notification.service';
-import { User } from '@/user.decorator';
+import { User } from '@/common/decorators/user.decorator';
 
 @Controller('notifications')
 @ApiTags('Notifications')

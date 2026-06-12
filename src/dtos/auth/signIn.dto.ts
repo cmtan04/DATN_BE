@@ -1,4 +1,5 @@
-import { Transform } from 'class-transformer';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform, Type } from 'class-transformer';
 import {
   IsBoolean,
   IsEmail,
@@ -9,29 +10,24 @@ import {
 } from 'class-validator';
 
 export class SignInRequestDto {
-  @Transform(({ value }) =>
-    typeof value === 'string' ? value.trim() : value,
-  )
+  @ApiProperty({ example: 'owner@test.com' })
+  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
   @IsEmail()
   @MaxLength(255)
   email: string;
 
+  @ApiProperty({ example: 'Password@123' })
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
   password: string;
 
-  @Transform(({ value }) => {
-    if (value === 'true') {
-      return true;
-    }
-
-    if (value === 'false') {
-      return false;
-    }
-
-    return value;
+  @ApiPropertyOptional({
+    description: 'Remember me option',
+    default: false,
+    example: true,
   })
+  @Type(() => Boolean)
   @IsOptional()
   @IsBoolean()
   rememberMe?: boolean;

@@ -9,6 +9,7 @@ import { TBLocation } from '@/entities/location/location.entity';
 import { TBLocationAvailability } from '@/entities/location_availability.entity';
 import { LocationRepository } from '@/repositories/location.repository';
 import { LocationService } from '@/services/location.service';
+import { OwnerLocationController } from "@/controllers/owner/owner.location.controller";
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { LocationService } from '@/services/location.service';
       TBLocationType,
     ]),
   ],
-  controllers: [LocationController],
+  controllers: [LocationController, OwnerLocationController],
   providers: [LocationService, LocationRepository],
 })
 export class LocationModule {}
