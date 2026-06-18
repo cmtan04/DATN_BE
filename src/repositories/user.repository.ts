@@ -26,11 +26,13 @@ export interface UpdateOwnerRequestData {
 
 @Injectable()
 export class UserRepository {
-  @InjectRepository(TBUserDefault)
-  private readonly user: Repository<TBUserDefault>;
+  constructor(
+    @InjectRepository(TBUserDefault)
+    private readonly user: Repository<TBUserDefault>,
 
-  @InjectRepository(TBUserProfile)
-  private readonly userProfile: Repository<TBUserProfile>;
+    @InjectRepository(TBUserProfile)
+    private readonly userProfile: Repository<TBUserProfile>,
+  ) {}
 
   public async findById(userId: number): Promise<TBUserDefault | null> {
     return await this.user.findOne({ where: { id: userId } });
@@ -102,7 +104,9 @@ export class UserRepository {
     return users.map((user) =>
       this.mapToAdminHostResponse(
         user,
-        user.userProfileId ? profileById.get(user.userProfileId) ?? null : null,
+        user.userProfileId
+          ? (profileById.get(user.userProfileId) ?? null)
+          : null,
       ),
     );
   }

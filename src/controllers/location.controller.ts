@@ -1,5 +1,4 @@
 import {
-  Body,
   Controller,
   Get,
   Post,
@@ -7,10 +6,6 @@ import {
   ParseIntPipe,
   Query,
 } from '@nestjs/common';
-import {
-  CreateLocationRequestDto,
-  CreateLocationResponseDto,
-} from '@/dtos/location/createLocation.dto';
 import {
   GetLocationsQueryDto,
   GetLocationsResponseDto,
@@ -20,8 +15,6 @@ import {
 import { LocationService } from '@/services/location.service';
 import { Public } from '@/common/decorators/public.decorator';
 import { User } from '@/common/decorators/user.decorator';
-import { UserRole } from '@assets/enum/user.enum';
-import { Role } from '@/common/decorators/role.decorator';
 
 @Controller('locations')
 export class LocationController {
@@ -31,8 +24,9 @@ export class LocationController {
   @Public()
   public async getLocations(
     @Query() query: GetLocationsQueryDto,
+    @User('id') userId?: number,
   ): Promise<GetLocationsResponseDto> {
-    return await this.locationService.getLocations(query);
+    return await this.locationService.getLocations(query, userId);
   }
 
   @Get('location-types')
@@ -45,15 +39,28 @@ export class LocationController {
   @Public()
   public async getLocationDetail(
     @Param('id', ParseIntPipe) id: number,
+    @User('id') userId?: number,
   ): Promise<GetLocationDetailResponseDto | null> {
-    return await this.locationService.getLocationDetail(id);
+    return await this.locationService.getLocationDetail(id, userId);
   }
 
-  // @Get(':id/related')
-  // @Public()
-  // public async getRelatedLocations(
-  //   @Param('id', ParseIntPipe) id: number,
-  // ): Promise<GetLocationsResponseDto> {
-  //   return await this.locationService.getRelatedLocations(id);
-  // }
+  @Get(':id/related')
+  @Public()
+  public async getRelatedLocations(
+    @Param('id', ParseIntPipe) id: number,
+    @User('id') userId?: number,
+  ): Promise<GetLocationsResponseDto> {
+    return await this.locationService.getRelatedLocations(id, userId);
+  }
+
+  @Post(':id/toggle-favourite')
+  public async toggleFavouriteLocation(
+    @Param('id', ParseIntPipe) locationId: number,
+    @User('id') userId: number,
+  ): Promise<{ isFavourite: boolean }> {
+    return await this.locationService.toggleFavouriteLocation(
+      userId,
+      locationId,
+    );
+  }
 }

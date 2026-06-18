@@ -14,6 +14,8 @@ import { TBPayment } from './entities/payment.entity';
 import { TBPayosWebhookEvent } from './entities/payos-webhook-event.entity';
 import { TBUserDefault } from './entities/user/user_default.entity';
 import { TBUserProfile } from './entities/user/user_profile.entity';
+import { TBOTP } from './entities/otp.entity';
+import { TBLocationFavourite } from './entities/location/location_favourite.entity';
 
 dotenv.config();
 
@@ -40,6 +42,8 @@ const baseDataSourceOptions: DataSourceOptions = {
     TBService,
     TBUserDefault,
     TBUserProfile,
+    TBOTP,
+    TBLocationFavourite,
   ],
 };
 

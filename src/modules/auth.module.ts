@@ -9,11 +9,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from '@/common/jwt/jwt.strategy';
+import { OtpModule } from './OTP.module';
 
 @Module({
   imports: [
     ConfigModule,
     PassportModule,
+    OtpModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -27,7 +29,7 @@ import { JwtStrategy } from '@/common/jwt/jwt.strategy';
     TypeOrmModule.forFeature([TBUserDefault, TBUserProfile]),
   ],
   controllers: [AuthController],
-  providers: [AuthService,JwtStrategy, AuthRepository],
+  providers: [AuthService, JwtStrategy, AuthRepository],
   exports: [AuthService, JwtModule],
 })
 export class AuthModule {}

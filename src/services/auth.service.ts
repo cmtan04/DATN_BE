@@ -11,6 +11,12 @@ import * as bcrypt from 'bcrypt';
 import { JwtPayload } from '@/dtos/jwt.dto';
 import { JwtService } from '@nestjs/jwt';
 import { UserRole, UserStatus } from '@assets/enum/user.enum';
+import { OtpService } from './OTP.service';
+import { ResetPasswordDto } from '@/dtos/auth/forgotPassword.dto';
+import { BadRequestException } from '@nestjs/common/exceptions';
+import { TBUserDefault } from '@/entities/user/user_default.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 const DEFAULT_USER_ROLE = UserRole.USER;
 const ROUNDS = 10;
@@ -21,6 +27,9 @@ export class AuthService {
     private readonly authRepository: AuthRepository,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly otpService: OtpService,
+    @InjectRepository(TBUserDefault)
+    private readonly userRepository: Repository<TBUserDefault>,
   ) {}
 
   public async signUp(payload: SignUpRequestDto): Promise<SignUpResponseDto> {
@@ -68,7 +77,7 @@ export class AuthService {
       };
       const rememberMe = payload.rememberMe || false;
       const accessToken = this.jwtService.sign(jwtPayload, {
-        expiresIn: rememberMe ? '1h' : '1d',
+        expiresIn: '1d',
       });
 
       const result: SignInResponseDto = {
@@ -136,5 +145,44 @@ export class AuthService {
     } catch (error) {
       throw new UnauthorizedException('Invalid or expired refresh token');
     }
+  }
+
+  public async resetPassword(resetPasswordDto: ResetPasswordDto) {
+    const { resetToken, password } = resetPasswordDto;
+
+    if (!resetToken?.trim() || !password?.trim()) {
+      throw new BadRequestException('Reset token and password are required');
+    }
+
+    // Lấy email dựa theo resetToken
+    const email = await this.otpService.getEmailFromToken({ resetToken });
+
+    // Lấy user dựa theo email
+    const user = await this.userRepository.findOne({
+      where: { email },
+    });
+    if (!user) {
+      throw new BadRequestException(
+        'Không tìm thấy tài khoản liên kết với token này.',
+      );
+    }
+
+    user.password = await this.hashPassword(password);
+    await this.userRepository.update(
+      { id: user.id },
+      { password: user.password },
+    );
+
+    // Xóa record
+    await this.otpService.deleteOldOtps(email);
+
+    return {
+      success: true,
+      message: 'Mật khẩu của bạn đã được thay đổi thành công!',
+    };
+  }
+
+  async pingDatabase(): Promise<void> {
+    await this.authRepository.pingDatabase();
   }
 }

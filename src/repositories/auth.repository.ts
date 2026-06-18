@@ -6,11 +6,13 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthRepository {
-  @InjectRepository(TBUserDefault)
-  private readonly user: Repository<TBUserDefault>;
+  constructor(
+    @InjectRepository(TBUserDefault)
+    private readonly user: Repository<TBUserDefault>,
 
-  @InjectRepository(TBUserProfile)
-  private readonly userProfile: Repository<TBUserProfile>;
+    @InjectRepository(TBUserProfile)
+    private readonly userProfile: Repository<TBUserProfile>,
+  ) {}
 
   public findByEmail = async (email: string): Promise<TBUserDefault | null> => {
     return await this.user.findOne({ where: { email } });
@@ -34,4 +36,15 @@ export class AuthRepository {
 
     return await this.user.save(user);
   };
+
+  public updatePassword = async (
+    userId: number,
+    newPassword: string,
+  ): Promise<void> => {
+    await this.user.update({ id: userId }, { password: newPassword });
+  };
+
+  async pingDatabase(): Promise<void> {
+    await this.user.query('SELECT 1');
+  }
 }

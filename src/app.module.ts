@@ -7,12 +7,13 @@ import { LocationModule } from './modules/location.module';
 import { UserModule } from './modules/user.module';
 import { AdminModule } from './modules/admin.module';
 import { NotificationModule } from './modules/notification.module';
-import { PaymentModule } from './modules/payment.module';
 import { CloudinaryModule } from './modules/cloudinary.module';
 import { ServiceModule } from './modules/service.module';
 import { JwtAuthGuard } from './common/jwt/jwt.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { OtpModule } from './modules/OTP.module';
+import { BookingModule } from './modules/booking.module';
 
 @Module({
   imports: [
@@ -24,9 +25,11 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     UserModule,
     AdminModule,
     NotificationModule,
-    PaymentModule,
+    // PaymentModule,
     CloudinaryModule,
     ServiceModule,
+    OtpModule,
+    BookingModule,
   ],
   controllers: [],
   providers: [

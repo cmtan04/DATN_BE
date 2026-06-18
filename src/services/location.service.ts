@@ -12,7 +12,6 @@ import {
   GetLocationTypeResponseDto,
 } from '@/dtos/location/getLocations.dto';
 import { LocationRepository } from '@/repositories/location.repository';
-import { ServiceRepository } from '@/repositories/service.repository';
 const MAX_LIMIT = 100;
 const DEFAULT_SORT_BY: LocationSortBy = 'createdAt';
 const DEFAULT_SORT_ORDER: LocationSortOrder = 'DESC';
@@ -48,29 +47,42 @@ export class LocationService {
 
   public async getLocations(
     query: GetLocationsQueryDto,
+    userId?: number,
   ): Promise<GetLocationsResponseDto> {
-    return await this.locationRepository.getLocations(query);
+    return await this.locationRepository.getLocations(query, userId);
   }
 
   public async getLocationDetail(
     id: number,
+    userId?: number,
   ): Promise<GetLocationDetailResponseDto | null> {
     if (id <= 0) {
       throw new BadRequestException('Invalid location ID');
     }
-    return await this.locationRepository.getLocationDetail(id);
+    return await this.locationRepository.getLocationDetail(id, userId);
   }
 
   public async getLocationTypes(): Promise<GetLocationTypeResponseDto[]> {
     return await this.locationRepository.getAllLocationTypes();
   }
 
-  // public async getRelatedLocations(
-  //   id: number,
-  // ): Promise<GetLocationsResponseDto> {
-  //   if (id <= 0) {
-  //     throw new BadRequestException('Invalid location ID');
-  //   }
-  //   return await this.locationRepository.findRelatedLocations(id);
-  // }
+  public async getRelatedLocations(
+    id: number,
+    userId?: number,
+  ): Promise<GetLocationsResponseDto> {
+    if (id <= 0) {
+      throw new BadRequestException('Invalid location ID');
+    }
+    return await this.locationRepository.findRelatedLocations(id, userId);
+  }
+
+  public async toggleFavouriteLocation(
+    userId: number,
+    locationId: number,
+  ): Promise<{ isFavourite: boolean }> {
+    return await this.locationRepository.toggleFavouriteLocation(
+      userId,
+      locationId,
+    );
+  }
 }

@@ -1,7 +1,4 @@
-import {
-  CreateLocationRepositoryDto,
-  CreateLocationServiceRequestDto,
-} from '@/dtos/location/createLocation.dto';
+import { CreateLocationRepositoryDto } from '@/dtos/location/createLocation.dto';
 import {
   GetLocationsQueryDto,
   GetLocationsResponseDto,
@@ -20,11 +17,8 @@ import { TBLocation } from '@/entities/location/location.entity';
 import { TBLocationAvailability } from '@/entities/location_availability.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Brackets, DataSource, In, Repository } from 'typeorm';
-import { TBService } from '@/entities/service.entity';
-import { ServiceRepository } from './service.repository';
-
-const RELATED_LOCATIONS_LIMIT = 6;
+import { DataSource, In, Repository, Brackets } from 'typeorm';
+import { TBLocationFavourite } from '@/entities/location/location_favourite.entity';
 
 @Injectable()
 export class LocationRepository {
@@ -45,18 +39,24 @@ export class LocationRepository {
   @InjectRepository(TBLocationType)
   private readonly locationType: Repository<TBLocationType>;
 
+  @InjectRepository(TBLocationFavourite)
+  private readonly locationFavourite: Repository<TBLocationFavourite>;
+
   public async locationTypeExists(locationTypeId: number): Promise<boolean> {
     return await this.dataSource
       .getRepository(TBLocationType)
       .exists({ where: { id: locationTypeId } });
   }
 
-  private buildEmptyLocationsResponse(): GetLocationsResponseDto {
+  private buildEmptyLocationsResponse(
+    page: number,
+    limit: number,
+  ): GetLocationsResponseDto {
     return {
       data: [],
       meta: {
-        page: 1,
-        limit: RELATED_LOCATIONS_LIMIT,
+        page: page,
+        limit: limit,
         total: 0,
         totalPages: 0,
       },
@@ -94,6 +94,9 @@ export class LocationRepository {
         's.name AS name',
       ])
       .where('ls.locationId = :locationId', { locationId })
+      .andWhere('ls.isActive = 1') // Chỉ lấy các dịch vụ đang hoạt động
+      .addOrderBy('CASE WHEN ls.isFree = 1 THEN 1 ELSE 2 END', 'ASC')
+      .addOrderBy('ls.price', 'ASC')
       .getRawMany<GetLocationServiceResponseDto>();
 
     return locationServices.map((ls) => ({
@@ -145,9 +148,13 @@ export class LocationRepository {
       .createQueryBuilder('user');
     const owner = await ownerQuery
       .leftJoin('tb_user_profile', 'profile', 'profile.id = user.userProfileId')
-      .select(['user.id', 'profile.phoneNumber', 'profile.fullName'])
+      .select([
+        'user.id as id',
+        'profile.phoneNumber as phoneNumber',
+        'profile.fullName as fullName',
+      ])
       .where('user.id = :ownerId', { ownerId: id })
-      .getOne();
+      .getRawOne();
 
     if (!owner) return null;
     return {
@@ -160,6 +167,7 @@ export class LocationRepository {
   private async baseQueryBuilder(
     filter: GetLocationsQueryDto,
     ownerId?: number,
+    userId?: number,
   ) {
     const query = this.location
       .createQueryBuilder('location')
@@ -169,14 +177,29 @@ export class LocationRepository {
         'address',
         'address.id = location.locationAddressId',
       );
-
     if (ownerId !== undefined) {
       query.andWhere('location.ownerId = :ownerId', { ownerId });
+    }
+
+    if (userId !== undefined) {
+      query.leftJoin(
+        'tb_location_favourite',
+        'favourite',
+        // Khớp cả locationId và userId ngay khi JOIN
+        'favourite.locationId = location.id AND favourite.userId = :userId',
+        { userId },
+      );
     }
 
     if (filter.locationTypeId !== undefined) {
       query.andWhere('type.id = :locationTypeId', {
         locationTypeId: filter.locationTypeId,
+      });
+    }
+
+    if (filter.guestCount !== undefined) {
+      query.andWhere('location.maxGuestCount >= :guestCount', {
+        guestCount: filter.guestCount,
       });
     }
 
@@ -234,10 +257,14 @@ export class LocationRepository {
 
   public async getLocations(
     filter: GetLocationsQueryDto,
+    userId?: number,
     ownerId?: number,
   ): Promise<GetLocationsResponseDto> {
-    const query = await this.baseQueryBuilder(filter, ownerId);
+    const query = await this.baseQueryBuilder(filter, ownerId, userId);
     const total = await query.getCount();
+
+    if (total === 0)
+      return this.buildEmptyLocationsResponse(filter.page, filter.limit);
 
     // Lay id cac phong
     const baseLocation = await query
@@ -248,6 +275,7 @@ export class LocationRepository {
         'location.price as price',
         'location.priceUnit as priceUnit',
         'location.area as area',
+        'location.createdAt as createdAt',
         'location.maxGuestCount as maxGuestCount',
         'location.averageRating as averageRating',
         'type.id as typeId',
@@ -257,15 +285,16 @@ export class LocationRepository {
         'address.fullAddress as fullAddress',
         'address.lat as lat',
         'address.lng as lng',
+        userId !== undefined
+          ? 'IF(favourite.locationId IS NOT NULL, 1, 0) as isFavourite'
+          : '0 as isFavourite',
       ])
       .orderBy(filter?.sortBy || 'location.id', filter?.sortOrder)
-      .skip((filter.page - 1) * filter.limit) // Phân trang
-      .take(filter.limit)
+      .offset((filter.page - 1) * filter.limit) // Phân trang
+      .limit(filter.limit)
       .getRawMany();
 
     const locationIds = baseLocation.map((item) => item.id);
-
-    if (locationIds.length === 0) return this.buildEmptyLocationsResponse();
 
     const thumbnail = await this.locationMedia.find({
       where: { locationId: In(locationIds), displayOrder: 1 },
@@ -293,6 +322,7 @@ export class LocationRepository {
         area: location.area,
         maxGuestCount: location.maxGuestCount,
         averageRating: location.averageRating,
+        isFavourite: Boolean(Number(location.isFavourite)),
         address: {
           id: location.addressId,
           fullAddress: location.fullAddress,
@@ -317,6 +347,7 @@ export class LocationRepository {
 
   public async getLocationDetail(
     id: number,
+    userId?: number,
   ): Promise<GetLocationDetailResponseDto | null> {
     const baseLocation = await this.location.findOne({
       where: { id },
@@ -326,6 +357,13 @@ export class LocationRepository {
     }
 
     const owner = await this.getLocationOwner(baseLocation.ownerId);
+    let isFavourite = false;
+    if (userId !== undefined) {
+      const favourite = await this.locationFavourite.findOne({
+        where: { locationId: id, userId },
+      });
+      isFavourite = favourite !== null;
+    }
     const address = await this.getLocationAddress(
       baseLocation.locationAddressId!,
     );
@@ -342,6 +380,7 @@ export class LocationRepository {
       area: baseLocation.area,
       maxGuestCount: baseLocation.maxGuestCount,
       averageRating: baseLocation.averageRating,
+      isFavourite: isFavourite,
       createdAt: baseLocation.createdAt,
       address: address || null,
       type: type || null,
@@ -433,22 +472,6 @@ export class LocationRepository {
     return await this.locationMedia.count({ where: { locationId } });
   }
 
-  // private async createLocationService(
-  //   body: CreateLocationServiceRequestDto,
-  // ): Promise<CreateLocationServiceResponseDto> {
-  //   const locationService = await this.locationService.save(
-  //     this.locationService.create(body),
-  //   );
-  //   return {
-  //     locationId: locationService.locationId,
-  //     serviceId: locationService.serviceId,
-  //     isFree: locationService.isFree,
-  //     price: locationService.price ?? undefined,
-  //     priceUnit: locationService.priceUnit ?? undefined,
-  //     isActive: locationService.isActive,
-  //   };
-  // }
-
   private buildCleanedVietNameseString(str: string): string {
     return str
       .normalize('NFD')
@@ -465,164 +488,163 @@ export class LocationRepository {
       .trim(); // Xóa khoảng trắng thừa ở 2 đầu
   }
 
-  // private mapRowToResponse(row: LocationRawRow): GetLocationsResponseDto {
-  //   return {
-  //     id: Number(row.location_id),
-  //     name: row.location_name,
-  //     description: row.location_description,
-  //     price: Number(row.location_price),
-  //     priceUnit: row.location_priceUnit,
-  //     area: Number(row.location_area),
-  //     maxGuestCount: Number(row.location_maxGuestCount),
-  //     averageRating: Number(row.location_averageRating),
-  //     createdAt: row.location_createdAt,
-  //     address: row.address_id
-  //       ? {
-  //           id: Number(row.address_id),
-  //           fullAddress: row.address_fullAddress ?? '',
-  //           province: row.address_province ?? '',
-  //           district: row.address_district ?? '',
-  //           country: row.address_country ?? '',
-  //           region: row.address_region ?? '',
-  //           lat: Number(row.address_lat),
-  //           lng: Number(row.address_lng),
-  //         }
-  //       : null,
-  //     type: row.type_id
-  //       ? {
-  //           id: Number(row.type_id),
-  //           name: row.type_name ?? '',
-  //           code: row.type_code ?? '',
-  //           canHaveMultiRoom: Number(row.type_canHaveMultiRoom),
-  //         }
-  //       : null,
-  //     thumbnailMedia: row.media_id
-  //       ? {
-  //           id: Number(row.media_id),
-  //           type: row.media_type ?? '',
-  //           url: row.media_url ?? '',
-  //           displayOrder: Number(row.media_displayOrder),
-  //         }
-  //       : null,
-  //   };
-  // }
+  public async findRelatedLocations(
+    locationId: number,
+    userId?: number,
+  ): Promise<GetLocationsResponseDto> {
+    const sourceLocation = await this.location
+      .createQueryBuilder('location')
+      .innerJoin(
+        'tb_location_address',
+        'address',
+        'address.id = location.locationAddressId',
+      )
+      .select([
+        'location.locationTypeId AS locationTypeId',
+        'address.province AS province',
+        'address.district AS district',
+      ])
+      .where('location.id = :locationId', { locationId })
+      .getRawOne();
 
-  // public async findRelatedLocations(
-  //   locationId: number,
-  // ): Promise<GetLocationsResponseDto> {
-  //   const sourceLocation = await this.location
-  //     .createQueryBuilder('location')
-  //     .innerJoin(
-  //       'tb_location_address',
-  //       'address',
-  //       'address.id = location.locationAddressId',
-  //     )
-  //     .select([
-  //       'location.locationTypeId AS location_locationTypeId',
-  //       'address.province AS address_province',
-  //       'address.district AS address_district',
-  //     ])
-  //     .where('location.id = :locationId', { locationId })
-  //     .getRawOne<RelatedLocationSourceRawRow>();
+    if (!sourceLocation) {
+      return this.buildEmptyLocationsResponse(1, 10); // Trả về response rỗng nếu không tìm thấy location nguồn
+    }
 
-  //   if (!sourceLocation) {
-  //     return this.buildEmptyLocationsResponse();
-  //   }
+    const relatedLocations = await this.location
+      .createQueryBuilder('location')
+      .leftJoin('tb_user_default', 'user', 'user.id = location.ownerId')
+      .leftJoin('tb_user_profile', 'profile', 'profile.id = user.userProfileId')
+      .leftJoin(
+        'tb_location_address',
+        'address',
+        'address.id = location.locationAddressId',
+      )
+      .leftJoin('tb_location_type', 'type', 'type.id = location.locationTypeId')
+      .leftJoin(
+        'tb_location_media',
+        'media',
+        `media.id = (
+          SELECT thumbnail.id
+          FROM tb_location_media thumbnail
+          WHERE thumbnail.locationId = location.id
+          ORDER BY thumbnail.displayOrder ASC, thumbnail.id ASC
+          LIMIT 1
+        )`,
+      )
+      .leftJoin(
+        'tb_location_favourite',
+        'favourite',
+        'favourite.locationId = location.id AND favourite.userId = :userId',
+        { userId },
+      )
+      .select([
+        'location.id as id',
+        'location.name as name',
+        'location.description as description',
+        'location.price as price',
+        'location.priceUnit as priceUnit',
+        'location.area as area',
+        'location.createdAt as createdAt',
+        'location.maxGuestCount as maxGuestCount',
+        'location.averageRating as averageRating',
+        'type.id as typeId',
+        'type.name as typeName',
+        'type.code as typeCode',
+        'address.id as addressId',
+        'address.fullAddress as fullAddress',
+        'address.lat as lat',
+        'address.lng as lng',
+        userId !== undefined
+          ? 'IF(favourite.locationId IS NOT NULL, 1, 0) as isFavourite'
+          : '0 as isFavourite',
+      ])
+      .where('location.id != :locationId', { locationId })
+      .andWhere('location.locationTypeId = :sourceLocationTypeId', {
+        sourceLocationTypeId: sourceLocation.locationTypeId,
+      })
+      .andWhere(
+        new Brackets((qb) => {
+          qb.where('address.district = :sourceDistrict', {
+            sourceDistrict: sourceLocation.district,
+          }).orWhere('address.province = :sourceProvince', {
+            sourceProvince: sourceLocation.province,
+          });
+        }),
+      )
+      .addOrderBy('location.averageRating', 'DESC')
+      .addOrderBy('location.createdAt', 'DESC')
+      .addOrderBy('location.id', 'ASC')
+      .limit(3)
+      .getRawMany();
 
-  //   // Related locations must share district or province with the source.
-  //   // Location type only decides priority inside that area-matched result set.
-  //   const sameDistrictPriority =
-  //     'CASE WHEN address.district = :sourceDistrict THEN 1 ELSE 0 END';
-  //   const sameProvincePriority =
-  //     'CASE WHEN address.province = :sourceProvince THEN 1 ELSE 0 END';
-  //   const sameTypePriority =
-  //     'CASE WHEN location.locationTypeId = :sourceLocationTypeId THEN 1 ELSE 0 END';
+    const locationIds = relatedLocations.map((item) => item.id);
+    if (locationIds.length === 0) {
+      return this.buildEmptyLocationsResponse(1, 3);
+    }
 
-  //   const rows = await this.location
-  //     .createQueryBuilder('location')
-  //     .leftJoin('tb_user_default', 'user', 'user.id = location.ownerId')
-  //     .leftJoin('tb_user_profile', 'profile', 'profile.id = user.userProfileId')
-  //     .leftJoin(
-  //       'tb_location_address',
-  //       'address',
-  //       'address.id = location.locationAddressId',
-  //     )
-  //     .leftJoin('tb_location_type', 'type', 'type.id = location.locationTypeId')
-  //     .leftJoin(
-  //       'tb_location_media',
-  //       'media',
-  //       `media.id = (
-  //         SELECT thumbnail.id
-  //         FROM tb_location_media thumbnail
-  //         WHERE thumbnail.locationId = location.id
-  //         ORDER BY thumbnail.displayOrder ASC, thumbnail.id ASC
-  //         LIMIT 1
-  //       )`,
-  //     )
-  //     .select([
-  //       'location.id AS location_id',
-  //       'location.name AS location_name',
-  //       'location.description AS location_description',
-  //       'location.ownerId AS location_ownerId',
-  //       'location.price AS location_price',
-  //       'location.priceUnit AS location_priceUnit',
-  //       'location.area AS location_area',
-  //       'location.maxGuestCount AS location_maxGuestCount',
-  //       'location.averageRating AS location_averageRating',
-  //       'location.createdAt AS location_createdAt',
-  //       'profile.phoneNumber AS owner_phone',
-  //       'profile.fullName AS owner_fullName',
-  //       'address.id AS address_id',
-  //       'address.fullAddress AS address_fullAddress',
-  //       'address.province AS address_province',
-  //       'address.district AS address_district',
-  //       'address.country AS address_country',
-  //       'address.region AS address_region',
-  //       'address.lat AS address_lat',
-  //       'address.lng AS address_lng',
-  //       'type.id AS type_id',
-  //       'type.name AS type_name',
-  //       'type.code AS type_code',
-  //       'type.canHaveMultiRoom AS type_canHaveMultiRoom',
-  //       'media.id AS media_id',
-  //       'media.type AS media_type',
-  //       'media.url AS media_url',
-  //       'media.displayOrder AS media_displayOrder',
-  //       `${sameDistrictPriority} AS sameDistrictPriority`,
-  //       `${sameProvincePriority} AS sameProvincePriority`,
-  //       `${sameTypePriority} AS sameTypePriority`,
-  //     ])
-  //     .where('location.id != :locationId', { locationId })
-  //     // Only keep rooms in the same district or province as the source.
-  //     .andWhere(
-  //       new Brackets((qb) => {
-  //         qb.where('address.district = :sourceDistrict').orWhere(
-  //           'address.province = :sourceProvince',
-  //         );
-  //       }),
-  //     )
-  //     .orderBy('sameDistrictPriority', 'DESC')
-  //     .addOrderBy('sameProvincePriority', 'DESC')
-  //     .addOrderBy('sameTypePriority', 'DESC')
-  //     .addOrderBy('location.averageRating', 'DESC')
-  //     .addOrderBy('location.createdAt', 'DESC')
-  //     .addOrderBy('location.id', 'ASC')
-  //     .limit(RELATED_LOCATIONS_LIMIT)
-  //     .setParameters({
-  //       sourceDistrict: sourceLocation.address_district,
-  //       sourceProvince: sourceLocation.address_province,
-  //       sourceLocationTypeId: sourceLocation.location_locationTypeId,
-  //     })
-  //     .getRawMany<LocationRawRow>();
+    const thumbnail = await this.locationMedia.find({
+      where: { locationId: In(locationIds), displayOrder: 1 },
+      select: ['id', 'type', 'url', 'locationId'],
+    });
 
-  //   return {
-  //     data: rows.map((row) => this.mapRowToResponse(row)),
-  //     meta: {
-  //       page: 1,
-  //       limit: RELATED_LOCATIONS_LIMIT,
-  //       total: rows.length,
-  //       totalPages: rows.length > 0 ? 1 : 0,
-  //     },
-  //   };
-  // }
+    const thumbnailMap = new Map(
+      thumbnail.map((t) => [
+        t.locationId,
+        {
+          id: t.id,
+          type: t.type,
+          url: t.url,
+        },
+      ]),
+    );
+
+    return {
+      data: relatedLocations.map((location) => ({
+        id: location.id,
+        name: location.name,
+        description: location.description,
+        price: location.price,
+        priceUnit: location.priceUnit,
+        area: location.area,
+        maxGuestCount: location.maxGuestCount,
+        averageRating: location.averageRating,
+        isFavourite: Boolean(Number(location.isFavourite)),
+        address: {
+          id: location.addressId,
+          fullAddress: location.fullAddress,
+          lat: location.lat,
+          lng: location.lng,
+        },
+        type: {
+          id: location.typeId,
+          name: location.typeName,
+          code: location.typeCode,
+        },
+        thumbnailMedia: thumbnailMap.get(location.id) || null,
+      })),
+      meta: {
+        page: 1,
+        limit: 4,
+        total: relatedLocations.length,
+        totalPages: Math.ceil(relatedLocations.length / 4),
+      },
+    };
+  }
+  public async toggleFavouriteLocation(
+    userId: number,
+    locationId: number,
+  ): Promise<{ isFavourite: boolean }> {
+    const existingFavourite = await this.locationFavourite.findOne({
+      where: { locationId, userId },
+    });
+
+    if (existingFavourite) {
+      await this.locationFavourite.delete({ locationId, userId });
+      return { isFavourite: false };
+    } else {
+      await this.locationFavourite.save({ locationId, userId });
+      return { isFavourite: true };
+    }
+  }
 }

@@ -17,47 +17,60 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   /**
-   * canActivate: Quyết định xem request có được phép đi tiếp hay không.
+   * Decide whether the current request can continue.
    */
-  canActivate(context: ExecutionContext) {
-    // 1. Kiểm tra xem Route hiện tại có được đánh dấu là @Public() không
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
 
-    // 2. Nếu là route công khai, cho phép truy cập ngay không cần token
+    const request = context.switchToHttp().getRequest();
+
     if (isPublic) {
+      const authorization = request.headers?.authorization as
+        | string
+        | undefined;
+
+      if (!authorization?.startsWith('Bearer ')) {
+        return true;
+      }
+
+      try {
+        await Promise.resolve(
+          super.canActivate(context) as boolean | Promise<boolean>,
+        );
+      } catch (err) {
+        this.logger.error('Authentication failed for public route!');
+        this.logger.error('Auth Error: ' + JSON.stringify(err));
+      }
+
       return true;
     }
 
-    // 3. Nếu không, gọi canActivate của AuthGuard('jwt') để kích hoạt JwtStrategy
-    return super.canActivate(context);
+    return await Promise.resolve(
+      super.canActivate(context) as boolean | Promise<boolean>,
+    );
   }
 
   /**
-   * handleRequest: Xử lý kết quả sau khi Passport (JwtStrategy) đã xác thực xong.
+   * Handle the result after Passport has validated the JWT.
    */
   handleRequest<TUser = any>(err: any, user: any, info: any): TUser {
-    // Nếu có lỗi xác thực hoặc không tìm thấy user (token sai/hết hạn)
     if (err || !user) {
       this.logger.error('Authentication failed!');
 
-      // Log thêm thông tin chi tiết nếu có (ví dụ: "jwt expired")
       if (info) {
         this.logger.error('Auth Info: ' + JSON.stringify(info));
       }
 
-      // Log lỗi kỹ thuật nếu có
       if (err) {
         this.logger.error('Auth Error: ' + JSON.stringify(err));
       }
 
-      // Ném lỗi 401 Unauthorized về phía Client
       throw err ?? new UnauthorizedException('Authentication failed');
     }
 
-    // Nếu mọi thứ hợp lệ, trả về object user (sẽ được Nest gán vào request.user)
     return user as TUser;
   }
 }

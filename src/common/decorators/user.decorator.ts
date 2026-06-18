@@ -9,12 +9,12 @@ export const User = createParamDecorator(
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const request = ctx.switchToHttp().getRequest();
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const user = request.user as UserDecoratorDtoResponse;
+    const user = request.user as UserDecoratorDtoResponse | undefined;
 
     if (!data) {
       return user;
     }
 
-    return user[data] as string | number | Date | undefined;
+    return user?.[data] as string | number | Date | undefined;
   },
 );

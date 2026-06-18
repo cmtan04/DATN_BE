@@ -7,13 +7,14 @@ import {
 import { SignUpRequestDto, SignUpResponseDto } from '@/dtos/auth/signUp.dto';
 import { AuthService } from '@/services/auth.service';
 import { Public } from '@/common/decorators/public.decorator';
+import { ResetPasswordDto } from '@/dtos/auth/forgotPassword.dto';
 
 @Controller('auth')
+@Public()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('sign-up')
-  @Public()
   public async signUp(
     @Body() payload: SignUpRequestDto,
   ): Promise<SignUpResponseDto> {
@@ -21,7 +22,6 @@ export class AuthController {
   }
 
   @Post('sign-in')
-  @Public()
   public async signIn(
     @Body() payload: SignInRequestDto,
   ): Promise<SignInResponseDto> {
@@ -29,7 +29,6 @@ export class AuthController {
   }
 
   @Post('refresh-token')
-  @Public()
   public async refreshToken(
     @Body() payload: RefreshTokenRequestDto,
   ): Promise<SignInResponseDto> {
@@ -37,8 +36,16 @@ export class AuthController {
   }
 
   @Get('health')
-  @Public()
   public async healthCheck(): Promise<{ status: string }> {
+    await this.authService.pingDatabase();
     return { status: 'OK' };
+  }
+
+  @Post('reset-password')
+  public async resetPassword(
+    @Body() payload: ResetPasswordDto,
+  ): Promise<{ message: string }> {
+    await this.authService.resetPassword(payload);
+    return { message: 'Password reset successfully' };
   }
 }

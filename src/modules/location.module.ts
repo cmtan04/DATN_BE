@@ -9,7 +9,8 @@ import { TBLocation } from '@/entities/location/location.entity';
 import { TBLocationAvailability } from '@/entities/location_availability.entity';
 import { LocationRepository } from '@/repositories/location.repository';
 import { LocationService } from '@/services/location.service';
-import { OwnerLocationController } from "@/controllers/owner/owner.location.controller";
+import { OwnerLocationController } from '@/controllers/owner/owner.location.controller';
+import { TBLocationFavourite } from '@/entities/location/location_favourite.entity';
 
 @Module({
   imports: [
@@ -18,11 +19,14 @@ import { OwnerLocationController } from "@/controllers/owner/owner.location.cont
       TBLocationAvailability,
       TBLocationAddress,
       TBLocationMedia,
+
       TBLocationService,
       TBLocationType,
+      TBLocationFavourite,
     ]),
   ],
   controllers: [LocationController, OwnerLocationController],
   providers: [LocationService, LocationRepository],
+  exports: [TypeOrmModule],
 })
 export class LocationModule {}

@@ -5,7 +5,7 @@ export class TBLocationAvailability {
   @PrimaryColumn({ type: 'int' })
   locationId: number;
 
-  @PrimaryColumn({ type: 'timestamp' })
+  @PrimaryColumn({ type: 'date' })
   date: Date;
 
   @Column({ type: 'int', default: 0 })

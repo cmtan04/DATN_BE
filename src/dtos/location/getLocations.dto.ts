@@ -12,14 +12,15 @@ import {
   IsNumber,
   IsDateString,
   IsDate,
+  IsBoolean,
 } from 'class-validator';
 
-export type LocationSortBy = 'price' | 'area' | 'rating' | 'createdAt';
+export type LocationSortBy = 'price' | 'area' | 'averageRating' | 'createdAt';
 export type LocationSortOrder = 'ASC' | 'DESC';
 export const LOCATION_SORT_BY_VALUES: string[] = [
   'price',
   'area',
-  'rating',
+  'averageRating',
   'createdAt',
 ];
 export const LOCATION_SORT_ORDER_VALUES: string[] = ['ASC', 'DESC'];
@@ -48,14 +49,12 @@ export class GetLocationsQueryDto {
   guestCount?: number;
 
   @ApiPropertyOptional({
-    description: 'Number of rooms the user wants to book',
-    default: 1,
+    description: 'For user to filter their favourite locations',
+    example: false,
   })
   @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  quantity?: number;
+  @IsBoolean()
+  isFavourite?: boolean;
 
   @ApiPropertyOptional({
     description: 'Start date for availability filter (ISO string)',
@@ -216,6 +215,7 @@ export interface LocationDto {
   area: number;
   maxGuestCount: number;
   averageRating: number;
+  isFavourite: boolean;
   address: GetLocationAddressResponseDto | null;
   type: GetLocationTypeResponseDto | null;
   thumbnailMedia: GetLocationMediaResponseDto | null;
@@ -231,6 +231,7 @@ export interface GetLocationDetailResponseDto {
   area: number;
   maxGuestCount: number;
   averageRating: number;
+  isFavourite: boolean;
   createdAt: Date;
   address: GetLocationAddressResponseDto | null;
   type: GetLocationTypeResponseDto | null;

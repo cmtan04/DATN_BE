@@ -3,12 +3,6 @@ import { Column, Entity, Index } from 'typeorm';
 import { BaseEntity } from './base.entity';
 
 @Entity('tb_booking')
-@Index('IDX_tb_booking_location_dates_status', [
-  'locationId',
-  'startDate',
-  'endDate',
-  'status',
-])
 export class TBBooking extends BaseEntity {
   @Column({ type: 'int', nullable: false, comment: 'ID nguoi dat phong' })
   userId: number;
@@ -16,39 +10,23 @@ export class TBBooking extends BaseEntity {
   @Column({ type: 'int', nullable: false, comment: 'ID dia diem' })
   locationId: number;
 
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: false,
+    comment: 'Ma dat phong',
+    unique: true,
+  })
+  bookingCode: string;
+
   @Column({ type: 'date', nullable: false, comment: 'Ngay bat dau dat phong' })
-  startDate: string;
+  startDate: Date;
 
   @Column({ type: 'date', nullable: false, comment: 'Ngay ket thuc dat phong' })
-  endDate: string;
+  endDate: Date;
 
-  @Column({
-    type: 'varchar',
-    length: 5,
-    nullable: false,
-    comment: 'Thoi gian check-in (HH:mm DD/MM/YYYY)',
-  })
-  checkInTime: string;
-
-  @Column({
-    type: 'varchar',
-    length: 5,
-    nullable: false,
-    comment: 'Thoi gian check-out (HH:mm DD/MM/YYYY )',
-  })
-  checkOutTime: string;
-
-  @Column({ type: 'int', nullable: false, comment: 'So luong khach' })
-  guestCount: number;
-
-  @Column({ type: 'varchar', length: 255, nullable: false })
-  contactName: string;
-
-  @Column({ type: 'varchar', length: 50, nullable: false })
-  contactPhone: string;
-
-  @Column({ type: 'varchar', length: 255, nullable: false })
-  contactEmail: string;
+  @Column({ type: 'int', nullable: false, comment: 'So phong da dat' })
+  roomNumber: number;
 
   @Column({ type: 'text', nullable: true })
   note?: string | null;
