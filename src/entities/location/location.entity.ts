@@ -1,5 +1,11 @@
 import { BaseEntity } from '../base.entity';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
+import { TBUserDefault } from '../user/user_default.entity';
+import { TBLocationAddress } from './location-address.entity';
+import { TBLocationType } from './location_type.entity';
+import { TBLocationMedia } from './location_media.entity';
+import { TBLocationService } from './location_service.entity';
+import { TBLocationFavourite } from './location_favourite.entity';
 
 @Entity('tb_location')
 export class TBLocation extends BaseEntity {
@@ -59,4 +65,25 @@ export class TBLocation extends BaseEntity {
 
   @Column({ type: 'boolean', nullable: false, default: true })
   isActive: boolean;
+
+  @ManyToOne(() => TBUserDefault, { createForeignKeyConstraints: false })
+  @JoinColumn({ name: 'ownerId' })
+  owner: TBUserDefault;
+
+  @OneToOne(() => TBLocationAddress)
+  @JoinColumn({ name: 'locationAddressId' })
+  address: TBLocationAddress;
+
+  @ManyToOne(() => TBLocationType, (type) => type.locations)
+  @JoinColumn({ name: 'locationTypeId' })
+  type: TBLocationType;
+
+  @OneToMany(() => TBLocationMedia, (media) => media.location)
+  media: TBLocationMedia[];
+
+  @OneToMany(() => TBLocationService, (service) => service.location)
+  services: TBLocationService[];
+
+  @OneToMany(() => TBLocationFavourite, (favourite) => favourite.location)
+  favourites: TBLocationFavourite[];
 }

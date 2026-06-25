@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { TBLocation } from './location.entity';
+import { TBService } from '../service.entity';
 
 @Entity('tb_location_service')
 export class TBLocationService {
@@ -34,4 +36,12 @@ export class TBLocationService {
 
   @Column({ type: 'boolean', nullable: false, default: true })
   isActive: boolean;
+
+  @ManyToOne(() => TBLocation, (location) => location.services)
+  @JoinColumn({ name: 'locationId' })
+  location: TBLocation;
+
+  @ManyToOne(() => TBService)
+  @JoinColumn({ name: 'serviceId' })
+  service: TBService;
 }

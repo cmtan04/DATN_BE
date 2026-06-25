@@ -1,5 +1,6 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../base.entity';
+import { TBLocation } from './location.entity';
 
 @Entity('tb_location_media')
 export class TBLocationMedia extends BaseEntity {
@@ -24,4 +25,8 @@ export class TBLocationMedia extends BaseEntity {
 
   @Column({ type: 'int', nullable: false, comment: 'Id cua location' })
   locationId: number;
+
+  @ManyToOne(() => TBLocation, (location) => location.media)
+  @JoinColumn({ name: 'locationId' })
+  location: TBLocation;
 }

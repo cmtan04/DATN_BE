@@ -2,11 +2,7 @@ import { CreateLocationRepositoryDto } from '@/dtos/location/createLocation.dto'
 import {
   GetLocationsQueryDto,
   GetLocationsResponseDto,
-  GetLocationAddressResponseDto,
   GetLocationDetailResponseDto,
-  GetLocationMediaResponseDto,
-  GetLocationOwnerResponseDto,
-  GetLocationServiceResponseDto,
   GetLocationTypeResponseDto,
 } from '@/dtos/location/getLocations.dto';
 import { TBLocationMedia } from '@/entities/location/location_media.entity';
@@ -43,9 +39,7 @@ export class LocationRepository {
   private readonly locationFavourite: Repository<TBLocationFavourite>;
 
   public async locationTypeExists(locationTypeId: number): Promise<boolean> {
-    return await this.dataSource
-      .getRepository(TBLocationType)
-      .exists({ where: { id: locationTypeId } });
+    return await this.locationType.exists({ where: { id: locationTypeId } });
   }
 
   private buildEmptyLocationsResponse(
@@ -63,130 +57,25 @@ export class LocationRepository {
     };
   }
 
-  private async getLocationAddress(
-    locationId: number,
-  ): Promise<GetLocationAddressResponseDto | null> {
-    const address = await this.locationAddress.findOne({
-      where: { id: locationId },
-    });
-    if (!address) {
-      return null;
-    }
-    return {
-      id: address.id,
-      fullAddress: address.fullAddress,
-      lat: parseFloat(address.lat.toString()),
-      lng: parseFloat(address.lng.toString()),
-    };
-  }
-
-  private async getLocationServices(
-    locationId: number,
-  ): Promise<GetLocationServiceResponseDto[]> {
-    const locationServices = await this.locationService
-      .createQueryBuilder('ls')
-      .leftJoin('tb_service', 's', 's.id = ls.serviceId') // Dùng leftJoin thay vì leftJoinAndSelect
-      .select([
-        'ls.isFree AS isFree',
-        'ls.price AS price',
-        'ls.priceUnit AS priceUnit',
-        'ls.isActive AS isActive',
-        's.name AS name',
-      ])
-      .where('ls.locationId = :locationId', { locationId })
-      .andWhere('ls.isActive = 1') // Chỉ lấy các dịch vụ đang hoạt động
-      .addOrderBy('CASE WHEN ls.isFree = 1 THEN 1 ELSE 2 END', 'ASC')
-      .addOrderBy('ls.price', 'ASC')
-      .getRawMany<GetLocationServiceResponseDto>();
-
-    return locationServices.map((ls) => ({
-      name: ls.name,
-      isFree: Boolean(ls.isFree),
-      price: ls.price ?? undefined,
-      priceUnit: ls.priceUnit ?? undefined,
-      isActive: Boolean(ls.isActive),
-    }));
-  }
-
-  private async getLocationType(
-    locationTypeId: number,
-  ): Promise<GetLocationTypeResponseDto | null> {
-    const locationType = await this.locationType.findOne({
-      where: { id: locationTypeId },
-    });
-    if (!locationType) {
-      return null;
-    }
-    return {
-      id: locationType.id,
-      name: locationType.name,
-      code: locationType.code,
-      canHaveMultiRoom: Boolean(locationType.canHaveMultiRoom),
-    };
-  }
-
-  private async getLocationMedia(
-    locationId: number,
-  ): Promise<GetLocationMediaResponseDto[]> {
-    const media = await this.locationMedia.find({
-      where: { locationId },
-      order: { displayOrder: 'ASC' },
-    });
-    return media.map((m) => ({
-      id: m.id,
-      type: m.type,
-      url: m.url,
-      displayOrder: m.displayOrder,
-    }));
-  }
-
-  private async getLocationOwner(
-    id: number,
-  ): Promise<GetLocationOwnerResponseDto | null> {
-    const ownerQuery = this.dataSource
-      .getRepository('tb_user_default')
-      .createQueryBuilder('user');
-    const owner = await ownerQuery
-      .leftJoin('tb_user_profile', 'profile', 'profile.id = user.userProfileId')
-      .select([
-        'user.id as id',
-        'profile.phoneNumber as phoneNumber',
-        'profile.fullName as fullName',
-      ])
-      .where('user.id = :ownerId', { ownerId: id })
-      .getRawOne();
-
-    if (!owner) return null;
-    return {
-      id: owner.id,
-      fullName: owner.fullName,
-      phoneNumber: owner.phoneNumber,
-    };
-  }
-
-  private async baseQueryBuilder(
+  private baseQueryBuilder(
     filter: GetLocationsQueryDto,
     ownerId?: number,
     userId?: number,
   ) {
     const query = this.location
       .createQueryBuilder('location')
-      .leftJoin('tb_location_type', 'type', 'type.id = location.locationTypeId')
-      .leftJoin(
-        'tb_location_address',
-        'address',
-        'address.id = location.locationAddressId',
-      );
+      .leftJoinAndSelect('location.type', 'type')
+      .leftJoinAndSelect('location.address', 'address');
+      
     if (ownerId !== undefined) {
       query.andWhere('location.ownerId = :ownerId', { ownerId });
     }
 
     if (userId !== undefined) {
-      query.leftJoin(
-        'tb_location_favourite',
+      query.leftJoinAndSelect(
+        'location.favourites',
         'favourite',
-        // Khớp cả locationId và userId ngay khi JOIN
-        'favourite.locationId = location.id AND favourite.userId = :userId',
+        'favourite.userId = :userId',
         { userId },
       );
     }
@@ -260,41 +149,19 @@ export class LocationRepository {
     userId?: number,
     ownerId?: number,
   ): Promise<GetLocationsResponseDto> {
-    const query = await this.baseQueryBuilder(filter, ownerId, userId);
+    const query = this.baseQueryBuilder(filter, ownerId, userId);
     const total = await query.getCount();
 
     if (total === 0)
       return this.buildEmptyLocationsResponse(filter.page, filter.limit);
 
-    // Lay id cac phong
-    const baseLocation = await query
-      .select([
-        'location.id as id',
-        'location.name as name',
-        'location.description as description',
-        'location.price as price',
-        'location.priceUnit as priceUnit',
-        'location.area as area',
-        'location.createdAt as createdAt',
-        'location.maxGuestCount as maxGuestCount',
-        'location.averageRating as averageRating',
-        'type.id as typeId',
-        'type.name as typeName',
-        'type.code as typeCode',
-        'address.id as addressId',
-        'address.fullAddress as fullAddress',
-        'address.lat as lat',
-        'address.lng as lng',
-        userId !== undefined
-          ? 'IF(favourite.locationId IS NOT NULL, 1, 0) as isFavourite'
-          : '0 as isFavourite',
-      ])
-      .orderBy(filter?.sortBy || 'location.id', filter?.sortOrder)
-      .offset((filter.page - 1) * filter.limit) // Phân trang
-      .limit(filter.limit)
-      .getRawMany();
+    const baseLocations = await query
+      .orderBy(filter?.sortBy ? `location.${filter.sortBy}` : 'location.id', filter?.sortOrder)
+      .skip((filter.page - 1) * filter.limit)
+      .take(filter.limit)
+      .getMany();
 
-    const locationIds = baseLocation.map((item) => item.id);
+    const locationIds = baseLocations.map((item) => item.id);
 
     const thumbnail = await this.locationMedia.find({
       where: { locationId: In(locationIds), displayOrder: 1 },
@@ -313,7 +180,7 @@ export class LocationRepository {
     );
 
     return {
-      data: baseLocation.map((location) => ({
+      data: baseLocations.map((location) => ({
         id: location.id,
         name: location.name,
         description: location.description,
@@ -322,18 +189,18 @@ export class LocationRepository {
         area: location.area,
         maxGuestCount: location.maxGuestCount,
         averageRating: location.averageRating,
-        isFavourite: Boolean(Number(location.isFavourite)),
-        address: {
-          id: location.addressId,
-          fullAddress: location.fullAddress,
-          lat: location.lat,
-          lng: location.lng,
-        },
-        type: {
-          id: location.typeId,
-          name: location.typeName,
-          code: location.typeCode,
-        },
+        isFavourite: Boolean(location.favourites && location.favourites.length > 0),
+        address: location.address ? {
+          id: location.address.id,
+          fullAddress: location.address.fullAddress,
+          lat: parseFloat(location.address.lat.toString()),
+          lng: parseFloat(location.address.lng.toString()),
+        } : { id: 0, fullAddress: '', lat: 0, lng: 0 },
+        type: location.type ? {
+          id: location.type.id,
+          name: location.type.name,
+          code: location.type.code,
+        } : { id: 0, name: '', code: '' },
         thumbnailMedia: thumbnailMap.get(location.id) || null,
       })),
       meta: {
@@ -351,30 +218,36 @@ export class LocationRepository {
   ): Promise<GetLocationDetailResponseDto | null> {
     const baseLocation = await this.location.findOne({
       where: { id },
+      relations: [
+        'address',
+        'type',
+        'media',
+        'services',
+        'services.service',
+        'owner',
+        'owner.userProfile',
+        ...(userId !== undefined ? ['favourites'] : []),
+      ],
     });
+    
     if (!baseLocation) {
       return null;
     }
 
-    const owner = await this.getLocationOwner(baseLocation.ownerId);
     let isFavourite = false;
-    if (userId !== undefined) {
-      const favourite = await this.locationFavourite.findOne({
-        where: { locationId: id, userId },
-      });
-      isFavourite = favourite !== null;
+    if (userId !== undefined && baseLocation.favourites) {
+      isFavourite = baseLocation.favourites.some(f => f.userId === userId);
     }
-    const address = await this.getLocationAddress(
-      baseLocation.locationAddressId!,
-    );
-    const type = await this.getLocationType(baseLocation.locationTypeId!);
-    const media = await this.getLocationMedia(baseLocation.id);
-    const services = await this.getLocationServices(baseLocation.id);
+
     return {
       id: baseLocation.id,
       name: baseLocation.name,
       description: baseLocation.description,
-      owner: owner,
+      owner: baseLocation.owner ? {
+        id: baseLocation.owner.id,
+        fullName: baseLocation.owner.userProfile?.fullName || '',
+        phoneNumber: baseLocation.owner.userProfile?.phoneNumber || '',
+      } : null,
       price: baseLocation.price,
       priceUnit: baseLocation.priceUnit,
       area: baseLocation.area,
@@ -382,10 +255,37 @@ export class LocationRepository {
       averageRating: baseLocation.averageRating,
       isFavourite: isFavourite,
       createdAt: baseLocation.createdAt,
-      address: address || null,
-      type: type || null,
-      media: media || [],
-      services: services || [],
+      address: baseLocation.address ? {
+        id: baseLocation.address.id,
+        fullAddress: baseLocation.address.fullAddress,
+        lat: parseFloat(baseLocation.address.lat.toString()),
+        lng: parseFloat(baseLocation.address.lng.toString()),
+      } : null,
+      type: baseLocation.type ? {
+        id: baseLocation.type.id,
+        name: baseLocation.type.name,
+        code: baseLocation.type.code,
+        canHaveMultiRoom: Boolean(baseLocation.type.canHaveMultiRoom),
+      } : null,
+      media: baseLocation.media ? [...baseLocation.media].sort((a, b) => a.displayOrder - b.displayOrder).map(m => ({
+        id: m.id,
+        type: m.type,
+        url: m.url,
+        displayOrder: m.displayOrder,
+      })) : [],
+      services: baseLocation.services ? baseLocation.services
+        .filter(s => s.isActive)
+        .sort((a, b) => {
+          if (a.isFree !== b.isFree) return a.isFree ? -1 : 1;
+          return (a.price || 0) - (b.price || 0);
+        })
+        .map(s => ({
+          name: s.service?.name || '',
+          isFree: Boolean(s.isFree),
+          price: s.price ?? undefined,
+          priceUnit: s.priceUnit ?? undefined,
+          isActive: Boolean(s.isActive),
+        })) : [],
     };
   }
 
@@ -492,73 +392,30 @@ export class LocationRepository {
     locationId: number,
     userId?: number,
   ): Promise<GetLocationsResponseDto> {
-    const sourceLocation = await this.location
-      .createQueryBuilder('location')
-      .innerJoin(
-        'tb_location_address',
-        'address',
-        'address.id = location.locationAddressId',
-      )
-      .select([
-        'location.locationTypeId AS locationTypeId',
-        'address.province AS province',
-        'address.district AS district',
-      ])
-      .where('location.id = :locationId', { locationId })
-      .getRawOne();
+    const sourceLocation = await this.location.findOne({
+      where: { id: locationId },
+      relations: ['address'],
+      select: ['id', 'locationTypeId'],
+    });
 
-    if (!sourceLocation) {
-      return this.buildEmptyLocationsResponse(1, 10); // Trả về response rỗng nếu không tìm thấy location nguồn
+    if (!sourceLocation || !sourceLocation.address) {
+      return this.buildEmptyLocationsResponse(1, 10);
     }
 
-    const relatedLocations = await this.location
-      .createQueryBuilder('location')
-      .leftJoin('tb_user_default', 'user', 'user.id = location.ownerId')
-      .leftJoin('tb_user_profile', 'profile', 'profile.id = user.userProfileId')
-      .leftJoin(
-        'tb_location_address',
-        'address',
-        'address.id = location.locationAddressId',
-      )
-      .leftJoin('tb_location_type', 'type', 'type.id = location.locationTypeId')
-      .leftJoin(
-        'tb_location_media',
-        'media',
-        `media.id = (
-          SELECT thumbnail.id
-          FROM tb_location_media thumbnail
-          WHERE thumbnail.locationId = location.id
-          ORDER BY thumbnail.displayOrder ASC, thumbnail.id ASC
-          LIMIT 1
-        )`,
-      )
-      .leftJoin(
-        'tb_location_favourite',
+    const query = this.location.createQueryBuilder('location')
+      .leftJoinAndSelect('location.type', 'type')
+      .leftJoinAndSelect('location.address', 'address');
+
+    if (userId !== undefined) {
+      query.leftJoinAndSelect(
+        'location.favourites',
         'favourite',
-        'favourite.locationId = location.id AND favourite.userId = :userId',
+        'favourite.userId = :userId',
         { userId },
-      )
-      .select([
-        'location.id as id',
-        'location.name as name',
-        'location.description as description',
-        'location.price as price',
-        'location.priceUnit as priceUnit',
-        'location.area as area',
-        'location.createdAt as createdAt',
-        'location.maxGuestCount as maxGuestCount',
-        'location.averageRating as averageRating',
-        'type.id as typeId',
-        'type.name as typeName',
-        'type.code as typeCode',
-        'address.id as addressId',
-        'address.fullAddress as fullAddress',
-        'address.lat as lat',
-        'address.lng as lng',
-        userId !== undefined
-          ? 'IF(favourite.locationId IS NOT NULL, 1, 0) as isFavourite'
-          : '0 as isFavourite',
-      ])
+      );
+    }
+
+    const relatedLocations = await query
       .where('location.id != :locationId', { locationId })
       .andWhere('location.locationTypeId = :sourceLocationTypeId', {
         sourceLocationTypeId: sourceLocation.locationTypeId,
@@ -566,17 +423,17 @@ export class LocationRepository {
       .andWhere(
         new Brackets((qb) => {
           qb.where('address.district = :sourceDistrict', {
-            sourceDistrict: sourceLocation.district,
+            sourceDistrict: sourceLocation.address.district,
           }).orWhere('address.province = :sourceProvince', {
-            sourceProvince: sourceLocation.province,
+            sourceProvince: sourceLocation.address.province,
           });
         }),
       )
-      .addOrderBy('location.averageRating', 'DESC')
+      .orderBy('location.averageRating', 'DESC')
       .addOrderBy('location.createdAt', 'DESC')
       .addOrderBy('location.id', 'ASC')
-      .limit(3)
-      .getRawMany();
+      .take(3)
+      .getMany();
 
     const locationIds = relatedLocations.map((item) => item.id);
     if (locationIds.length === 0) {
@@ -609,18 +466,18 @@ export class LocationRepository {
         area: location.area,
         maxGuestCount: location.maxGuestCount,
         averageRating: location.averageRating,
-        isFavourite: Boolean(Number(location.isFavourite)),
-        address: {
-          id: location.addressId,
-          fullAddress: location.fullAddress,
-          lat: location.lat,
-          lng: location.lng,
-        },
-        type: {
-          id: location.typeId,
-          name: location.typeName,
-          code: location.typeCode,
-        },
+        isFavourite: Boolean(location.favourites && location.favourites.length > 0),
+        address: location.address ? {
+          id: location.address.id,
+          fullAddress: location.address.fullAddress,
+          lat: parseFloat(location.address.lat.toString()),
+          lng: parseFloat(location.address.lng.toString()),
+        } : { id: 0, fullAddress: '', lat: 0, lng: 0 },
+        type: location.type ? {
+          id: location.type.id,
+          name: location.type.name,
+          code: location.type.code,
+        } : { id: 0, name: '', code: '' },
         thumbnailMedia: thumbnailMap.get(location.id) || null,
       })),
       meta: {
@@ -631,6 +488,7 @@ export class LocationRepository {
       },
     };
   }
+  
   public async toggleFavouriteLocation(
     userId: number,
     locationId: number,
