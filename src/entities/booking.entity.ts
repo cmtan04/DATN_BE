@@ -28,14 +28,17 @@ export class TBBooking extends BaseEntity {
   @Column({ type: 'int', nullable: false, comment: 'So phong da dat' })
   roomNumber: number;
 
+  @Column({ type: 'int', nullable: false, default: 1, comment: 'So luong khach' })
+  guestCount: number;
+
   @Column({ type: 'text', nullable: true })
-  note?: string | null;
+  note?: string;
 
   @Column({
     type: 'varchar',
     length: 32,
     nullable: false,
-    default: BookingStatus.PENDING_PAYMENT,
+    default: BookingStatus.CREATED,
   })
   status: BookingStatus;
 

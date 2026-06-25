@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { SignInRequestDto, SignInResponseDto } from '@/dtos/auth/signIn.dto';
 import { SignUpRequestDto, SignUpResponseDto } from '@/dtos/auth/signUp.dto';
+import { ChangePasswordDto } from '@/dtos/auth/changePassword.dto';
 import { AuthRepository } from '@/repositories/auth.repository';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
@@ -179,6 +180,35 @@ export class AuthService {
     return {
       success: true,
       message: 'Mật khẩu của bạn đã được thay đổi thành công!',
+    };
+  }
+
+  public async changePassword(
+    changePasswordDto: ChangePasswordDto,
+    userId: number,
+  ) {
+    const { currentPassword, newPassword } = changePasswordDto;
+
+    const storedPassword =
+      await this.authRepository.findCurrentPassword(userId);
+    if (!storedPassword) {
+      throw new BadRequestException('User not found');
+    }
+
+    const isCurrentPasswordValid = await this.verifyPassword(
+      currentPassword,
+      storedPassword,
+    );
+    if (!isCurrentPasswordValid) {
+      throw new BadRequestException('Current password is incorrect');
+    }
+
+    const hashedNewPassword = await this.hashPassword(newPassword);
+    await this.authRepository.changePassword(userId, hashedNewPassword);
+
+    return {
+      success: true,
+      message: 'Your password has been changed successfully!',
     };
   }
 

@@ -10,4 +10,7 @@ export class TBLocationAvailability {
 
   @Column({ type: 'int', default: 0 })
   bookedCount: number;
+
+  @Column({ type: 'int', default: 0 })
+  availableCount: number;
 }

@@ -15,12 +15,16 @@ import {
 } from '@/repositories/user.repository';
 import { NotificationService } from './notification.service';
 import { OwnerRequestStatus, UserRole } from '@assets/enum/user.enum';
+import { AuthService } from './auth.service';
+import { ResetPasswordDto } from '@/dtos/auth/forgotPassword.dto';
+import { ChangePasswordDto } from '@/dtos/auth/changePassword.dto';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly notificationService: NotificationService,
+    private readonly authService: AuthService,
   ) {}
 
   public async getCurrentUser(
@@ -73,10 +77,9 @@ export class UserService {
 
     if (
       user.userRole !== UserRole.USER ||
-      ![
-        OwnerRequestStatus.NONE,
-        OwnerRequestStatus.REJECTED,
-      ].includes(ownerRequestStatus)
+      ![OwnerRequestStatus.NONE, OwnerRequestStatus.REJECTED].includes(
+        ownerRequestStatus,
+      )
     ) {
       throw new BadRequestException('Invalid owner request status');
     }
@@ -86,9 +89,7 @@ export class UserService {
       userRole: UserRole.USER,
     });
 
-    await this.notifyAdminsOwnerRequestCreated(
-      profile.fullName || user.email,
-    );
+    await this.notifyAdminsOwnerRequestCreated(profile.fullName || user.email);
 
     return await this.getCurrentUser(user.id);
   }
@@ -146,5 +147,12 @@ export class UserService {
     }
 
     return updateData;
+  }
+
+  public async changePassword(
+    changePasswordDto: ChangePasswordDto,
+    userId: number,
+  ) {
+    return await this.authService.changePassword(changePasswordDto, userId);
   }
 }

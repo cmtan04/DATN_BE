@@ -1,7 +1,9 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, Index } from 'typeorm';
 import { BaseEntity } from './base.entity';
 
 @Entity('tb_notification')
+@Index('IDX_NOTIFICATION_USER_READ', ['userId', 'isRead'])
+@Index('IDX_NOTIFICATION_USER_CREATED', ['userId', 'createdAt'])
 export class TBNotification extends BaseEntity {
   @Column({
     type: 'varchar',

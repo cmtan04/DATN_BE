@@ -37,6 +37,24 @@ export class AuthRepository {
     return await this.user.save(user);
   };
 
+  public findCurrentPassword = async (
+    userId: number,
+  ): Promise<string | null> => {
+    const user = await this.user.findOne({
+      where: { id: userId },
+      select: ['password'],
+    });
+
+    return user ? user.password : null;
+  };
+
+  public changePassword = async (
+    userId: number,
+    newPassword: string,
+  ): Promise<void> => {
+    await this.user.update({ id: userId }, { password: newPassword });
+  };
+
   public updatePassword = async (
     userId: number,
     newPassword: string,

@@ -7,6 +7,7 @@ import {
 } from '@/dtos/user/user.dto';
 import { UserService } from '@/services/user.service';
 import { User } from '@/common/decorators/user.decorator';
+import { ChangePasswordDto } from '@/dtos/auth/changePassword.dto';
 
 @Controller('users')
 export class UserController {
@@ -32,5 +33,14 @@ export class UserController {
     @User('id') userId: number,
   ): Promise<SubmitOwnerRequestResponseDto> {
     return await this.userService.submitOwnerRequest(userId);
+  }
+
+  @Post('/me/change-password')
+  public async changePassword(
+    @Body() payload: ChangePasswordDto,
+    @User('id') userId: number,
+  ): Promise<{ message: string }> {
+    await this.userService.changePassword(payload, userId);
+    return { message: 'Password changed successfully' };
   }
 }

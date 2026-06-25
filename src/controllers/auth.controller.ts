@@ -8,6 +8,8 @@ import { SignUpRequestDto, SignUpResponseDto } from '@/dtos/auth/signUp.dto';
 import { AuthService } from '@/services/auth.service';
 import { Public } from '@/common/decorators/public.decorator';
 import { ResetPasswordDto } from '@/dtos/auth/forgotPassword.dto';
+import { User } from '@/common/decorators/user.decorator';
+import { ChangePasswordDto } from '@/dtos/auth/changePassword.dto';
 
 @Controller('auth')
 @Public()

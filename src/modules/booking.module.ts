@@ -14,6 +14,6 @@ import { LocationModule } from './location.module';
   ],
   controllers: [BookingController],
   providers: [BookingService, BookingRepository],
-  exports: [BookingService],
+  exports: [BookingService, BookingRepository, TypeOrmModule],
 })
 export class BookingModule {}

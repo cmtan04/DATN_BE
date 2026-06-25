@@ -14,6 +14,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { OtpModule } from './modules/OTP.module';
 import { BookingModule } from './modules/booking.module';
+import { PaymentModule } from './modules/payment.module';
+import { RolesGuard } from "./common/guards/role.guard";
 
 @Module({
   imports: [
@@ -25,7 +27,7 @@ import { BookingModule } from './modules/booking.module';
     UserModule,
     AdminModule,
     NotificationModule,
-    // PaymentModule,
+    PaymentModule,
     CloudinaryModule,
     ServiceModule,
     OtpModule,
@@ -36,6 +38,10 @@ import { BookingModule } from './modules/booking.module';
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
 })
