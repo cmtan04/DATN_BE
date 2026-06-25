@@ -1,6 +1,5 @@
 import { BaseEntity } from '../base.entity';
-import { Column, Entity, OneToOne } from 'typeorm';
-import { TBLocation } from './location.entity';
+import { Column, Entity } from 'typeorm';
 
 @Entity('tb_location_address')
 export class TBLocationAddress extends BaseEntity {
@@ -59,7 +58,4 @@ export class TBLocationAddress extends BaseEntity {
 
   @Column({ type: 'varchar', length: 255, nullable: false })
   normalFullAddress: string;
-
-  @OneToOne(() => TBLocation, (location) => location.address)
-  location: TBLocation;
 }

@@ -1,6 +1,5 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { BaseEntity } from '../base.entity';
-import { TBLocation } from './location.entity';
 
 @Entity('tb_location_type')
 export class TBLocationType extends BaseEntity {
@@ -27,7 +26,4 @@ export class TBLocationType extends BaseEntity {
     comment: 'Có thể có nhiều phòng',
   })
   canHaveMultiRoom: boolean;
-
-  @OneToMany(() => TBLocation, (location) => location.type)
-  locations: TBLocation[];
 }

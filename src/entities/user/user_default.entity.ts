@@ -1,7 +1,6 @@
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { BaseEntity } from '../base.entity';
 import { OwnerRequestStatus } from '@assets/enum/user.enum';
-import { TBUserProfile } from './user_profile.entity';
 
 @Entity('tb_user_default')
 export class TBUserDefault extends BaseEntity {
@@ -42,8 +41,4 @@ export class TBUserDefault extends BaseEntity {
 
   @Column({ type: 'int', nullable: true, comment: 'Primary key' })
   userProfileId?: number;
-
-  @OneToOne(() => TBUserProfile)
-  @JoinColumn({ name: 'userProfileId' })
-  userProfile: TBUserProfile;
 }
