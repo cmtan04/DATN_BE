@@ -132,7 +132,10 @@ export class CloudinaryService {
 
   public async uploadImage(file: FileUpload): Promise<string> {
     if (!file) {
-      throw new HttpException('Image file is required.', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Image file is required.',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     if (!file.mimetype.startsWith('image/')) {
@@ -158,7 +161,10 @@ export class CloudinaryService {
   }
   public async uploadVideo(file: FileUpload): Promise<string> {
     if (!file) {
-      throw new HttpException('Video file is required.', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Video file is required.',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     if (!file.mimetype.startsWith('video/')) {

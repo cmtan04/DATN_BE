@@ -18,7 +18,8 @@
     "migration:generate": "npm run typeorm -- -d ./src/data-source.ts migration:generate ./src/migrations/$npm_config_name",
     "migration:run": "npm run typeorm -- migration:run -d ./src/data-source.ts",
     "migration:revert": "npm run typeorm -- migration:revert -d ./src/data-source.ts",
-    "seed:run": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:run -d ./src/data-source.ts"
+    "seed:run": "ts-node -r tsconfig-paths/register src/seed/seed.ts",
+    "seed:undo": "ts-node -r tsconfig-paths/register src/seed/unseed.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -29,6 +30,7 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/schedule": "^6.1.3",
     "@nestjs/swagger": "^11.4.4",
     "@nestjs/typeorm": "^11.0.1",
     "@payos/node": "^2.0.5",
@@ -36,14 +38,15 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
     "cloudinary": "^2.10.0",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^17.4.2",
     "mysql2": "^3.22.3",
+    "nanoid": "^6.0.1",
     "nodemailer": "^9.0.0",
     "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
-    "typeorm": "^0.3.30",
-    "typeorm-extension": "^3.9.0"
+    "typeorm": "^0.3.30"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -51,6 +54,7 @@
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.1",
+    "@types/cookie-parser": "^1.4.10",
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.12.4",

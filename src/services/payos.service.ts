@@ -100,6 +100,20 @@ export class PayosService {
     }
   }
 
+  public async cancelPaymentLink(
+    orderCode: number,
+    cancellationReason?: string,
+  ): Promise<PaymentLink | null> {
+    try {
+      return await this.payos.paymentRequests.cancel(
+        orderCode,
+        cancellationReason,
+      );
+    } catch (error) {
+      return null;
+    }
+  }
+
   public async verifyWebhook(webhook: Webhook): Promise<WebhookData> {
     try {
       return await this.payos.webhooks.verify(webhook);

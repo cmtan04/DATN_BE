@@ -29,15 +29,15 @@ export class CheckoutPaymentRequestDto {
   @Matches(/^\d{4}-\d{2}-\d{2}$/)
   endDate: string;
 
-  @ApiProperty({ example: 2 })
+  @ApiProperty({ example: 1 })
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  guestCount: number;
+  roomNumber: number;
 
   @ApiProperty({ example: 'Nguyen Van A' })
-  @Transform(({ value }) =>
-    typeof value === 'string' ? value.trim() : value,
+  @Transform(({ value }: { value: unknown }) =>
+    typeof value === 'string' ? value.trim() : (value as string),
   )
   @IsString()
   @IsNotEmpty()
@@ -45,8 +45,8 @@ export class CheckoutPaymentRequestDto {
   contactName: string;
 
   @ApiProperty({ example: '0901234567' })
-  @Transform(({ value }) =>
-    typeof value === 'string' ? value.trim() : value,
+  @Transform(({ value }: { value: unknown }) =>
+    typeof value === 'string' ? value.trim() : (value as string),
   )
   @IsString()
   @IsNotEmpty()
@@ -54,8 +54,8 @@ export class CheckoutPaymentRequestDto {
   contactPhone: string;
 
   @ApiProperty({ example: 'customer@example.com' })
-  @Transform(({ value }) =>
-    typeof value === 'string' ? value.trim() : value,
+  @Transform(({ value }: { value: unknown }) =>
+    typeof value === 'string' ? value.trim() : (value as string),
   )
   @IsEmail()
   @MaxLength(255)
@@ -63,8 +63,8 @@ export class CheckoutPaymentRequestDto {
 
   @ApiPropertyOptional({ example: 'Can xem phong truoc khi nhan phong' })
   @IsOptional()
-  @Transform(({ value }) =>
-    typeof value === 'string' ? value.trim() : value,
+  @Transform(({ value }: { value: unknown }) =>
+    typeof value === 'string' ? value.trim() : (value as string),
   )
   @IsString()
   @MaxLength(2000)
@@ -74,9 +74,14 @@ export class CheckoutPaymentRequestDto {
 export interface CheckoutPaymentResponseDto {
   bookingId: number;
   paymentId: number;
+  amount: number;
   checkoutUrl: string;
   qrCode: string;
   status: PaymentStatus;
+  accountName: string;
+  accountNumber: string;
+  bankName: string;
+  description: string;
 }
 
 export interface PaymentCheckUpdateResponseDto {

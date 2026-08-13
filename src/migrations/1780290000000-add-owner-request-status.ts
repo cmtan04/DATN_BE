@@ -1,8 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class AddOwnerRequestStatus1780290000000
-  implements MigrationInterface
-{
+export class AddOwnerRequestStatus1780290000000 implements MigrationInterface {
   name = 'AddOwnerRequestStatus1780290000000';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

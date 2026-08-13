@@ -1,8 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class AddLocationServiceKeys1779909348194
-  implements MigrationInterface
-{
+export class AddLocationServiceKeys1779909348194 implements MigrationInterface {
   name = 'AddLocationServiceKeys1779909348194';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

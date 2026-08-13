@@ -23,7 +23,10 @@ export class NotificationService {
     const notifications = await this.notificationRepository.createMany(items);
 
     notifications.forEach((notification) => {
-      this.eventEmitter.emit(`notification.${notification.userId}`, notification);
+      this.eventEmitter.emit(
+        `notification.${notification.userId}`,
+        notification,
+      );
     });
 
     return notifications;

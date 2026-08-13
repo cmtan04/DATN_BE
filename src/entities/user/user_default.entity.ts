@@ -1,4 +1,4 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { BaseEntity } from '../base.entity';
 import { OwnerRequestStatus } from '@assets/enum/user.enum';
 
@@ -39,6 +39,10 @@ export class TBUserDefault extends BaseEntity {
   })
   ownerRequestStatus: number;
 
-  @Column({ type: 'int', nullable: true, comment: 'Primary key' })
+  @PrimaryColumn({
+    type: 'int',
+    nullable: false,
+    comment: 'ID profile cua nguoi dung',
+  })
   userProfileId?: number;
 }

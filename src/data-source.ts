@@ -1,6 +1,5 @@
 import * as dotenv from 'dotenv';
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { SeederOptions } from 'typeorm-extension';
 import { TBLocationAddress } from './entities/location/location-address.entity';
 import { TBLocationMedia } from './entities/location/location_media.entity';
 import { TBLocationService } from './entities/location/location_service.entity';
@@ -16,6 +15,7 @@ import { TBUserDefault } from './entities/user/user_default.entity';
 import { TBUserProfile } from './entities/user/user_profile.entity';
 import { TBOTP } from './entities/otp.entity';
 import { TBLocationFavourite } from './entities/location/location_favourite.entity';
+import { TBRefundRequest } from './entities/refund_request.entity';
 
 dotenv.config();
 
@@ -44,6 +44,7 @@ const baseDataSourceOptions: DataSourceOptions = {
     TBUserProfile,
     TBOTP,
     TBLocationFavourite,
+    TBRefundRequest,
   ],
 };
 
@@ -52,10 +53,9 @@ export const dataSourceOptions: DataSourceOptions = {
   synchronize: process.env.TYPEORM_SYNC === 'true',
 };
 
-export const cliDataSourceOptions: DataSourceOptions & SeederOptions = {
+export const cliDataSourceOptions: DataSourceOptions = {
   ...baseDataSourceOptions,
   migrations: ['src/migrations/*.ts'],
-  seeds: ['src/seed/**/*{.ts,.js}'],
 };
 
 const dataSource = new DataSource(cliDataSourceOptions);

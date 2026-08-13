@@ -1,18 +1,25 @@
 export enum BookingStatus {
-  CREATED = 'CREATED',
-  PENDING_PAYMENT = 'PENDING_PAYMENT',
-  CONFIRMED = 'CONFIRMED',
-  CANCELLED = 'CANCELLED',
-  EXPIRED = 'EXPIRED',
+  CREATED = 0,
+  PENDING_PAYMENT = 1,
+  CONFIRMED = 2,
+  CANCELLED = 3,
+  EXPIRED = 4,
 }
 
 export enum PaymentStatus {
   UNPAID = 'UNPAID',
   PAID = 'PAID',
   FAILED = 'FAILED',
-  EXPIRED = 'EXPIRED',
   CANCELLED = 'CANCELLED',
+  REFUND_PENDING = 'REFUND_PENDING',
   REFUNDED = 'REFUNDED',
+}
+
+export enum RefundStatus {
+  PENDING = 'PENDING',
+  COMPLETED = 'COMPLETED',
+  REJECTED = 'REJECTED',
+  CANCELLED = 'CANCELLED',
 }
 
 export enum PaymentMethod {

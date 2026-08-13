@@ -4,7 +4,6 @@ import { AppModule } from './app.module';
 import 'dotenv/config';
 import { setupSwagger } from './swagger.config';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { join } from 'path';
 
 //Hot Module Replacement (HMR) - dev mode only
 declare const module: {
@@ -16,20 +15,22 @@ declare const module: {
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
   app.useGlobalPipes(
     new ValidationPipe({
-      transform: true,// để dùng @Type
-      whitelist: true,// để loại bỏ các thuộc tính không có trong dto 
+      transform: true, // để dùng @Type
+      whitelist: true, // để loại bỏ các thuộc tính không có trong dto
     }),
   );
-  app.enableCors();
-  app.useStaticAssets(join(process.cwd(), 'uploads'), {
-    prefix: '/uploads',
+
+  app.enableCors({
+    origin: '*', // Cho phép tất cả các domain (an toàn trong dev/ngrok)
+    credentials: true, // Cần thiết cho cookies, auth headers
   });
 
   setupSwagger(app);
 
-  await app.listen(process.env.PORT || 8000);
+  await app.listen(process.env.PORT || 8080, '0.0.0.0');
 
   module.hot?.accept();
   module.hot?.dispose(() => {

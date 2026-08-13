@@ -1,15 +1,20 @@
-import { Injectable } from '@nestjs/common';
-import { Repository, In } from 'typeorm';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
+import { Repository, In, LessThan, EntityManager } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TBBooking } from '@/entities/booking.entity';
 import { TBLocationAvailability } from '@/entities/location_availability.entity';
 import {
-  GetAvailableRoomsRequestDto,
-  GetAvailableRoomsResponseDto,
-  CreateBookingRequestDto,
-} from '@/dtos/booking.dto';
+  GetUserBookingsRequestDto,
+  GetUserBookingsSummaryDto,
+  RawBookingData,
+} from '@/dtos/user/user.dto';
 import { TBLocation } from '@/entities/location/location.entity';
 import { BookingStatus } from '@assets/enum/payment.enum';
+
 @Injectable()
 export class BookingRepository {
   constructor(
@@ -23,138 +28,101 @@ export class BookingRepository {
     private readonly locationRepository: Repository<TBLocation>,
   ) {}
 
-  public getDateRange(startDate: Date, endDate: Date): Date[] {
-    const dates: Date[] = [];
-    for (
-      let date = new Date(startDate);
-      date < endDate;
-      date.setDate(date.getDate() + 1)
-    ) {
-      dates.push(new Date(date));
-    }
-    return dates;
+  async seedLocationAvailabilities(
+    manager: EntityManager,
+    locationId: number,
+    dateStrings: string[],
+  ): Promise<void> {
+    await manager
+      .createQueryBuilder()
+      .insert()
+      .into(TBLocationAvailability)
+      .values(
+        dateStrings.map((dateStr) => ({
+          locationId,
+          date: dateStr,
+          bookedCount: 0,
+        })),
+      )
+      .orIgnore()
+      .execute();
   }
 
-  public async getAvailableRooms(
-    payload: GetAvailableRoomsRequestDto,
-  ): Promise<GetAvailableRoomsResponseDto> {
-    if (!payload.locationId) {
-      throw new Error('Location ID is required');
-    }
+  async updateAvailabilities(
+    manager: EntityManager,
+    locationId: number,
+    dateStrings: string[],
+    rooms: number,
+    maxQuantity: number,
+  ): Promise<void> {
+    const updateResult = await manager
+      .createQueryBuilder()
+      .update(TBLocationAvailability)
+      .set({
+        bookedCount: () => 'bookedCount + :rooms',
+      })
+      .where('locationId = :locationId', { locationId: locationId })
+      .andWhere('date IN (:...dates)', { dates: dateStrings })
+      .andWhere(':maxQuantity - bookedCount >= :rooms')
+      .setParameters({
+        rooms: rooms,
+        maxQuantity: maxQuantity,
+      })
+      .execute();
 
-    if (!payload.startDate || !payload.endDate) {
-      throw new Error('Start date and end date are required');
+    if (updateResult.affected !== dateStrings.length) {
+      throw new BadRequestException('Phòng đã hết trong khoảng thời gian này.');
     }
+  }
 
-    if (payload.startDate >= payload.endDate) {
-      throw new Error('Start date must be before end date');
-    }
+  async findExpiredBookings(expirationTime: Date): Promise<TBBooking[]> {
+    return await this.bookingRepository.find({
+      where: [
+        {
+          status: BookingStatus.PENDING_PAYMENT,
+          createdAt: LessThan(expirationTime),
+        },
+        {
+          status: BookingStatus.CREATED,
+          createdAt: LessThan(expirationTime),
+        },
+      ],
+    });
+  }
 
-    const maxCount = await this.locationRepository.findOne({
-      where: { id: payload.locationId },
+  async getAvailableRooms(
+    locationId: number,
+    dateStrings: string[],
+  ): Promise<number> {
+    const location = await this.locationRepository.findOne({
+      where: { id: locationId },
       select: { quantity: true },
     });
+    if (!location) {
+      throw new NotFoundException('Location not exist');
+    }
 
-    const dates: Date[] = this.getDateRange(payload.startDate, payload.endDate);
+    const maxQuantity = location?.quantity ?? 0;
 
-    // Lấy số lượng phòng còn trống lớn nhất trong khoảng thời gian
     const result = await this.locationAvailabilityRepository
       .createQueryBuilder('availability')
-      .select(['MIN(availability.availableCount) AS maxAvailable'])
+      .select(['MAX(availability.bookedCount) AS maxBooked'])
       .where('availability.locationId = :locationId', {
-        locationId: payload.locationId,
+        locationId: locationId,
       })
-      .andWhere('availability.date IN (:...dates)', { dates })
+      .andWhere('availability.date IN (:...dates)', { dates: dateStrings })
       .getRawOne();
 
-    // Lấy ra số lượng phòng còn trống lớn nhất (Nếu không có bản ghi nào thì lấy số lượng phòng tối đa của địa điểm)
-    const maxAvailableCount = Number(
-      result?.maxAvailable ?? maxCount?.quantity ?? 0,
-    );
+    const maxBookedCount = Number(result?.maxBooked ?? 0);
 
-    return { availableRooms: maxAvailableCount };
+    return Math.max(0, maxQuantity - maxBookedCount);
   }
 
-  public async createBooking(
-    payload: CreateBookingRequestDto,
-    userId: number,
-  ): Promise<TBBooking> {
-    return await this.bookingRepository.manager.transaction(
-      async (transactionalEntityManager) => {
-        // 1. Lock các dòng dữ liệu cần kiểm tra trong khoảng thời gian
-        const dates = this.getDateRange(payload.startDate, payload.endDate);
-
-        const availabilities = await transactionalEntityManager
-          .createQueryBuilder(TBLocationAvailability, 'availability')
-          .setLock('pessimistic_write') // Khóa dòng này lại
-          .where('availability.locationId = :locationId', {
-            locationId: payload.locationId,
-          })
-          .andWhere('availability.date IN (:...dates)', { dates })
-          .getMany();
-
-        const location = await transactionalEntityManager.findOne(TBLocation, {
-          where: { id: payload.locationId },
-          select: { quantity: true },
-        });
-        const maxQuantity = location?.quantity ?? 0;
-
-        // Map existing availabilities by date string YYYY-MM-DD
-        const availabilityMap = new Map<string, TBLocationAvailability>();
-        for (const av of availabilities) {
-          const dateStr = new Date(av.date).toISOString().split('T')[0];
-          availabilityMap.set(dateStr, av);
-        }
-
-        const finalAvailabilities: TBLocationAvailability[] = [];
-
-        for (const date of dates) {
-          const dateStr = date.toISOString().split('T')[0];
-          let av = availabilityMap.get(dateStr);
-          if (!av) {
-            av = transactionalEntityManager.create(TBLocationAvailability, {
-              locationId: payload.locationId,
-              date: date,
-              availableCount: maxQuantity,
-              bookedCount: 0,
-            });
-          }
-          finalAvailabilities.push(av);
-        }
-
-        // 2. Kiểm tra xem có ngày nào hết phòng không
-        const canBook = finalAvailabilities.every(
-          (a) => a.availableCount >= payload.roomNumber,
-        );
-
-        if (!canBook) {
-          // Gợi ý: Tại đây bạn có thể trigger logic fallback (tìm phòng khác)
-          throw new Error('ROOM_UNAVAILABLE');
-        }
-
-        // 3. Cập nhật số lượng phòng
-        for (const av of finalAvailabilities) {
-          av.availableCount -= payload.roomNumber;
-          av.bookedCount += payload.roomNumber;
-          await transactionalEntityManager.save(av);
-        }
-
-        // 4. Tạo booking
-        const booking = this.bookingRepository.create({
-          ...payload,
-          userId,
-          bookingCode: `BOOK-${userId}-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
-        });
-
-        return await transactionalEntityManager.save(booking);
-      },
-    );
-  }
-
-  public async updateBooking(
+  async updateBooking(
     bookingId: number,
     status: BookingStatus,
     userId: number,
+    note?: string,
   ): Promise<TBBooking | null> {
     const repoUserId = await this.bookingRepository.findOne({
       where: { id: bookingId },
@@ -164,53 +132,54 @@ export class BookingRepository {
     if (repoUserId?.userId !== userId) {
       throw new Error('Unauthorized');
     }
-    await this.bookingRepository.update(bookingId, { status });
+
+    const updateData: any = { status };
+    if (note !== undefined) {
+      updateData.note = note;
+    }
+
+    await this.bookingRepository.update(bookingId, updateData);
     return await this.bookingRepository.findOne({ where: { id: bookingId } });
   }
 
-  cancelBooking(bookingId: number, userId: number): Promise<void> {
-    return this.bookingRepository.manager.transaction(
-      async (transactionalEntityManager) => {
-        const booking = await transactionalEntityManager.findOne(TBBooking, {
-          where: { id: bookingId },
-        });
+  async findBooking(bookingCode: string, userId: number): Promise<TBBooking> {
+    const booking = await this.bookingRepository.findOne({
+      where: { bookingCode, userId },
+    });
 
-        if (!booking) {
-          throw new Error('Booking not found');
-        }
+    if (!booking) {
+      throw new BadRequestException('Booking not found');
+    }
 
-        if (booking.userId !== userId) {
-          throw new Error('Unauthorized');
-        }
-
-        // Lấy tất cả các ngày trong khoảng thời gian
-        const dates = this.getDateRange(booking.startDate, booking.endDate);
-
-        // Lock các dòng dữ liệu cần kiểm tra trong khoảng thời gian
-        const availabilities = await transactionalEntityManager
-          .createQueryBuilder(TBLocationAvailability, 'availability')
-          .setLock('pessimistic_write') // Khóa dòng này lại
-          .where('availability.locationId = :locationId', {
-            locationId: booking.locationId,
-          })
-          .andWhere('availability.date IN (:...dates)', { dates })
-          .getMany();
-
-        // Cộng số lượng phòng trở lại
-        for (const av of availabilities) {
-          av.availableCount += booking.roomNumber;
-          av.bookedCount -= booking.roomNumber;
-          await transactionalEntityManager.save(av);
-        }
-        await transactionalEntityManager.update(TBBooking, bookingId, {
-          status: BookingStatus.CANCELLED,
-        });
-      },
-    );
+    return booking;
   }
 
-  public async getUserBookings(userId: number): Promise<any[]> {
-    return await this.bookingRepository
+  async restoreAvailabilities(
+    manager: EntityManager,
+    locationId: number,
+    dateStrings: string[],
+    rooms: number,
+  ): Promise<void> {
+    const updateResult = await manager
+      .createQueryBuilder()
+      .update(TBLocationAvailability)
+      .set({
+        bookedCount: () => 'bookedCount - :rooms',
+      })
+      .where('locationId = :locationId', { locationId: locationId })
+      .andWhere('date IN (:...dates)', { dates: dateStrings })
+      .setParameters({
+        rooms: rooms,
+      })
+      .execute();
+
+    if (updateResult.affected !== dateStrings.length) {
+      throw new Error('Failed to restore availabilities');
+    }
+  }
+
+  private async baseQueryBuilder() {
+    return this.bookingRepository
       .createQueryBuilder('booking')
       .leftJoin(TBLocation, 'location', 'location.id = booking.locationId')
       .leftJoin(
@@ -222,14 +191,67 @@ export class BookingRepository {
         'tb_location_media',
         'media',
         'media.locationId = location.id AND media.displayOrder = 1',
-      )
+      );
+  }
+
+  async getUserBookings(
+    userId: number,
+    queryDto: GetUserBookingsRequestDto,
+  ): Promise<{
+    data: RawBookingData[];
+    totalCount: number;
+    summary: GetUserBookingsSummaryDto;
+  }> {
+    const query = await this.baseQueryBuilder();
+
+    query.where('booking.userId = :userId', { userId });
+
+    if (queryDto.search) {
+      query.andWhere(
+        '(location.name LIKE :search OR booking.bookingCode LIKE :search)',
+        { search: `%${queryDto.search}%` },
+      );
+    }
+
+    if (queryDto.status && queryDto.status !== 'all') {
+      const statusStr = queryDto.status.toLowerCase();
+      if (statusStr === 'pending') {
+        query.andWhere('booking.status IN (:...pendingStatuses)', {
+          pendingStatuses: [
+            BookingStatus.PENDING_PAYMENT,
+            BookingStatus.CREATED,
+          ],
+        });
+      } else if (statusStr === 'confirmed') {
+        query.andWhere(
+          'booking.status = :confirmedStatus AND booking.endDate >= NOW()',
+          { confirmedStatus: BookingStatus.CONFIRMED },
+        );
+      } else if (statusStr === 'completed') {
+        query.andWhere(
+          'booking.status = :confirmedStatus AND booking.endDate < NOW()',
+          { confirmedStatus: BookingStatus.CONFIRMED },
+        );
+      } else if (statusStr === 'cancelled') {
+        query.andWhere('booking.status IN (:...cancelledStatuses)', {
+          cancelledStatuses: [BookingStatus.CANCELLED, BookingStatus.EXPIRED],
+        });
+      }
+    }
+
+    const totalCount = await query.getCount();
+
+    const page = queryDto.page || 1;
+    const limit = queryDto.limit || 6;
+    const skip = (page - 1) * limit;
+
+    const rawData: RawBookingData[] = await query
       .select([
         'booking.id as id',
         'booking.bookingCode as bookingCode',
         'booking.startDate as startDate',
         'booking.endDate as endDate',
         'booking.roomNumber as roomNumber',
-        'booking.guestCount as guestCount',
         'booking.note as note',
         'booking.status as status',
         'booking.totalAmount as totalAmount',
@@ -243,8 +265,45 @@ export class BookingRepository {
         'address.fullAddress as fullAddress',
         'media.url as thumbnailUrl',
       ])
-      .where('booking.userId = :userId', { userId })
       .orderBy('booking.createdAt', 'DESC')
+      .offset(skip)
+      .limit(limit)
       .getRawMany();
+
+    const confirmedCount = await this.bookingRepository
+      .createQueryBuilder('booking')
+      .where('booking.userId = :userId', { userId })
+      .andWhere(
+        'booking.status = :confirmedStatus AND booking.endDate >= NOW()',
+        { confirmedStatus: BookingStatus.CONFIRMED },
+      )
+      .getCount();
+
+    const completedCount = await this.bookingRepository
+      .createQueryBuilder('booking')
+      .where('booking.userId = :userId', { userId })
+      .andWhere(
+        'booking.status = :confirmedStatus AND booking.endDate < NOW()',
+        { confirmedStatus: BookingStatus.CONFIRMED },
+      )
+      .getCount();
+
+    const cancelledCount = await this.bookingRepository
+      .createQueryBuilder('booking')
+      .where('booking.userId = :userId', { userId })
+      .andWhere('booking.status IN (:...cancelledStatuses)', {
+        cancelledStatuses: [BookingStatus.CANCELLED, BookingStatus.EXPIRED],
+      })
+      .getCount();
+
+    return {
+      data: rawData,
+      totalCount,
+      summary: {
+        confirmedCount,
+        completedCount,
+        cancelledCount,
+      },
+    };
   }
 }

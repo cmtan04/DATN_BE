@@ -20,6 +20,14 @@ export class TBLocationType extends BaseEntity {
   code: string;
 
   @Column({
+    type: 'varchar',
+    length: 127,
+    nullable: false,
+    comment: 'Đơn vị phòng',
+  })
+  typeUnit: string;
+
+  @Column({
     type: 'boolean',
     nullable: false,
     default: false,

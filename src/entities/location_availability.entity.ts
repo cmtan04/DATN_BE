@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn, VersionColumn } from 'typeorm';
 
 @Entity('tb_location_availability')
 export class TBLocationAvailability {
@@ -10,7 +10,4 @@ export class TBLocationAvailability {
 
   @Column({ type: 'int', default: 0 })
   bookedCount: number;
-
-  @Column({ type: 'int', default: 0 })
-  availableCount: number;
 }

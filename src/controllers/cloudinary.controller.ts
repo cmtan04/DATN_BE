@@ -8,9 +8,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from '@/services/cloudinary.service';
 import { CreateUploadSignatureRequestDto } from '@/dtos/upload.dto';
-import type {
-  CreateUploadSignatureResponse,
-} from '@/services/cloudinary.service';
+import type { CreateUploadSignatureResponse } from '@/services/cloudinary.service';
 import { ApiTags, ApiOperation, ApiConsumes, ApiBody } from '@nestjs/swagger';
 
 @ApiTags('Upload')

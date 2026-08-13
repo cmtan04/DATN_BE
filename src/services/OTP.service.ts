@@ -6,29 +6,18 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { OtpRepository } from '@/repositories/otp.repository';
-import * as nodemailer from 'nodemailer';
 import 'dotenv/config';
 import * as crypto from 'node:crypto';
 import { VerifyOtpDto, VerifyResetTokenDto } from '@/dtos/OTP.dto';
+import { MailService } from '@/services/mail.service';
 
 @Injectable()
 export class OtpService {
-  private readonly transporter: nodemailer.Transporter;
-
   constructor(
     // Inject Custom Repository thay vì Repository mặc định
     private readonly otpRepository: OtpRepository,
-  ) {
-    this.transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.NODEMAILER_USER,
-        pass: process.env.NODEMAILER_PASS,
-      },
-    });
-  }
+    private readonly mailService: MailService,
+  ) {}
 
   public async deleteOldOtps(email: string): Promise<void> {
     await this.otpRepository.deleteOldOtps(email);
@@ -86,7 +75,11 @@ export class OtpService {
         `,
     };
     try {
-      await this.transporter.sendMail(mailOptions);
+      await this.mailService.sendMail(
+        mailOptions.to,
+        mailOptions.subject,
+        mailOptions.html,
+      );
 
       return {
         success: true,

@@ -48,9 +48,7 @@ export class NotificationRepository {
     await this.notification.update(id, { isRead: true });
   }
 
-  public mapResponse(
-    notification: TBNotification,
-  ): NotificationResponseDto {
+  public mapResponse(notification: TBNotification): NotificationResponseDto {
     return {
       id: notification.id,
       title: notification.title,

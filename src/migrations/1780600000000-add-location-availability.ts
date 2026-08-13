@@ -1,8 +1,6 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class AddLocationAvailability1780600000000
-  implements MigrationInterface
-{
+export class AddLocationAvailability1780600000000 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     const locationTable = await queryRunner.getTable('tb_location');
 
@@ -11,7 +9,7 @@ export class AddLocationAvailability1780600000000
       !locationTable.columns.some((column) => column.name === 'maxGuestCount')
     ) {
       await queryRunner.query(
-        'ALTER TABLE `tb_location` ADD COLUMN `maxGuestCount` int NOT NULL DEFAULT 1 COMMENT \'So luong khach toi da\' AFTER `area`',
+        "ALTER TABLE `tb_location` ADD COLUMN `maxGuestCount` int NOT NULL DEFAULT 1 COMMENT 'So luong khach toi da' AFTER `area`",
       );
     }
 

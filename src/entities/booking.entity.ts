@@ -12,7 +12,7 @@ export class TBBooking extends BaseEntity {
 
   @Column({
     type: 'varchar',
-    length: 255,
+    length: 32,
     nullable: false,
     comment: 'Ma dat phong',
     unique: true,
@@ -28,15 +28,11 @@ export class TBBooking extends BaseEntity {
   @Column({ type: 'int', nullable: false, comment: 'So phong da dat' })
   roomNumber: number;
 
-  @Column({ type: 'int', nullable: false, default: 1, comment: 'So luong khach' })
-  guestCount: number;
-
   @Column({ type: 'text', nullable: true })
   note?: string;
 
   @Column({
-    type: 'varchar',
-    length: 32,
+    type: 'int',
     nullable: false,
     default: BookingStatus.CREATED,
   })

@@ -40,8 +40,8 @@ export class TBLocationAddress extends BaseEntity {
 
   @Column({
     type: 'decimal',
-    precision: 10,
-    scale: 8,
+    precision: 12,
+    scale: 10,
     nullable: false,
     comment: 'Kinh độ',
   })
@@ -49,8 +49,8 @@ export class TBLocationAddress extends BaseEntity {
 
   @Column({
     type: 'decimal',
-    precision: 11,
-    scale: 8,
+    precision: 13,
+    scale: 10,
     nullable: false,
     comment: 'Vĩ độ',
   })

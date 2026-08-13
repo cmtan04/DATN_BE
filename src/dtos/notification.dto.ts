@@ -7,4 +7,3 @@ export interface NotificationResponseDto {
   createdAt: Date;
   updatedAt: Date;
 }
-

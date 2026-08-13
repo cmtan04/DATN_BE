@@ -53,6 +53,12 @@ export class GetLocationsQueryDto {
     example: false,
   })
   @IsOptional()
+  @Transform(({ value }) => {
+    if (value === undefined) return undefined;
+    if (value === 'true' || value === true) return true;
+    if (value === 'false' || value === false) return false;
+    return value;
+  })
   @IsBoolean()
   isFavourite?: boolean;
 
@@ -196,6 +202,7 @@ export interface GetLocationTypeResponseDto {
   id: number;
   name: string;
   code: string;
+  typeUnit?: string;
   canHaveMultiRoom?: boolean;
 }
 

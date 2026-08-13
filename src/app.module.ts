@@ -15,12 +15,15 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { OtpModule } from './modules/OTP.module';
 import { BookingModule } from './modules/booking.module';
 import { PaymentModule } from './modules/payment.module';
-import { RolesGuard } from "./common/guards/role.guard";
+import { RolesGuard } from './common/guards/role.guard';
+import { ScheduleModule } from '@nestjs/schedule';
+import { MailModule } from './modules/mail.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     EventEmitterModule.forRoot(),
+    ScheduleModule.forRoot(),
     TypeOrmModule.forRoot(dataSourceOptions),
     AuthModule,
     LocationModule,
@@ -32,6 +35,7 @@ import { RolesGuard } from "./common/guards/role.guard";
     ServiceModule,
     OtpModule,
     BookingModule,
+    MailModule,
   ],
   controllers: [],
   providers: [

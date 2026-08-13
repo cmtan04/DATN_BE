@@ -16,9 +16,11 @@ import {
 import type { AdminHostResponseDto } from '@/dtos/admin/host.dto';
 import { User } from '@/common/decorators/user.decorator';
 import { UserRole } from '@assets/enum/user.enum';
+import { Role } from '@/common/decorators/role.decorator';
 
 @Controller('admin')
 @ApiTags('Admin')
+@Role(UserRole.ADMIN)
 export class AdminHostController {
   constructor(private readonly adminService: AdminService) {}
 

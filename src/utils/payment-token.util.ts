@@ -1,5 +1,10 @@
 import { BadRequestException } from '@nestjs/common';
-import { createCipheriv, createDecipheriv, createHash, randomBytes } from 'crypto';
+import {
+  createCipheriv,
+  createDecipheriv,
+  createHash,
+  randomBytes,
+} from 'crypto';
 
 const IV_LENGTH = 16;
 
@@ -79,7 +84,9 @@ function fromBase64Url(value: string): Buffer {
   return Buffer.from(`${normalized}${padding}`, 'base64');
 }
 
-function assertPaymentTokenPayload(value: unknown): PaymentRedirectTokenPayload {
+function assertPaymentTokenPayload(
+  value: unknown,
+): PaymentRedirectTokenPayload {
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
     throw new BadRequestException('Invalid payment token payload');
   }

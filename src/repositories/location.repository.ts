@@ -48,6 +48,10 @@ export class LocationRepository {
       .exists({ where: { id: locationTypeId } });
   }
 
+  public async locationExists(locationId: number): Promise<boolean> {
+    return await this.location.exists({ where: { id: locationId } });
+  }
+
   private buildEmptyLocationsResponse(
     page: number,
     limit: number,
@@ -121,6 +125,7 @@ export class LocationRepository {
       id: locationType.id,
       name: locationType.name,
       code: locationType.code,
+      typeUnit: locationType.typeUnit,
       canHaveMultiRoom: Boolean(locationType.canHaveMultiRoom),
     };
   }
@@ -189,6 +194,14 @@ export class LocationRepository {
         'favourite.locationId = location.id AND favourite.userId = :userId',
         { userId },
       );
+    }
+
+    if (filter.isFavourite === true) {
+      if (userId !== undefined) {
+        query.andWhere('favourite.locationId IS NOT NULL');
+      } else {
+        query.andWhere('1 = 0');
+      }
     }
 
     if (filter.locationTypeId !== undefined) {
@@ -281,6 +294,7 @@ export class LocationRepository {
         'type.id as typeId',
         'type.name as typeName',
         'type.code as typeCode',
+        'type.typeUnit as typeUnit',
         'address.id as addressId',
         'address.fullAddress as fullAddress',
         'address.lat as lat',
@@ -333,6 +347,7 @@ export class LocationRepository {
           id: location.typeId,
           name: location.typeName,
           code: location.typeCode,
+          typeUnit: location.typeUnit,
         },
         thumbnailMedia: thumbnailMap.get(location.id) || null,
       })),
@@ -453,6 +468,7 @@ export class LocationRepository {
       id: type.id,
       name: type.name,
       code: type.code,
+      typeUnit: type.typeUnit,
       canHaveMultiRoom: Boolean(type.canHaveMultiRoom),
     }));
   }

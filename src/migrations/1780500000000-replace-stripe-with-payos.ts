@@ -6,9 +6,7 @@ import {
   TableIndex,
 } from 'typeorm';
 
-export class ReplaceStripeWithPayos1780500000000
-  implements MigrationInterface
-{
+export class ReplaceStripeWithPayos1780500000000 implements MigrationInterface {
   name = 'ReplaceStripeWithPayos1780500000000';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

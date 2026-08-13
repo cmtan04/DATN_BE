@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import {
   CreateLocationRequestDto,
   CreateLocationResponseDto,
@@ -27,10 +31,10 @@ export class LocationService {
       {
         page: 1,
         limit: MAX_LIMIT,
-
         sortBy: DEFAULT_SORT_BY,
         sortOrder: DEFAULT_SORT_ORDER,
       },
+      undefined,
       ownerId,
     );
   }
@@ -80,6 +84,13 @@ export class LocationService {
     userId: number,
     locationId: number,
   ): Promise<{ isFavourite: boolean }> {
+    if (locationId <= 0) {
+      throw new BadRequestException('Invalid location ID');
+    }
+    const exists = await this.locationRepository.locationExists(locationId);
+    if (!exists) {
+      throw new NotFoundException('Location not found');
+    }
     return await this.locationRepository.toggleFavouriteLocation(
       userId,
       locationId,

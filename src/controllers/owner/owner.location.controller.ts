@@ -18,10 +18,7 @@ export class OwnerLocationController {
     @User('id') ownerId: number,
     @Body() payload: CreateLocationRequestDto,
   ): Promise<CreateLocationResponseDto> {
-    return await this.locationService.createLocation(
-      ownerId,
-      payload,
-    );
+    return await this.locationService.createLocation(ownerId, payload);
   }
 
   @Get()
