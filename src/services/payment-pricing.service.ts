@@ -5,15 +5,15 @@ import { getDateRange } from '@/utils/date.util';
 export class PaymentPricingService {
   public calculateLocationAmount(
     price: number,
-    startDate: string,
-    endDate: string,
+    startDate: Date,
+    endDate: Date,
     roomNumber: number,
   ): number {
     if (!Number.isInteger(price) || price <= 0) {
       throw new BadRequestException('Location price is invalid');
     }
 
-    const date = getDateRange(new Date(startDate), new Date(endDate));
+    const date = getDateRange(startDate, endDate);
 
     return price * Math.max(1, Math.ceil(date.length)) * roomNumber;
   }

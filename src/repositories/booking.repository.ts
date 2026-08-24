@@ -14,6 +14,7 @@ import {
 } from '@/dtos/user/user.dto';
 import { TBLocation } from '@/entities/location/location.entity';
 import { BookingStatus } from '@assets/enum/payment.enum';
+import { FindOptionsWhere } from 'typeorm';
 
 @Injectable()
 export class BookingRepository {
@@ -142,27 +143,26 @@ export class BookingRepository {
     return await this.bookingRepository.findOne({ where: { id: bookingId } });
   }
 
-  async findBooking(bookingCode: string, userId: number): Promise<TBBooking> {
-    const booking = await this.bookingRepository.findOne({
-      where: { bookingCode, userId },
-    });
-
+  async findBooking(where: FindOptionsWhere<TBBooking>): Promise<TBBooking> {
+    const booking = await this.bookingRepository.findOne({ where });
     if (!booking) {
-      throw new BadRequestException('Booking not found');
+      throw new NotFoundException('Booking not found!');
     }
-
     return booking;
   }
 
   async restoreAvailabilities(
-    manager: EntityManager,
     locationId: number,
     dateStrings: string[],
     rooms: number,
   ): Promise<void> {
-    const updateResult = await manager
+    if (dateStrings.length === 0) {
+      return;
+    }
+
+    const updateResult = await this.locationAvailabilityRepository
       .createQueryBuilder()
-      .update(TBLocationAvailability)
+      .update()
       .set({
         bookedCount: () => 'bookedCount - :rooms',
       })

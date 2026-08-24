@@ -1,18 +1,25 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
+import { InjectRepository } from '@nestjs/typeorm';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { Repository } from 'typeorm';
+
 import { JwtPayload } from '@dtos/jwt.dto';
 import { UserDecoratorDtoResponse } from '@dtos/user/user.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { TBUserDefault } from '@/entities/user/user_default.entity';
+import { TBUserProfile } from '@/entities/user/user_profile.entity';
 import { UserStatus } from '@/assets/enum/user.enum';
-import { UnauthorizedException } from '@nestjs/common/exceptions';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(configService: ConfigService) {
+  constructor(
+    configService: ConfigService,
+    @InjectRepository(TBUserDefault)
+    private readonly userRepository: Repository<TBUserDefault>,
+    @InjectRepository(TBUserProfile)
+    private readonly userProfileRepository: Repository<TBUserProfile>,
+  ) {
     super({
       // 1. Tự động trích xuất token từ Header "Authorization: Bearer <token>"
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -20,37 +27,36 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       // 2. Không cho phép token hết hạn đi qua
       ignoreExpiration: false,
 
-      // 3. Sử dụng Secret Key để giải mã và kiểm tra chữ ký token
+      // 3. Sử dụng Secret Key để giải mã token
       secretOrKey: configService.getOrThrow<string>('JWT_ACCESS_SECRET'),
     });
   }
 
-  @InjectRepository(TBUserDefault)
-  private readonly userRepository: Repository<TBUserDefault>;
-
   /**
-   * validate: Được gọi sau khi JWT đã giải mã thành công.
-   * Kết quả trả về sẽ được Nest gán vào object Request.
+   * validate: Được gọi sau khi JWT đã verify chữ ký thành công.
+   * Kết quả return sẽ được gán vào `req.user`.
    */
   async validate(payload: JwtPayload): Promise<UserDecoratorDtoResponse> {
-    //Thử tìm kiếm lại user trong db để đảm bảo user vẫn tồn tại
+    // 1. Tìm user trong DB để đảm bảo user vẫn tồn tại và lấy data mới nhất
+    // (Optional: Có thể dùng `select` để tối ưu các cột cần lấy, tránh lấy password)
     const user = await this.userRepository.findOne({
       where: { id: payload.sub },
     });
 
+    // 2. Kiểm tra tồn tại và trạng thái Active
     if (user?.status !== UserStatus.ACTIVE) {
       throw new UnauthorizedException('User no longer exists or is inactive');
     }
 
-    // Chuyển đổi dữ liệu từ Token Payload sang DTO phản hồi tiêu chuẩn của User
+    if (!user?.isEmailVerified) {
+      throw new UnauthorizedException('User email is not verified');
+    }
+
     return {
-      id: payload.sub,
-      email: payload.email,
-      password: '', // Không trả password trong token/request user
-      fullName: payload.fullName,
-      status: payload.status,
-      role: payload.role,
-      isEmailVerified: payload.isEmailVerified,
+      id: user.id,
+      email: user.email,
+      status: user.status,
+      role: user.userRole,
     };
   }
 }

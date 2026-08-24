@@ -4,6 +4,7 @@ import { AppModule } from './app.module';
 import 'dotenv/config';
 import { setupSwagger } from './swagger.config';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { initializeTransactionalContext } from 'typeorm-transactional';
 
 //Hot Module Replacement (HMR) - dev mode only
 declare const module: {
@@ -14,6 +15,7 @@ declare const module: {
 };
 
 async function bootstrap(): Promise<void> {
+  initializeTransactionalContext();
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.useGlobalPipes(

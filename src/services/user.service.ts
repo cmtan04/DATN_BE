@@ -4,13 +4,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import {
-  GetCurrentUserResponseDto,
   GetUserBookingsRequestDto,
   GetUserBookingsResponseDto,
   RawBookingData,
-  SubmitOwnerRequestResponseDto,
   UpdateCurrentUserRequestDto,
-  UpdateCurrentUserResponseDto,
+  User,
   UserBookingItemDto,
 } from '@/dtos/user/user.dto';
 import {
@@ -32,9 +30,7 @@ export class UserService {
     private readonly authService: AuthService,
   ) {}
 
-  public async getCurrentUser(
-    userId: number,
-  ): Promise<GetCurrentUserResponseDto> {
+  public async getCurrentUser(userId: number): Promise<User> {
     const { user, profile } = await this.getUserAndProfile(userId);
     return this.userRepository.mapToCurrentUserResponse(user, profile);
   }
@@ -42,7 +38,7 @@ export class UserService {
   public async updateCurrentUser(
     userId: number,
     payload: UpdateCurrentUserRequestDto,
-  ): Promise<UpdateCurrentUserResponseDto> {
+  ): Promise<User> {
     const { user, profile } = await this.getUserAndProfile(userId);
 
     const updateData = this.normalizeUpdatePayload(payload);
@@ -51,53 +47,53 @@ export class UserService {
     return await this.getCurrentUser(user.id);
   }
 
-  public async submitOwnerRequest(
-    userId: number,
-  ): Promise<SubmitOwnerRequestResponseDto> {
-    const { user, profile } = await this.getUserAndProfile(userId);
-    const ownerRequestStatus =
-      user.ownerRequestStatus ?? OwnerRequestStatus.NONE;
+  // public async submitOwnerRequest(
+  //   userId: number,
+  // ): Promise<SubmitOwnerRequestResponseDto> {
+  //   const { user, profile } = await this.getUserAndProfile(userId);
+  //   const ownerRequestStatus =
+  //     user.ownerRequestStatus ?? OwnerRequestStatus.NONE;
 
-    if (user.userRole === UserRole.ADMIN) {
-      throw new BadRequestException('Admin cannot apply to become owner');
-    }
+  //   if (user.userRole === UserRole.ADMIN) {
+  //     throw new BadRequestException('Admin cannot apply to become owner');
+  //   }
 
-    if (
-      user.userRole === UserRole.OWNER ||
-      ownerRequestStatus === OwnerRequestStatus.APPROVED
-    ) {
-      if (ownerRequestStatus !== OwnerRequestStatus.APPROVED) {
-        await this.userRepository.updateOwnerRequest(user.id, {
-          ownerRequestStatus: OwnerRequestStatus.APPROVED,
-          userRole: UserRole.OWNER,
-        });
-      }
+  //   if (
+  //     user.userRole === UserRole.OWNER ||
+  //     ownerRequestStatus === OwnerRequestStatus.APPROVED
+  //   ) {
+  //     if (ownerRequestStatus !== OwnerRequestStatus.APPROVED) {
+  //       await this.userRepository.updateOwnerRequest(user.id, {
+  //         ownerRequestStatus: OwnerRequestStatus.APPROVED,
+  //         userRole: UserRole.OWNER,
+  //       });
+  //     }
 
-      return await this.getCurrentUser(user.id);
-    }
+  //     return await this.getCurrentUser(user.id);
+  //   }
 
-    if (ownerRequestStatus === OwnerRequestStatus.PENDING) {
-      return await this.getCurrentUser(user.id);
-    }
+  //   if (ownerRequestStatus === OwnerRequestStatus.PENDING) {
+  //     return await this.getCurrentUser(user.id);
+  //   }
 
-    if (
-      user.userRole !== UserRole.USER ||
-      ![OwnerRequestStatus.NONE, OwnerRequestStatus.REJECTED].includes(
-        ownerRequestStatus,
-      )
-    ) {
-      throw new BadRequestException('Invalid owner request status');
-    }
+  //   if (
+  //     user.userRole !== UserRole.USER ||
+  //     ![OwnerRequestStatus.NONE, OwnerRequestStatus.REJECTED].includes(
+  //       ownerRequestStatus,
+  //     )
+  //   ) {
+  //     throw new BadRequestException('Invalid owner request status');
+  //   }
 
-    await this.userRepository.updateOwnerRequest(user.id, {
-      ownerRequestStatus: OwnerRequestStatus.PENDING,
-      userRole: UserRole.USER,
-    });
+  //   await this.userRepository.updateOwnerRequest(user.id, {
+  //     ownerRequestStatus: OwnerRequestStatus.PENDING,
+  //     userRole: UserRole.USER,
+  //   });
 
-    await this.notifyAdminsOwnerRequestCreated(profile.fullName || user.email);
+  //   await this.notifyAdminsOwnerRequestCreated(profile.fullName || user.email);
 
-    return await this.getCurrentUser(user.id);
-  }
+  //   return await this.getCurrentUser(user.id);
+  // }
 
   private async notifyAdminsOwnerRequestCreated(
     requesterName: string,
@@ -141,10 +137,6 @@ export class UserService {
 
     if (payload.phoneNumber !== undefined) {
       updateData.phoneNumber = payload.phoneNumber;
-    }
-
-    if (payload.avatarUrl !== undefined) {
-      updateData.avatarUrl = payload.avatarUrl || null;
     }
 
     if (Object.keys(updateData).length === 0) {

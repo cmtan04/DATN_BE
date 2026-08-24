@@ -5,9 +5,7 @@ import { BookingService } from '@/services/booking.service';
 import { BookingRepository } from '@/repositories/booking.repository';
 import { TBBooking } from '@/entities/booking.entity';
 import { TBLocationAvailability } from '@/entities/location_availability.entity';
-import { TBPayment } from '@/entities/payment.entity';
-import { TBRefundRequest } from '@/entities/refund_request.entity';
-import { PayosService } from '@/services/payos.service';
+import { TBLocation } from '@/entities/location/location.entity';
 import { LocationModule } from './location.module';
 
 @Module({
@@ -15,13 +13,12 @@ import { LocationModule } from './location.module';
     TypeOrmModule.forFeature([
       TBBooking,
       TBLocationAvailability,
-      TBPayment,
-      TBRefundRequest,
+      TBLocation,
     ]),
     LocationModule,
   ],
   controllers: [BookingController],
-  providers: [BookingService, BookingRepository, PayosService],
-  exports: [BookingService, BookingRepository, TypeOrmModule],
+  providers: [BookingService, BookingRepository],
+  exports: [BookingService, BookingRepository],
 })
 export class BookingModule {}

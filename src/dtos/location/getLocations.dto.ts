@@ -181,11 +181,9 @@ export interface GetLocationAddressResponseDto {
   region?: string;
   lat: number;
   lng: number;
-  normalFullAddress?: string;
 }
 
 export interface GetLocationOwnerResponseDto {
-  id: number;
   fullName: string | null;
   phoneNumber: string | null;
 }
@@ -232,7 +230,6 @@ export interface GetLocationDetailResponseDto {
   id: number;
   name: string;
   description?: string | null;
-  owner: GetLocationOwnerResponseDto | null;
   price: number;
   priceUnit: string;
   area: number;

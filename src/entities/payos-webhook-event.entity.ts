@@ -1,4 +1,4 @@
-import { Column, Entity, Index } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index } from 'typeorm';
 import { BaseEntity } from './base.entity';
 
 @Entity('tb_payos_webhook_event')
@@ -10,6 +10,6 @@ export class TBPayosWebhookEvent extends BaseEntity {
   @Column({ type: 'varchar', length: 255, nullable: false })
   type: string;
 
-  @Column({ type: 'timestamp', nullable: false })
+  @CreateDateColumn({ type: 'timestamp', nullable: false })
   processedAt: Date;
 }

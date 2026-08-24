@@ -1,4 +1,5 @@
 import { CreateLocationRepositoryDto } from '@/dtos/location/createLocation.dto';
+import { AdminLocationListResponseDto } from '@/dtos/admin/location.dto';
 import {
   GetLocationsQueryDto,
   GetLocationsResponseDto,
@@ -163,7 +164,6 @@ export class LocationRepository {
 
     if (!owner) return null;
     return {
-      id: owner.id,
       fullName: owner.fullName,
       phoneNumber: owner.phoneNumber,
     };
@@ -303,7 +303,10 @@ export class LocationRepository {
           ? 'IF(favourite.locationId IS NOT NULL, 1, 0) as isFavourite'
           : '0 as isFavourite',
       ])
-      .orderBy(filter?.sortBy || 'location.id', filter?.sortOrder)
+      .orderBy(
+        filter?.sortBy ? `location.${filter.sortBy}` : 'location.id',
+        (filter?.sortOrder || 'DESC').toUpperCase() === 'ASC' ? 'ASC' : 'DESC',
+      )
       .offset((filter.page - 1) * filter.limit) // Phân trang
       .limit(filter.limit)
       .getRawMany();
@@ -371,25 +374,25 @@ export class LocationRepository {
       return null;
     }
 
-    const owner = await this.getLocationOwner(baseLocation.ownerId);
-    let isFavourite = false;
-    if (userId !== undefined) {
-      const favourite = await this.locationFavourite.findOne({
-        where: { locationId: id, userId },
-      });
-      isFavourite = favourite !== null;
-    }
-    const address = await this.getLocationAddress(
-      baseLocation.locationAddressId!,
-    );
-    const type = await this.getLocationType(baseLocation.locationTypeId!);
-    const media = await this.getLocationMedia(baseLocation.id);
-    const services = await this.getLocationServices(baseLocation.id);
+    const [isFavourite, address, type, media, services] = await Promise.all([
+      userId !== undefined
+        ? this.locationFavourite
+            .findOne({ where: { locationId: id, userId } })
+            .then((fav) => fav !== null)
+        : Promise.resolve(false),
+      baseLocation.locationAddressId
+        ? this.getLocationAddress(baseLocation.locationAddressId)
+        : Promise.resolve(null),
+      baseLocation.locationTypeId
+        ? this.getLocationType(baseLocation.locationTypeId)
+        : Promise.resolve(null),
+      this.getLocationMedia(baseLocation.id),
+      this.getLocationServices(baseLocation.id),
+    ]);
     return {
       id: baseLocation.id,
       name: baseLocation.name,
       description: baseLocation.description,
-      owner: owner,
       price: baseLocation.price,
       priceUnit: baseLocation.priceUnit,
       area: baseLocation.area,
@@ -662,5 +665,190 @@ export class LocationRepository {
       await this.locationFavourite.save({ locationId, userId });
       return { isFavourite: true };
     }
+  }
+
+  public async getAdminLocations(
+    filter: GetLocationsQueryDto,
+  ): Promise<AdminLocationListResponseDto> {
+    const query = this.location
+      .createQueryBuilder('location')
+      .leftJoin('tb_location_type', 'type', 'type.id = location.locationTypeId')
+      .leftJoin(
+        'tb_location_address',
+        'address',
+        'address.id = location.locationAddressId',
+      )
+      .leftJoin(
+        'tb_user_default',
+        'ownerUser',
+        'ownerUser.id = location.ownerId',
+      )
+      .leftJoin(
+        'tb_user_profile',
+        'ownerProfile',
+        'ownerProfile.id = ownerUser.userProfileId',
+      );
+
+    if (filter.locationTypeId !== undefined) {
+      query.andWhere('type.id = :locationTypeId', {
+        locationTypeId: filter.locationTypeId,
+      });
+    }
+
+    if (filter.guestCount !== undefined) {
+      query.andWhere('location.maxGuestCount >= :guestCount', {
+        guestCount: filter.guestCount,
+      });
+    }
+
+    if (filter.minPrice !== undefined) {
+      query.andWhere('location.price >= :minPrice', {
+        minPrice: filter.minPrice,
+      });
+    }
+
+    if (filter.maxPrice !== undefined) {
+      query.andWhere('location.price <= :maxPrice', {
+        maxPrice: filter.maxPrice,
+      });
+    }
+
+    if (filter.minArea !== undefined) {
+      query.andWhere('location.area >= :minArea', { minArea: filter.minArea });
+    }
+
+    if (filter.maxArea !== undefined) {
+      query.andWhere('location.area <= :maxArea', { maxArea: filter.maxArea });
+    }
+
+    if (filter.keyword) {
+      const cleanedKeyword = this.buildCleanedVietNameseString(filter.keyword);
+      query.andWhere(
+        new Brackets((qb) => {
+          qb.where('address.normalFullAddress LIKE :cleanedKeyword', {
+            cleanedKeyword: `%${cleanedKeyword}%`,
+          })
+            .orWhere('location.name LIKE :rawKeyword', {
+              rawKeyword: `%${filter.keyword}%`,
+            })
+            .orWhere('ownerUser.email LIKE :rawKeyword', {
+              rawKeyword: `%${filter.keyword}%`,
+            })
+            .orWhere('ownerProfile.fullName LIKE :rawKeyword', {
+              rawKeyword: `%${filter.keyword}%`,
+            })
+            .orWhere('ownerProfile.phoneNumber LIKE :rawKeyword', {
+              rawKeyword: `%${filter.keyword}%`,
+            });
+        }),
+      );
+    }
+
+    const total = await query.getCount();
+
+    if (total === 0) {
+      return {
+        data: [],
+        meta: {
+          page: filter.page,
+          limit: filter.limit,
+          total: 0,
+          totalPages: 0,
+        },
+      };
+    }
+
+    const rawLocations = await query
+      .select([
+        'location.id as id',
+        'location.name as name',
+        'location.description as description',
+        'location.price as price',
+        'location.priceUnit as priceUnit',
+        'location.area as area',
+        'location.createdAt as createdAt',
+        'location.maxGuestCount as maxGuestCount',
+        'location.averageRating as averageRating',
+        'type.id as typeId',
+        'type.name as typeName',
+        'type.code as typeCode',
+        'type.typeUnit as typeUnit',
+        'address.id as addressId',
+        'address.fullAddress as fullAddress',
+        'address.lat as lat',
+        'address.lng as lng',
+        'ownerUser.id as ownerId',
+        'ownerUser.email as ownerEmail',
+        'ownerProfile.fullName as ownerFullName',
+        'ownerProfile.phoneNumber as ownerPhoneNumber',
+        'ownerProfile.avatarUrl as ownerAvatarUrl',
+      ])
+      .orderBy(
+        filter?.sortBy ? `location.${filter.sortBy}` : 'location.id',
+        (filter?.sortOrder || 'DESC').toUpperCase() === 'ASC' ? 'ASC' : 'DESC',
+      )
+      .offset((filter.page - 1) * filter.limit)
+      .limit(filter.limit)
+      .getRawMany();
+
+    const locationIds = rawLocations.map((item) => item.id);
+
+    const thumbnail = await this.locationMedia.find({
+      where: { locationId: In(locationIds), displayOrder: 1 },
+      select: ['id', 'type', 'url', 'locationId'],
+    });
+
+    const thumbnailMap = new Map(
+      thumbnail.map((t) => [
+        t.locationId,
+        {
+          id: t.id,
+          type: t.type,
+          url: t.url,
+        },
+      ]),
+    );
+
+    return {
+      data: rawLocations.map((location) => ({
+        id: location.id,
+        name: location.name,
+        description: location.description,
+        price: location.price,
+        priceUnit: location.priceUnit,
+        area: location.area,
+        maxGuestCount: location.maxGuestCount,
+        averageRating: location.averageRating,
+        isFavourite: false,
+        owner: location.ownerId
+          ? {
+              id: location.ownerId,
+              fullName: location.ownerFullName || null,
+              phoneNumber: location.ownerPhoneNumber || null,
+              email: location.ownerEmail || '',
+              avatarUrl: location.ownerAvatarUrl || null,
+            }
+          : null,
+        address: {
+          id: location.addressId,
+          fullAddress: location.fullAddress,
+          lat: location.lat,
+          lng: location.lng,
+        },
+        type: {
+          id: location.typeId,
+          name: location.typeName,
+          code: location.typeCode,
+          typeUnit: location.typeUnit,
+        },
+        thumbnailMedia: thumbnailMap.get(location.id) || null,
+      })),
+      meta: {
+        page: filter.page,
+        limit: filter.limit,
+        total: total,
+        totalPages: Math.ceil(total / filter.limit),
+      },
+    };
   }
 }

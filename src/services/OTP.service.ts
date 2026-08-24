@@ -60,7 +60,7 @@ export class OtpService {
     const mailOptions = {
       from: `"Hệ thống Xác thực" <${process.env.NODEMAILER_USER}>`,
       to: email,
-      subject: '[Hostings] Mã xác thực OTP của bạn ',
+      subject: '[Ownerings] Mã xác thực OTP của bạn ',
       html: `
           <div style="font-family: Arial, sans-serif; max-width: 500px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
             <h2 style="color: #1a73e8; text-align: center;">MÃ XÁC THỰC OTP</h2>

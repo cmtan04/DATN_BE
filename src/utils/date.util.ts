@@ -1,3 +1,6 @@
+/**
+ * Lấy danh sách ngày ( trả về 1 mảng )
+ */
 export function getDateRange(startDate: Date, endDate: Date): Date[] {
   const dates: Date[] = [];
   for (

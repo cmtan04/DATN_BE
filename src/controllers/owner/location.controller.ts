@@ -5,13 +5,16 @@ import {
   CreateLocationRequestDto,
   CreateLocationResponseDto,
 } from '@/dtos/location/createLocation.dto';
-import { GetLocationsResponseDto } from '@/dtos/location/getLocations.dto';
-import { LocationService } from '@/services/location.service';
-import { Body, Get, Post, Controller } from '@nestjs/common';
+import {
+  GetLocationsQueryDto,
+  GetLocationsResponseDto,
+} from '@/dtos/location/getLocations.dto';
+import { LocationService } from '@/services/owner/location.service';
+import { Body, Get, Post, Controller, Query } from '@nestjs/common';
 
-@Controller('owner/locations')
+@Controller('owner/location')
 @Role(UserRole.OWNER)
-export class OwnerLocationController {
+export class LocationController {
   constructor(private readonly locationService: LocationService) {}
   @Post()
   public async createLocation(
@@ -23,8 +26,9 @@ export class OwnerLocationController {
 
   @Get()
   public async getOwnerLocations(
+    @Query() query: GetLocationsQueryDto,
     @User('id') ownerId: number,
   ): Promise<GetLocationsResponseDto> {
-    return await this.locationService.getOwnerLocations(ownerId);
+    return await this.locationService.getOwnerLocations(ownerId, query);
   }
 }

@@ -1,10 +1,21 @@
 import {
+  ConfirmWebhookResponse,
+  CreatePayosPaymentLinkInput,
+  CreatePayosPaymentLinkResponse,
+  ExtendedPaymentLink,
+  PaymentLink,
+  Webhook,
+  WebhookData,
+} from '@/dtos/payment/payos.dto';
+import { getBankNameByBin } from '@/utils/vietqr-bank.util';
+import {
   BadGatewayException,
   BadRequestException,
   ForbiddenException,
   HttpException,
   Injectable,
   InternalServerErrorException,
+  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -14,38 +25,19 @@ import {
   BadRequestError,
   ConnectionError,
   ConnectionTimeoutError,
-  CreatePaymentLinkResponse,
   ForbiddenError,
   InternalServerError,
   InvalidSignatureError,
   NotFoundError,
   PayOS,
-  PaymentLink,
   TooManyRequestError,
   UnauthorizedError,
-  Webhook,
-  WebhookData,
   WebhookError,
 } from '@payos/node';
 
-export interface CreatePayosPaymentLinkInput {
-  orderCode: number;
-  amount: number;
-  description: string;
-  buyerName: string;
-  buyerEmail: string;
-  buyerPhone: string;
-  returnUrl: string;
-  cancelUrl: string;
-  items: {
-    name: string;
-    quantity: number;
-    price: number;
-  }[];
-}
-
 @Injectable()
-export class PayosService {
+export class PayOSService {
+  private readonly logger = new Logger(PayOSService.name);
   private readonly payos: PayOS;
 
   constructor(private readonly configService: ConfigService) {
@@ -53,16 +45,21 @@ export class PayosService {
     const apiKey = this.configService.get<string>('PAYOS_API_KEY');
     const checksumKey = this.configService.get<string>('PAYOS_CHECKSUM_KEY');
 
-    if (!clientId) {
-      throw new InternalServerErrorException('Missing PAYOS_CLIENT_ID');
-    }
+    if (!clientId || !apiKey || !checksumKey) {
+      const missingKeys = [
+        !clientId && 'PAYOS_CLIENT_ID',
+        !apiKey && 'PAYOS_API_KEY',
+        !checksumKey && 'PAYOS_CHECKSUM_KEY',
+      ]
+        .filter(Boolean)
+        .join(', ');
 
-    if (!apiKey) {
-      throw new InternalServerErrorException('Missing PAYOS_API_KEY');
-    }
-
-    if (!checksumKey) {
-      throw new InternalServerErrorException('Missing PAYOS_CHECKSUM_KEY');
+      this.logger.error(
+        `Failed to initialize PayOS service. Missing configuration keys: ${missingKeys}`,
+      );
+      throw new InternalServerErrorException(
+        `Missing PayOS configuration: ${missingKeys}`,
+      );
     }
 
     this.payos = new PayOS({
@@ -74,9 +71,9 @@ export class PayosService {
 
   public async createPaymentLink(
     input: CreatePayosPaymentLinkInput,
-  ): Promise<CreatePaymentLinkResponse> {
+  ): Promise<CreatePayosPaymentLinkResponse> {
     try {
-      return await this.payos.paymentRequests.create({
+      const payment = await this.payos.paymentRequests.create({
         orderCode: input.orderCode,
         amount: input.amount,
         description: input.description,
@@ -87,12 +84,24 @@ export class PayosService {
         cancelUrl: input.cancelUrl,
         items: input.items,
       });
+      return {
+        orderCode: payment.orderCode,
+        qrCode: payment.qrCode,
+        bankName: getBankNameByBin(payment.bin),
+        accountName: payment.accountName,
+        accountNumber: payment.accountNumber,
+        ammount: payment.amount,
+        description: payment.description,
+        expiredAt: payment.expiredAt,
+      };
     } catch (error) {
       this.throwMappedPayosError(error);
     }
   }
 
-  public async retrievePaymentLink(orderCode: number): Promise<PaymentLink> {
+  public async retrievePaymentLink(
+    orderCode: number,
+  ): Promise<ExtendedPaymentLink> {
     try {
       return await this.payos.paymentRequests.get(orderCode);
     } catch (error) {
@@ -110,6 +119,11 @@ export class PayosService {
         cancellationReason,
       );
     } catch (error) {
+      this.logger.warn(
+        `Failed to cancel payment link for orderCode ${orderCode}: ${
+          error instanceof Error ? error.message : 'Unknown error'
+        }`,
+      );
       return null;
     }
   }
@@ -122,9 +136,22 @@ export class PayosService {
     }
   }
 
+  public async confirmWebhookUrl(
+    webhookUrl: string,
+  ): Promise<ConfirmWebhookResponse> {
+    try {
+      return await this.payos.webhooks.confirm(webhookUrl);
+    } catch (error) {
+      this.throwMappedPayosError(error);
+    }
+  }
+
   private throwMappedPayosError(error: unknown): never {
     const message =
       error instanceof Error ? error.message : 'payOS request failed';
+    const stack = error instanceof Error ? error.stack : undefined;
+
+    this.logger.error(`PayOS API error: ${message}`, stack);
 
     if (
       error instanceof BadRequestError ||

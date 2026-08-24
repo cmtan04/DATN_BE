@@ -18,28 +18,26 @@ import { BookingStatus } from '@/assets/enum/payment.enum';
 export class UserDecoratorDtoResponse {
   id: number;
   email: string;
-  password: string;
   phone?: string;
   fullName?: string;
   dateOfBirth?: Date;
   status: UserStatus;
   role: UserRole;
-  isEmailVerified: boolean;
 }
 
-export class UserProfileResponseDto {
+export class UserProfile {
   fullName: string;
   phoneNumber: string;
   avatarUrl?: string;
 }
 
-export class GetCurrentUserResponseDto {
+export class User {
   id: number;
   email: string;
   userRole: UserRole;
   status: UserStatus;
   ownerRequestStatus: OwnerRequestStatus;
-  profile: UserProfileResponseDto | null;
+  profile: UserProfile;
 }
 
 export class UpdateCurrentUserRequestDto {
@@ -56,17 +54,7 @@ export class UpdateCurrentUserRequestDto {
   @IsNotEmpty()
   @MaxLength(50)
   phoneNumber?: string;
-
-  @IsOptional()
-  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
-  @IsString()
-  @MaxLength(500)
-  avatarUrl?: string;
 }
-
-export class UpdateCurrentUserResponseDto extends GetCurrentUserResponseDto {}
-
-export class SubmitOwnerRequestResponseDto extends GetCurrentUserResponseDto {}
 
 export class GetUserBookingsRequestDto {
   @ApiProperty({ description: 'Số trang', example: 1, required: false })

@@ -35,8 +35,6 @@ export class TBLocationAddress extends BaseEntity {
   })
   country: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: false, comment: 'Khu vực' })
-  region: string;
 
   @Column({
     type: 'decimal',

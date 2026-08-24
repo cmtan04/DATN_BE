@@ -6,34 +6,36 @@ import {
 } from '@nestjs/common';
 import { UserRepository } from '@/repositories/user.repository';
 import {
-  AdminHostResponseDto,
-  AdminHostStatusQuery,
-  UpdateHostStatusRequestDto,
-} from '@/dtos/admin/host.dto';
+  AdminOwnerListQueryDto,
+  AdminOwnerListResponseDto,
+  AdminOwnerResponseDto,
+  AdminOwnerStatusQuery,
+  UpdateOwnerStatusRequestDto,
+} from '@/dtos/admin/owner.dto';
 import { NotificationService } from '../notification.service';
 import { OwnerRequestStatus, UserRole } from '@assets/enum/user.enum';
 
 @Injectable()
-export class AdminService {
+export class OwnerService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly notificationService: NotificationService,
   ) {}
 
-  public async getHosts(
+  public async getOwners(
     adminRole: UserRole,
-    status?: AdminHostStatusQuery,
-  ): Promise<AdminHostResponseDto[]> {
+    query: AdminOwnerListQueryDto,
+  ): Promise<AdminOwnerListResponseDto> {
     this.assertAdmin(adminRole);
 
-    return await this.userRepository.findHosts(status);
+    return await this.userRepository.findOwners(query);
   }
 
-  public async updateHostStatus(
+  public async updateOwnerStatus(
     adminRole: UserRole,
     userId: number,
-    payload: UpdateHostStatusRequestDto,
-  ): Promise<AdminHostResponseDto> {
+    payload: UpdateOwnerStatusRequestDto,
+  ): Promise<AdminOwnerResponseDto> {
     this.assertAdmin(adminRole);
 
     const target = await this.userRepository.findById(userId);
@@ -42,7 +44,7 @@ export class AdminService {
     }
 
     if (target.userRole === UserRole.ADMIN) {
-      throw new BadRequestException('Cannot update admin host status');
+      throw new BadRequestException('Cannot update admin owner status');
     }
 
     const ownerRequestStatus = this.mapUpdateStatus(payload.status);
@@ -56,7 +58,7 @@ export class AdminService {
       userRole,
     });
 
-    await this.notifyHostStatusUpdated(userId, ownerRequestStatus);
+    await this.notifyOwnerStatusUpdated(userId, ownerRequestStatus);
 
     const updatedUser = await this.userRepository.findById(userId);
     if (!updatedUser) {
@@ -67,12 +69,12 @@ export class AdminService {
       ? await this.userRepository.findProfileById(updatedUser.userProfileId)
       : null;
 
-    return this.userRepository.mapToAdminHostResponse(updatedUser, profile);
+    return this.userRepository.mapToAdminOwnerResponse(updatedUser, profile);
   }
 
   private assertAdmin(role: UserRole): void {
     if (role !== UserRole.ADMIN) {
-      throw new ForbiddenException('Only admin can manage hosts');
+      throw new ForbiddenException('Only admin can manage owners');
     }
   }
 
@@ -85,10 +87,10 @@ export class AdminService {
       return OwnerRequestStatus.REJECTED;
     }
 
-    throw new BadRequestException('Invalid host status');
+    throw new BadRequestException('Invalid owner status');
   }
 
-  private async notifyHostStatusUpdated(
+  private async notifyOwnerStatusUpdated(
     userId: number,
     status: OwnerRequestStatus,
   ): Promise<void> {

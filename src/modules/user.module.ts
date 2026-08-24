@@ -18,5 +18,6 @@ import { BookingModule } from './booking.module';
   ],
   controllers: [UserController],
   providers: [UserService, UserRepository],
+  exports: [UserService, UserRepository],
 })
 export class UserModule {}

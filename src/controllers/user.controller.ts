@@ -1,11 +1,9 @@
 import { Body, Controller, Get, Patch, Post, Query } from '@nestjs/common';
 import {
-  GetCurrentUserResponseDto,
   GetUserBookingsRequestDto,
   GetUserBookingsResponseDto,
-  SubmitOwnerRequestResponseDto,
   UpdateCurrentUserRequestDto,
-  UpdateCurrentUserResponseDto,
+  User as UserDto,
 } from '@/dtos/user/user.dto';
 import { UserService } from '@/services/user.service';
 import { User } from '@/common/decorators/user.decorator';
@@ -16,9 +14,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('me')
-  public async getCurrentUser(
-    @User('id') userId: number,
-  ): Promise<GetCurrentUserResponseDto> {
+  public async getCurrentUser(@User('id') userId: number): Promise<UserDto> {
     return await this.userService.getCurrentUser(userId);
   }
 
@@ -34,16 +30,16 @@ export class UserController {
   public async updateCurrentUser(
     @User('id') userId: number,
     @Body() payload: UpdateCurrentUserRequestDto,
-  ): Promise<UpdateCurrentUserResponseDto> {
+  ): Promise<UserDto> {
     return await this.userService.updateCurrentUser(userId, payload);
   }
 
-  @Post('me/owner-request')
-  public async submitOwnerRequest(
-    @User('id') userId: number,
-  ): Promise<SubmitOwnerRequestResponseDto> {
-    return await this.userService.submitOwnerRequest(userId);
-  }
+  // @Post('me/owner-request')
+  // public async submitOwnerRequest(
+  //   @User('id') userId: number,
+  // ): Promise<{ message: string }> {
+  //   return await this.userService.submitOwnerRequest(userId);
+  // }
 
   @Post('/me/change-password')
   public async changePassword(

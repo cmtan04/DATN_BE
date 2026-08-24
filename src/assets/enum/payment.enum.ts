@@ -7,12 +7,12 @@ export enum BookingStatus {
 }
 
 export enum PaymentStatus {
-  UNPAID = 'UNPAID',
-  PAID = 'PAID',
-  FAILED = 'FAILED',
-  CANCELLED = 'CANCELLED',
-  REFUND_PENDING = 'REFUND_PENDING',
-  REFUNDED = 'REFUNDED',
+  UNPAID = 0,
+  PAID = 1,
+  FAILED = 2,
+  CANCELLED = 3,
+  REFUND_PENDING = 4,
+  REFUNDED = 5,
 }
 
 export enum RefundStatus {

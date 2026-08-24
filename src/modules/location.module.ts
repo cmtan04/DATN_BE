@@ -9,7 +9,6 @@ import { TBLocation } from '@/entities/location/location.entity';
 import { TBLocationAvailability } from '@/entities/location_availability.entity';
 import { LocationRepository } from '@/repositories/location.repository';
 import { LocationService } from '@/services/location.service';
-import { OwnerLocationController } from '@/controllers/owner/owner.location.controller';
 import { TBLocationFavourite } from '@/entities/location/location_favourite.entity';
 
 @Module({
@@ -25,8 +24,8 @@ import { TBLocationFavourite } from '@/entities/location/location_favourite.enti
       TBLocationFavourite,
     ]),
   ],
-  controllers: [LocationController, OwnerLocationController],
+  controllers: [LocationController],
   providers: [LocationService, LocationRepository],
-  exports: [TypeOrmModule],
+  exports: [LocationService, LocationRepository],
 })
 export class LocationModule {}

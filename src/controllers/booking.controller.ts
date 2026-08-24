@@ -1,21 +1,10 @@
-import {
-  Controller,
-  Get,
-  Query,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Query, Post, Body } from '@nestjs/common';
 import { BookingService } from '@/services/booking.service';
 import {
   CreateBookingRequestDto,
   CreateBookingResponseDto,
   GetAvailableRoomsRequestDto,
   GetAvailableRoomsResponseDto,
-  CancelBookingRequestDto,
-  CancelBookingResponseDto,
 } from '@/dtos/booking.dto';
 import { Public } from '@/common/decorators/public.decorator';
 import { User } from '@/common/decorators/user.decorator';
@@ -38,13 +27,5 @@ export class BookingController {
     @Body() payload: CreateBookingRequestDto,
   ): Promise<CreateBookingResponseDto> {
     return await this.bookingService.createBooking(userId, payload);
-  }
-
-  @Post('cancel')
-  public async cancelBooking(
-    @User('id') userId: number,
-    @Body() payload: CancelBookingRequestDto,
-  ): Promise<CancelBookingResponseDto> {
-    return await this.bookingService.cancelBooking(payload, userId);
   }
 }

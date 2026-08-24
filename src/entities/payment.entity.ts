@@ -27,22 +27,15 @@ export class TBPayment extends BaseEntity {
   currency: string;
 
   @Column({
-    type: 'varchar',
-    length: 32,
+    type: 'int',
     nullable: false,
     default: PaymentStatus.UNPAID,
   })
   status: PaymentStatus;
 
   @Column({ type: 'int', nullable: true })
-  payosOrderCode?: number | null;
-
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  payosPaymentLinkId?: string | null;
-
-  @Column({ type: 'varchar', length: 2048, nullable: true })
-  checkoutUrl?: string | null;
+  payosOrderCode?: number;
 
   @Column({ type: 'text', nullable: true })
-  qrCode?: string | null;
+  qrCode?: string;
 }

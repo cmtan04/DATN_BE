@@ -55,13 +55,6 @@ export class CreateLocationAddressRequestDto {
   @MaxLength(255)
   country: string;
 
-  @ApiProperty({ example: 'Mien Bac' })
-  @IsString()
-  @Trim()
-  @IsNotEmpty()
-  @MaxLength(255)
-  region: string;
-
   @ApiProperty({ example: 21.0285 })
   @Type(() => Number)
   @IsNumber()

@@ -1,4 +1,4 @@
-import { BookingStatus } from '@/assets/enum/payment.enum';
+import { BookingStatus, PaymentStatus } from '@/assets/enum/payment.enum';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsDate, IsInt, IsOptional, IsString, Min } from 'class-validator';
@@ -46,7 +46,6 @@ export class ConfirmBookingRequestDto extends CreateBookingRequestDto {
 }
 
 export class CreateBookingResponseDto {
-  id: number;
   bookingCode: string;
   locationId: number;
   startDate: Date;
@@ -63,8 +62,9 @@ export class ConfirmBookingResponseDto extends CreateBookingResponseDto {
 
 export class CancelBookingRequestDto {
   @ApiProperty({ description: 'Mã đặt phòng', example: 'BK123456' })
+  @IsOptional()
   @IsString()
-  bookingCode: string;
+  bookingCode?: string;
 
   @ApiProperty({
     description: 'Lý do hủy',
@@ -78,7 +78,6 @@ export class CancelBookingRequestDto {
   @ApiProperty({
     description: 'Tên ngân hàng nhận refund',
     example: 'MBBank',
-    required: false,
   })
   @IsOptional()
   @IsString()
@@ -87,7 +86,6 @@ export class CancelBookingRequestDto {
   @ApiProperty({
     description: 'Số tài khoản nhận refund',
     example: '0123456789',
-    required: false,
   })
   @IsOptional()
   @IsString()
@@ -96,7 +94,6 @@ export class CancelBookingRequestDto {
   @ApiProperty({
     description: 'Tên chủ tài khoản nhận refund',
     example: 'NGUYEN VAN A',
-    required: false,
   })
   @IsOptional()
   @IsString()
@@ -114,7 +111,7 @@ export class CancelBookingResponseDto {
   bookingStatus: BookingStatus;
 
   @ApiProperty({ description: 'Trạng thái payment', example: 'REFUND_PENDING' })
-  paymentStatus: string;
+  paymentStatus: PaymentStatus;
 
   @ApiProperty({ description: 'Số tiền hoàn lại', example: 500000 })
   refundAmount: number;

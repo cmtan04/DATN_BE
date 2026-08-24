@@ -4,50 +4,18 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import {
-  CreateLocationRequestDto,
-  CreateLocationResponseDto,
-} from '@/dtos/location/createLocation.dto';
-import {
   GetLocationsQueryDto,
   GetLocationsResponseDto,
   GetLocationDetailResponseDto,
-  LocationSortBy,
-  LocationSortOrder,
   GetLocationTypeResponseDto,
 } from '@/dtos/location/getLocations.dto';
 import { LocationRepository } from '@/repositories/location.repository';
-const MAX_LIMIT = 100;
-const DEFAULT_SORT_BY: LocationSortBy = 'createdAt';
-const DEFAULT_SORT_ORDER: LocationSortOrder = 'DESC';
 
 @Injectable()
 export class LocationService {
   constructor(private readonly locationRepository: LocationRepository) {}
 
-  public async getOwnerLocations(
-    ownerId: number,
-  ): Promise<GetLocationsResponseDto> {
-    return await this.locationRepository.getLocations(
-      {
-        page: 1,
-        limit: MAX_LIMIT,
-        sortBy: DEFAULT_SORT_BY,
-        sortOrder: DEFAULT_SORT_ORDER,
-      },
-      undefined,
-      ownerId,
-    );
-  }
 
-  public async createLocation(
-    ownerId: number,
-    payload: CreateLocationRequestDto,
-  ): Promise<CreateLocationResponseDto> {
-    return await this.locationRepository.createLocation({
-      ...payload,
-      ownerId,
-    });
-  }
 
   public async getLocations(
     query: GetLocationsQueryDto,

@@ -1,404 +1,174 @@
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ConfigService } from '@nestjs/config';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import {
-  BookingStatus,
-  PaymentMethod,
-  PaymentStatus,
-} from '@/assets/enum/payment.enum';
-import {
-  CheckoutPaymentRequestDto,
-  CheckoutPaymentResponseDto,
-  PaymentCheckUpdateResponseDto,
-} from '@/dtos/payment/payment.dto';
-import { BookingRepository } from '@/repositories/booking.repository';
-import { BookingService } from '@/services/booking.service';
+import { EntityManager, DataSource, FindOptionsWhere } from 'typeorm';
+import { BookingStatus, PaymentStatus } from '@/assets/enum/payment.enum';
+import { CheckoutPaymentResponseDto } from '@/dtos/payment/payment.dto';
+import { PaymentRepository } from '@/repositories/payment.repository';
 import { PaymentPricingService } from '@/services/payment-pricing.service';
 import { TBPayment } from '@/entities/payment.entity';
-import { TBLocation } from '@/entities/location/location.entity';
 import { TBBooking } from '@/entities/booking.entity';
-import { TBPayosWebhookEvent } from '@/entities/payos-webhook-event.entity';
-import { TBUserDefault } from '@/entities/user/user_default.entity';
-import { PayosService } from '@/services/payos.service';
+import { TBRefundRequest } from '@/entities/refund_request.entity';
+import { PayOSService } from '@/services/payos.service';
 import { MailService } from '@/services/mail.service';
-import { decryptObject, encryptObject } from '@/utils/payment-token.util';
 import { getBankNameByBin } from '@/utils/vietqr-bank.util';
-import { Webhook } from '@payos/node';
-
-const CURRENCY = 'vnd';
+import type { CreatePaymentLinkResponse } from '@payos/node';
 
 @Injectable()
 export class PaymentService {
   constructor(
-    @InjectRepository(TBPayment)
-    private readonly paymentRepository: Repository<TBPayment>,
-    @InjectRepository(TBLocation)
-    private readonly locationRepository: Repository<TBLocation>,
-    @InjectRepository(TBBooking)
-    private readonly bookingEntityRepository: Repository<TBBooking>,
-    @InjectRepository(TBPayosWebhookEvent)
-    private readonly webhookEventRepository: Repository<TBPayosWebhookEvent>,
-    @InjectRepository(TBUserDefault)
-    private readonly userRepository: Repository<TBUserDefault>,
-    private readonly bookingRepository: BookingRepository,
-    private readonly bookingService: BookingService,
+    private readonly paymentRepository: PaymentRepository,
     private readonly pricingService: PaymentPricingService,
     private readonly configService: ConfigService,
-    private readonly payosService: PayosService,
+    private readonly payOSService: PayOSService,
     private readonly mailService: MailService,
     private readonly eventEmitter: EventEmitter2,
+    private readonly dataSource: DataSource,
   ) {}
 
-  public async createCheckout(
+  // ─── Lookup methods (wrap repo) ──────────────────────────────
+
+  public async findExistingUnpaidPayment(
+    bookingId: number,
+  ): Promise<TBPayment | null> {
+    return await this.paymentRepository.findExistingUnpaidPayment(bookingId);
+  }
+
+  /**
+   * Tìm payment theo bookingId
+   * @param bookingId
+   * @returns
+   */
+  public async findPaymentByBookingId(bookingId: number): Promise<TBPayment> {
+    const payment =
+      await this.paymentRepository.findPaymentByBookingId(bookingId);
+    if (!payment) {
+      throw new NotFoundException('Payment not found');
+    }
+    return payment;
+  }
+
+  /**
+   * Tìm payment theo orderCode
+   * @param orderCode
+   * @returns
+   */
+  public async findPaymentByOrderCode(
+    orderCode: number,
+  ): Promise<TBPayment | null> {
+    return await this.paymentRepository.findPaymentByOrderCode(orderCode);
+  }
+
+  public async findBookingByCodeAndUser(
+    bookingCode: string,
     userId: number,
-    payload: CheckoutPaymentRequestDto,
-  ): Promise<CheckoutPaymentResponseDto> {
-    const location = await this.locationRepository.findOne({
-      where: { id: payload.locationId },
-    });
+  ): Promise<TBBooking | null> {
+    return await this.paymentRepository.findBookingByCodeAndUser(
+      bookingCode,
+      userId,
+    );
+  }
+
+  public async findBookingById(bookingId: number): Promise<TBBooking | null> {
+    return await this.paymentRepository.findBookingById(bookingId);
+  }
+
+  public async findWebhookEvent(payosEventKey: string): Promise<any | null> {
+    return await this.paymentRepository.findWebhookEvent(payosEventKey);
+  }
+
+  // ─── Write methods (wrap repo) ──────────────────────────────
+
+  public async updatePaymentStatus(
+    where: FindOptionsWhere<TBPayment>,
+    status: PaymentStatus,
+  ): Promise<void> {
+    try {
+      await this.paymentRepository.updatePayment(where, status);
+    } catch (error) {
+      throw new InternalServerErrorException('Error updating payment status');
+    }
+  }
+
+  public async savePayment(
+    payment: TBPayment,
+    manager?: EntityManager,
+  ): Promise<TBPayment> {
+    return await this.paymentRepository.savePayment(payment, manager);
+  }
+
+  public async createAndSaveWebhookEvent(
+    payosEventKey: string,
+    type: string,
+  ): Promise<void> {
+    await this.paymentRepository.createAndSaveWebhookEvent(payosEventKey, type);
+  }
+
+  public async updatePaymentCheckoutDetails(
+    paymentId: number,
+    payosOrderCode: number,
+    payosQrCode: string,
+  ): Promise<void> {
+    await this.paymentRepository.updatePaymentCheckoutDetails(
+      paymentId,
+      payosOrderCode,
+      payosQrCode,
+    );
+  }
+
+  // ─── Business logic methods ──────────────────
+
+  public async getBookingDeposit(booking: TBBooking): Promise<number> {
+    const location = await this.paymentRepository.findLocationById(
+      booking.locationId,
+    );
 
     if (!location) {
-      throw new NotFoundException('Location not found');
+      throw new NotFoundException('Địa điểm không tồn tại');
     }
 
-    // Check room availability
-    const availableResult = await this.bookingRepository.getAvailableRooms({
-      locationId: payload.locationId,
-      startDate: new Date(payload.startDate),
-      endDate: new Date(payload.endDate),
-    });
-
-    if (availableResult.availableRooms < 1) {
-      throw new BadRequestException('Location is already booked');
-    }
-
-    const totalAmount = this.pricingService.calculateLocationAmount(
+    const calculatedTotal = this.pricingService.calculateLocationAmount(
       Number(location.price),
-      payload.startDate,
-      payload.endDate,
-      payload.roomNumber,
+      booking.startDate,
+      booking.endDate,
+      booking.roomNumber,
     );
+    return calculatedTotal * 0.15;
+  }
 
-    const depositAmount = Math.round(totalAmount * 0.15);
-
-    // Create Booking
-    const booking = await this.bookingRepository.createBooking(
-      {
-        locationId: payload.locationId,
-        startDate: new Date(payload.startDate),
-        endDate: new Date(payload.endDate),
-        roomNumber: payload.roomNumber,
-        totalAmount,
-        currency: CURRENCY,
-      },
+  public async createPayment(
+    userId: number,
+    booking: TBBooking,
+    depositAmount?: number,
+    manager?: EntityManager,
+  ): Promise<TBPayment> {
+    const repo = manager
+      ? manager.getRepository(TBPayment)
+      : this.dataSource.getRepository(TBPayment);
+    const pendingPayment: Partial<TBPayment> = {
       userId,
-    );
-
-    // Update Booking status to PENDING_PAYMENT
-    await this.bookingRepository.updateBooking(
-      booking.id,
-      BookingStatus.PENDING_PAYMENT,
-
-      userId,
-    );
-    booking.status = BookingStatus.PENDING_PAYMENT;
-
-    // Create Payment
-    const payment = await this.paymentRepository.save(
-      this.paymentRepository.create({
-        userId,
-        bookingId: booking.id,
-        method: PaymentMethod.PAYOS,
-        amount: depositAmount,
-        currency: CURRENCY,
-        status: PaymentStatus.UNPAID,
-      }),
-    );
-
-    // Generate redirect token
-    const token = this.generatePaymentToken(booking.id, payment.id, 1); // 1 = UNPAID / pending
-    const webUrl =
-      this.configService.get<string>('WEB_URL') || 'http://localhost:5173';
-    const internalCheckoutUrl = `${webUrl.replace(/\/+$/g, '')}/checkout/${token}`;
-
-    let finalCheckoutUrl = internalCheckoutUrl;
-    const payosOrderCode = payment.id; // Using payment ID as orderCode
-    const paymentDescription = `Thanh toán cọc (15%) - #${booking.id}`;
-    let payosQrCode = '';
-    let payosAccountName = '';
-    let payosAccountNumber = '';
-    let payosBankName = '';
-    let payosDescription = paymentDescription;
-
-    try {
-      const payosLink = await this.payosService.createPaymentLink({
-        orderCode: payosOrderCode,
-        amount: depositAmount,
-        description: paymentDescription,
-        buyerName: payload.contactName,
-        buyerEmail: payload.contactEmail,
-        buyerPhone: payload.contactPhone,
-        returnUrl: internalCheckoutUrl,
-        cancelUrl: internalCheckoutUrl,
-        items: [
-          {
-            name: `Thanh toán cọc (15%) - #${booking.id}`.substring(0, 255),
-            quantity: 1,
-            price: depositAmount,
-          },
-        ],
-      });
-
-      if (payosLink.checkoutUrl) {
-        finalCheckoutUrl = payosLink.checkoutUrl;
-      }
-
-      if (payosLink.qrCode) {
-        payosQrCode = payosLink.qrCode;
-      }
-
-      if (payosLink.accountName) {
-        payosAccountName = payosLink.accountName;
-      }
-
-      if (payosLink.accountNumber) {
-        payosAccountNumber = payosLink.accountNumber;
-      }
-
-      if (payosLink.bin) {
-        payosBankName = getBankNameByBin(payosLink.bin);
-      } else {
-        payosBankName = getBankNameByBin();
-      }
-
-      if (payosLink.description) {
-        payosDescription = payosLink.description;
-      }
-    } catch (error) {
-      console.error('Failed to create PayOS payment link:', error);
-      // Fallback to internal mock if PayOS fails (or could throw error)
-      payosBankName = getBankNameByBin();
-    }
-
-    // Save checkoutUrl
-    await this.paymentRepository.update(payment.id, {
-      checkoutUrl: finalCheckoutUrl,
-      payosOrderCode: payosOrderCode,
-    });
-
-    return {
       bookingId: booking.id,
-      paymentId: payment.id,
       amount: depositAmount,
-      checkoutUrl: finalCheckoutUrl,
-      qrCode: payosQrCode,
       status: PaymentStatus.UNPAID,
-      accountName: payosAccountName,
-      accountNumber: payosAccountNumber,
-      bankName: payosBankName,
-      description: payosDescription,
     };
+    return await repo.save(pendingPayment);
   }
 
-  public async handleWebhook(webhookBody: Webhook): Promise<any> {
-    const webhookData = await this.payosService.verifyWebhook(webhookBody);
-
-    // Check idempotency
-    const existingEvent = await this.webhookEventRepository.findOne({
-      where: {
-        payosEventKey:
-          webhookData.orderCode.toString() +
-          '_' +
-          webhookBody.data?.transactionDateTime,
-      },
-    });
-
-    if (existingEvent) {
-      return { message: 'Webhook already processed' };
-    }
-
-    const payment = await this.paymentRepository.findOne({
-      where: { payosOrderCode: webhookData.orderCode },
-    });
-
-    if (!payment) {
-      throw new NotFoundException('Payment not found');
-    }
-
-    const booking = await this.bookingEntityRepository.findOne({
-      where: { id: payment.bookingId },
-    });
-
-    if (!booking) {
-      throw new NotFoundException('Booking not found');
-    }
-
-    if (webhookData.code === '00') {
-      payment.status = PaymentStatus.PAID;
-      booking.status = BookingStatus.CONFIRMED;
-
-      // Send confirmation email asynchronously
-      void this.sendConfirmationEmailAsync(booking);
-    } else {
-      payment.status = PaymentStatus.FAILED;
-      booking.status = BookingStatus.CANCELLED;
-    }
-
-    await this.paymentRepository.save(payment);
-    await this.bookingEntityRepository.save(booking);
-
-    // Emit SSE event for realtime payment status update
-    this.eventEmitter.emit(`payment.${payment.id}`, {
-      paymentId: payment.id,
-      bookingId: booking.id,
-      paymentStatus: payment.status,
-      bookingStatus: booking.status,
-    });
-
-    await this.webhookEventRepository.save(
-      this.webhookEventRepository.create({
-        payosEventKey:
-          webhookData.orderCode.toString() +
-          '_' +
-          webhookBody.data?.transactionDateTime,
-        type: webhookBody.desc || 'payment_webhook',
-        processedAt: new Date(),
-      }),
-    );
-
-    return { message: 'Webhook processed successfully' };
-  }
-
-  public async checkUpdate(
-    userId: number,
-    token: string,
-    cancel?: string,
-  ): Promise<PaymentCheckUpdateResponseDto> {
-    const payload = decryptObject(token, this.getPaymentTokenSecret());
-
-    const payment = await this.paymentRepository.findOne({
-      where: { id: payload.paymentId, bookingId: payload.bookingId, userId },
-    });
-
-    if (!payment) {
-      throw new NotFoundException('Payment not found');
-    }
-
-    const booking = await this.bookingEntityRepository.findOne({
-      where: { id: payload.bookingId, userId },
-    });
-
-    if (!booking) {
-      throw new NotFoundException('Booking not found');
-    }
-
-    if (cancel === 'true' && booking.status !== BookingStatus.CANCELLED) {
-      await this.bookingService.cancelBooking(
-        { bookingCode: booking.bookingCode, reason: 'Hủy thanh toán PayOS' },
-        userId,
-      );
-      booking.status = BookingStatus.CANCELLED;
-      payment.status = PaymentStatus.CANCELLED;
-    }
-
-    return {
-      bookingId: booking.id,
-      paymentId: payment.id,
-      bookingStatus: booking.status,
-      paymentStatus: payment.status,
-      amount: payment.amount,
-      currency: payment.currency,
-      checkoutUrl: payment.checkoutUrl,
-      qrCode: payment.qrCode,
-    };
-  }
-
-  public async simulateSuccess(
-    userId: number,
-    token: string,
-  ): Promise<PaymentCheckUpdateResponseDto> {
-    const payload = decryptObject(token, this.getPaymentTokenSecret());
-
-    const payment = await this.paymentRepository.findOne({
-      where: { id: payload.paymentId, bookingId: payload.bookingId, userId },
-    });
-
-    if (!payment) {
-      throw new NotFoundException('Payment not found');
-    }
-
-    const booking = await this.bookingEntityRepository.findOne({
-      where: { id: payload.bookingId, userId },
-    });
-
-    if (!booking) {
-      throw new NotFoundException('Booking not found');
-    }
-
-    // Update status to PAID & CONFIRMED
-    payment.status = PaymentStatus.PAID;
-    await this.paymentRepository.save(payment);
-
-    booking.status = BookingStatus.CONFIRMED;
-    await this.bookingEntityRepository.save(booking);
-
-    // Emit SSE event for realtime payment status update
-    this.eventEmitter.emit(`payment.${payment.id}`, {
-      paymentId: payment.id,
-      bookingId: booking.id,
-      paymentStatus: payment.status,
-      bookingStatus: booking.status,
-    });
-
-    // Send confirmation email asynchronously
-    void this.sendConfirmationEmailAsync(booking);
-
-    return {
-      bookingId: booking.id,
-      paymentId: payment.id,
-      bookingStatus: booking.status,
-      paymentStatus: payment.status,
-      amount: payment.amount,
-      currency: payment.currency,
-      checkoutUrl: payment.checkoutUrl,
-      qrCode: payment.qrCode,
-    };
-  }
-
-  private generatePaymentToken(
-    bookingId: number,
-    paymentId: number,
-    status: number,
-  ): string {
-    return encryptObject(
-      { bookingId, paymentId, status },
-      this.getPaymentTokenSecret(),
-    );
-  }
-
-  private getPaymentTokenSecret(): string {
-    return (
-      this.configService.get<string>('PAYMENT_TOKEN_SECRET') ||
-      'default_payment_token_secret_32_bytes_long_!'
-    );
-  }
-
-  private async sendConfirmationEmailAsync(booking: TBBooking): Promise<void> {
+  public async sendConfirmationEmailAsync(booking: TBBooking): Promise<void> {
     try {
-      const user = await this.userRepository.findOne({
-        where: { id: booking.userId },
-      });
-      if (!user?.email) return;
+      const userEmail = await this.paymentRepository.findUserEmail(
+        booking.userId,
+      );
+      if (!userEmail) return;
 
-      const location = await this.locationRepository.findOne({
-        where: { id: booking.locationId },
-      });
+      const location = await this.paymentRepository.findLocationById(
+        booking.locationId,
+      );
       const locationName = location ? location.name : 'Unknown Location';
 
       const htmlContent = `
@@ -420,12 +190,39 @@ export class PaymentService {
       `;
 
       await this.mailService.sendMail(
-        user.email,
-        '[Hostings] Xác nhận đặt phòng thành công',
+        userEmail,
+        '[Ownerings] Xác nhận đặt phòng thành công',
         htmlContent,
       );
     } catch (error) {
       console.error('Error sending confirmation email:', error);
+    }
+  }
+
+  /**
+   * Emit SSE event cho realtime payment status update.
+   */
+  public emitPaymentEvent(
+    paymentId: number,
+    data: {
+      paymentId: number;
+      bookingId: number;
+      paymentStatus: PaymentStatus;
+      bookingStatus: BookingStatus;
+    },
+  ): void {
+    this.eventEmitter.emit(`payment.${paymentId}`, data);
+  }
+
+  async createAndSaveRefundRequest(
+    refundRequest: Partial<TBRefundRequest>,
+  ): Promise<TBRefundRequest> {
+    try {
+      return await this.paymentRepository.createAndSaveRefundRequest(
+        refundRequest,
+      );
+    } catch (error) {
+      throw new InternalServerErrorException('Lỗi khi tạo yêu cầu hoàn tiền');
     }
   }
 }

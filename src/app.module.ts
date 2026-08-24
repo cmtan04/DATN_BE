@@ -14,27 +14,43 @@ import { APP_GUARD } from '@nestjs/core';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { OtpModule } from './modules/OTP.module';
 import { BookingModule } from './modules/booking.module';
-import { PaymentModule } from './modules/payment.module';
 import { RolesGuard } from './common/guards/role.guard';
 import { ScheduleModule } from '@nestjs/schedule';
 import { MailModule } from './modules/mail.module';
+import { PaymentModule } from './modules/payment.module';
+import { BookingProcessModule } from './modules/bookingProcess.module';
+import { addTransactionalDataSource } from 'typeorm-transactional';
+import { DataSource } from 'typeorm';
+import { OwnerModule } from './modules/owner.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     EventEmitterModule.forRoot(),
     ScheduleModule.forRoot(),
-    TypeOrmModule.forRoot(dataSourceOptions),
+    TypeOrmModule.forRootAsync({
+      useFactory: () => dataSourceOptions,
+      dataSourceFactory: async (options) => {
+        if (!options) {
+          throw new Error('Invalid options passed');
+        }
+        // Bọc DataSource bằng addTransactionalDataSource
+        return addTransactionalDataSource(new DataSource(options));
+      },
+    }),
+
     AuthModule,
     LocationModule,
     UserModule,
     AdminModule,
+    OwnerModule,
     NotificationModule,
     PaymentModule,
     CloudinaryModule,
     ServiceModule,
     OtpModule,
     BookingModule,
+    BookingProcessModule,
     MailModule,
   ],
   controllers: [],
