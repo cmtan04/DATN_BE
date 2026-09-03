@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsDate, IsNotEmpty, MinDate } from 'class-validator';
+import { IsDate, IsNotEmpty } from 'class-validator';
 import { IsAfter } from '@/common/validators/validators';
 
 export class DateRangeDto {
@@ -8,9 +8,6 @@ export class DateRangeDto {
   @Type(() => Date)
   @IsDate()
   @IsNotEmpty()
-  @MinDate(new Date(), {
-    message: 'Ngay dat phong phai bat dau tu ngay hom nay',
-  })
   startDate: Date;
 
   @ApiProperty({ description: 'Ngay ket thuc', example: '2030-02-01' })
