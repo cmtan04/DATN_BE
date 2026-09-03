@@ -58,11 +58,11 @@ export class BookingProcessService {
     try {
       const payosResponse = await this.payOSService.createPaymentLink({
         orderCode: payment.id,
-        amount: payment.amount,
-        description: booking.bookingCode.replace('-', ''),
-        buyerName: buyer.profile.fullName,
+        amount: Number(payment.amount),
+        description: booking.bookingCode.replace('-', '').substring(0, 25),
+        buyerName: buyer.profile?.fullName || 'Khách hàng',
         buyerEmail: buyer.email,
-        buyerPhone: buyer.profile.phoneNumber,
+        buyerPhone: buyer.profile?.phoneNumber || '',
         returnUrl: '',
         cancelUrl: '',
         items: [
@@ -72,7 +72,7 @@ export class BookingProcessService {
               255,
             ),
             quantity: 1,
-            price: payment.amount,
+            price: Number(payment.amount),
           },
         ],
       });
@@ -85,6 +85,9 @@ export class BookingProcessService {
       return payosResponse;
     } catch (error) {
       this.logger.error('Error creating PayOS payment link:', error);
+      if (error instanceof HttpException) {
+        throw error;
+      }
       throw new InternalServerErrorException(
         'Không thể kết nối với cổng thanh toán PayOS',
       );
@@ -111,6 +114,10 @@ export class BookingProcessService {
     }
 
     const depositAmount = await this.paymentService.getBookingDeposit(booking);
+    if (!depositAmount || depositAmount <= 0) {
+      throw new BadRequestException('Số tiền đặt cọc không hợp lệ');
+    }
+
     const buyer = await this.userService.getCurrentUser(userId);
 
     await this.bookingService.updateBookingStatus(
@@ -472,14 +479,14 @@ export class BookingProcessService {
     // 1. Update Booking -> EXPIRED
     await this.bookingService.updateBookingStatus(
       booking.id,
-      BookingStatus.EXPIRED,
+      BookingStatus.CANCELLED,
       'Hết hạn thời gian thanh toán',
     );
 
     // 2. Update Payment -> CANCELLED
     await this.paymentService.updatePaymentStatus(
       { bookingId: booking.id },
-      PaymentStatus.CANCELLED,
+      PaymentStatus.EXPIRED,
     );
 
     // 3. Hoàn lại số lượng phòng

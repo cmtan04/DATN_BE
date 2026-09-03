@@ -16,6 +16,7 @@ import { TBUserProfile } from './entities/user/user_profile.entity';
 import { TBOTP } from './entities/otp.entity';
 import { TBLocationFavourite } from './entities/location/location_favourite.entity';
 import { TBRefundRequest } from './entities/refund_request.entity';
+import { TBTokenBlacklist } from './entities/token_blacklist.entity';
 
 dotenv.config();
 
@@ -45,6 +46,7 @@ const baseDataSourceOptions: DataSourceOptions = {
     TBOTP,
     TBLocationFavourite,
     TBRefundRequest,
+    TBTokenBlacklist,
   ],
 };
 

@@ -11,7 +11,7 @@ import {
   GetUserBookingsRequestDto,
   GetUserBookingsSummaryDto,
   RawBookingData,
-} from '@/dtos/user/user.dto';
+} from '@/dtos/booking.dto';
 import { TBLocation } from '@/entities/location/location.entity';
 import { BookingStatus } from '@assets/enum/payment.enum';
 import { FindOptionsWhere } from 'typeorm';
@@ -213,28 +213,18 @@ export class BookingRepository {
       );
     }
 
-    if (queryDto.status && queryDto.status !== 'all') {
-      const statusStr = queryDto.status.toLowerCase();
-      if (statusStr === 'pending') {
-        query.andWhere('booking.status IN (:...pendingStatuses)', {
-          pendingStatuses: [
-            BookingStatus.PENDING_PAYMENT,
-            BookingStatus.CREATED,
-          ],
+    if (queryDto.status) {
+      if (queryDto.status === BookingStatus.CONFIRMED) {
+        query.andWhere('booking.status = :confirmedStatus ', {
+          confirmedStatus: BookingStatus.CONFIRMED,
         });
-      } else if (statusStr === 'confirmed') {
-        query.andWhere(
-          'booking.status = :confirmedStatus AND booking.endDate >= NOW()',
-          { confirmedStatus: BookingStatus.CONFIRMED },
-        );
-      } else if (statusStr === 'completed') {
-        query.andWhere(
-          'booking.status = :confirmedStatus AND booking.endDate < NOW()',
-          { confirmedStatus: BookingStatus.CONFIRMED },
-        );
-      } else if (statusStr === 'cancelled') {
-        query.andWhere('booking.status IN (:...cancelledStatuses)', {
-          cancelledStatuses: [BookingStatus.CANCELLED, BookingStatus.EXPIRED],
+      } else if (queryDto.status === BookingStatus.COMPLETED) {
+        query.andWhere('booking.status = :completedStatus', {
+          completedStatus: BookingStatus.COMPLETED,
+        });
+      } else if (queryDto.status === BookingStatus.CANCELLED) {
+        query.andWhere('booking.status = :cancelledStatus', {
+          cancelledStatus: BookingStatus.CANCELLED,
         });
       }
     }
@@ -273,33 +263,33 @@ export class BookingRepository {
     const confirmedCount = await this.bookingRepository
       .createQueryBuilder('booking')
       .where('booking.userId = :userId', { userId })
-      .andWhere(
-        'booking.status = :confirmedStatus AND booking.endDate >= NOW()',
-        { confirmedStatus: BookingStatus.CONFIRMED },
-      )
+      .andWhere('booking.status = :confirmedStatus ', {
+        confirmedStatus: BookingStatus.CONFIRMED,
+      })
       .getCount();
 
     const completedCount = await this.bookingRepository
       .createQueryBuilder('booking')
       .where('booking.userId = :userId', { userId })
-      .andWhere(
-        'booking.status = :confirmedStatus AND booking.endDate < NOW()',
-        { confirmedStatus: BookingStatus.CONFIRMED },
-      )
+      .andWhere('booking.status = :completedStatus ', {
+        completedStatus: BookingStatus.COMPLETED,
+      })
       .getCount();
 
     const cancelledCount = await this.bookingRepository
       .createQueryBuilder('booking')
       .where('booking.userId = :userId', { userId })
-      .andWhere('booking.status IN (:...cancelledStatuses)', {
-        cancelledStatuses: [BookingStatus.CANCELLED, BookingStatus.EXPIRED],
+      .andWhere('booking.status = :cancelledStatus', {
+        cancelledStatus: BookingStatus.CANCELLED,
       })
       .getCount();
+    const total = confirmedCount + completedCount + cancelledCount;
 
     return {
       data: rawData,
       totalCount,
       summary: {
+        allCount: total,
         confirmedCount,
         completedCount,
         cancelledCount,

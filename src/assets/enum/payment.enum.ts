@@ -3,7 +3,7 @@ export enum BookingStatus {
   PENDING_PAYMENT = 1,
   CONFIRMED = 2,
   CANCELLED = 3,
-  EXPIRED = 4,
+  COMPLETED = 4,
 }
 
 export enum PaymentStatus {
@@ -11,8 +11,9 @@ export enum PaymentStatus {
   PAID = 1,
   FAILED = 2,
   CANCELLED = 3,
-  REFUND_PENDING = 4,
-  REFUNDED = 5,
+  EXPIRED = 4,
+  REFUND_PENDING = 5,
+  REFUNDED = 6,
 }
 
 export enum RefundStatus {

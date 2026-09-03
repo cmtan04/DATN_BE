@@ -15,8 +15,6 @@ import { LocationRepository } from '@/repositories/location.repository';
 export class LocationService {
   constructor(private readonly locationRepository: LocationRepository) {}
 
-
-
   public async getLocations(
     query: GetLocationsQueryDto,
     userId?: number,

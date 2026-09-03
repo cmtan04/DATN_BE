@@ -7,14 +7,12 @@ import { UserRepository } from '@/repositories/user.repository';
 import { UserService } from '@/services/user.service';
 import { NotificationModule } from './notification.module';
 import { AuthModule } from './auth.module';
-import { BookingModule } from './booking.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([TBUserDefault, TBUserProfile]),
     NotificationModule,
     AuthModule,
-    BookingModule,
   ],
   controllers: [UserController],
   providers: [UserService, UserRepository],

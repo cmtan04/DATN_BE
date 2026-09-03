@@ -1,214 +1,58 @@
 import dataSource from '../data-source';
-import { DeepPartial } from 'typeorm';
-import { TBUserDefault } from '@/entities/user/user_default.entity';
-import { TBLocationType } from '@/entities/location/location_type.entity';
-import { TBLocationAddress } from '@/entities/location/location-address.entity';
-import { TBLocation } from '@/entities/location/location.entity';
-import { TBLocationMedia } from '@/entities/location/location_media.entity';
-import { TBService } from '@/entities/service.entity';
-import { TBLocationService } from '@/entities/location/location_service.entity';
-import { UserRole } from '@/assets/enum/user.enum';
-import * as fs from 'fs';
-import * as path from 'path';
-
-const buildCleanedVietNameseString = (str: string): string => {
-  return str
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/đ/gi, 'd')
-    .replaceAll('-', ' ')
-    .split(',')
-    .map((part) => part.trim())
-    .filter((part) => part.length > 0)
-    .join(', ')
-    .replace(/[^a-zA-Z0-9, ]/g, '')
-    .replace(/\s+/g, ' ')
-    .toLowerCase()
-    .trim();
-};
+import { UserSeeder } from './seeders/user.seeder';
+import { LocationTypeSeeder } from './seeders/location-type.seeder';
+import { ServiceSeeder } from './seeders/service.seeder';
+import { LocationSeeder } from './seeders/location.seeder';
+import { LocationAvailabilitySeeder } from './seeders/location-availability.seeder';
 
 async function seed() {
+  const startTime = Date.now();
+  console.log('========================================');
+  console.log('🌱 Starting Database Seeding Process...');
+  console.log('========================================\n');
+
   try {
     await dataSource.initialize();
-    console.log('Database connection initialized for seeding.');
+    console.log('✓ Database connection initialized.\n');
 
-    const userRepository = dataSource.getRepository(TBUserDefault);
-    const locationTypeRepository = dataSource.getRepository(TBLocationType);
-    const locationAddressRepository =
-      dataSource.getRepository(TBLocationAddress);
-    const locationRepository = dataSource.getRepository(TBLocation);
-    const locationMediaRepository = dataSource.getRepository(TBLocationMedia);
-    const serviceRepository = dataSource.getRepository(TBService);
-    const locationServiceRepository =
-      dataSource.getRepository(TBLocationService);
+    // 1. Seed Users & Profiles
+    console.log('[1/5] Seeding Users and Profiles...');
+    await UserSeeder.run(dataSource);
+    console.log('');
 
-    const locationsPath = path.join(__dirname, 'data', 'locations.json');
-    const servicesPath = path.join(__dirname, 'data', 'services.json');
-    const rawData: {
-      typeCode: string;
-      mediaUrls?: string[];
-      loc: DeepPartial<TBLocation>;
-      addr: DeepPartial<TBLocationAddress>;
-    }[] = JSON.parse(fs.readFileSync(locationsPath, 'utf8'));
-    const servicesData: DeepPartial<TBService>[] = JSON.parse(
-      fs.readFileSync(servicesPath, 'utf8'),
-    );
+    // 2. Seed Location Types
+    console.log('[2/5] Seeding Location Types...');
+    await LocationTypeSeeder.run(dataSource);
+    console.log('');
 
-    // 1. Lấy Host (OWNER) từ DB
-    const hosts = await userRepository.find({
-      where: { userRole: UserRole.OWNER },
-    });
+    // 3. Seed Services
+    console.log('[3/5] Seeding Services...');
+    await ServiceSeeder.run(dataSource);
+    console.log('');
 
-    if (hosts.length === 0) {
-      console.warn(
-        '⚠️ Không tìm thấy user với role OWNER trong DB! Vui lòng tạo tài khoản OWNER trước.',
-      );
-      return;
-    }
+    // 4. Seed Locations, Addresses, Media, and Location Services
+    console.log('[4/5] Seeding Locations & related data...');
+    await LocationSeeder.run(dataSource);
+    console.log('');
 
-    // 2. Lấy các loại địa điểm (LocationType) từ DB
-    const dbLocationTypes = await locationTypeRepository.find();
-    if (dbLocationTypes.length === 0) {
-      console.warn(
-        '⚠️ Không tìm thấy LocationType trong DB! Vui lòng seed hoặc tạo LocationType trước.',
-      );
-      return;
-    }
-    const typeMap: Record<string, number> = {};
-    for (const t of dbLocationTypes) {
-      typeMap[t.code] = t.id;
-    }
+    // 5. Seed Location Availabilities
+    console.log('[5/5] Seeding Location Availabilities...');
+    await LocationAvailabilitySeeder.run(dataSource);
+    console.log('');
 
-    // Seed Services
-    const savedServices: TBService[] = [];
-    for (const svc of servicesData) {
-      let service = await serviceRepository.findOne({
-        where: { name: svc.name },
-      });
-      if (!service) {
-        service = await serviceRepository.save(serviceRepository.create(svc));
-      }
-      savedServices.push(service);
-    }
-    console.log(`Seeded ${savedServices.length} services.`);
-
-    // 3. Seed Locations
-    let seededLocationsCount = 0;
-    for (let i = 0; i < rawData.length; i++) {
-      const data = rawData[i];
-      const hostIndex = i % hosts.length; // Luân phiên sử dụng các host
-      const host = hosts[hostIndex];
-
-      const typeId = typeMap[data.typeCode];
-      if (!typeId) {
-        console.warn(`Bỏ qua seed do không tìm thấy Type: ${data.typeCode}`);
-        continue;
-      }
-
-      const computedNormalFullAddress = buildCleanedVietNameseString(
-        data.addr.fullAddress!,
-      );
-
-      // Lưu Address
-      let addr = await locationAddressRepository.findOne({
-        where: { normalFullAddress: computedNormalFullAddress },
-      });
-      addr = await locationAddressRepository.save(
-        locationAddressRepository.create({
-          ...(addr ?? {}),
-          ...data.addr,
-          normalFullAddress: computedNormalFullAddress,
-        }),
-      );
-
-      // Lưu Location
-      let location = await locationRepository.findOne({
-        where: { name: data.loc.name },
-      });
-      location = await locationRepository.save(
-        locationRepository.create({
-          ...(location ?? {}),
-          ...data.loc,
-          ownerId: host.id,
-          locationAddressId: addr.id,
-          locationTypeId: typeId,
-          isActive: true,
-        }),
-      );
-
-      // Seed Media
-      if (data.mediaUrls && data.mediaUrls.length > 0) {
-        for (let j = 0; j < data.mediaUrls.length; j++) {
-          const displayOrder = j + 1;
-          const media = await locationMediaRepository.findOne({
-            where: { locationId: location.id, displayOrder },
-          });
-          if (!media) {
-            await locationMediaRepository.save(
-              locationMediaRepository.create({
-                locationId: location.id,
-                type: 'IMAGE',
-                url: data.mediaUrls[j],
-                displayOrder,
-              }),
-            );
-          }
-        }
-      } else {
-        for (let j = 1; j <= 3; j++) {
-          const media = await locationMediaRepository.findOne({
-            where: { locationId: location.id, displayOrder: j },
-          });
-          if (!media) {
-            await locationMediaRepository.save(
-              locationMediaRepository.create({
-                locationId: location.id,
-                type: 'IMAGE',
-                url: `https://picsum.photos/seed/loc${location.id}_${j}/800/600`,
-                displayOrder: j,
-              }),
-            );
-          }
-        }
-      }
-
-      // Seed Location Services
-      const numServices = Math.floor(Math.random() * 3) + 3; // 3 to 5
-      const shuffledServices = [...savedServices].sort(
-        () => 0.5 - Math.random(),
-      );
-      const selectedServices = shuffledServices.slice(0, numServices);
-
-      for (const svc of selectedServices) {
-        const locSvc = await locationServiceRepository.findOne({
-          where: { locationId: location.id, serviceId: svc.id },
-        });
-        if (!locSvc) {
-          await locationServiceRepository.save(
-            locationServiceRepository.create({
-              locationId: location.id,
-              serviceId: svc.id,
-              isFree: true,
-              isActive: true,
-            }),
-          );
-        }
-      }
-
-      seededLocationsCount++;
-    }
-
-    console.log(
-      `Seeding completed successfully. Seeded ${seededLocationsCount} locations.`,
-    );
+    const duration = ((Date.now() - startTime) / 1000).toFixed(2);
+    console.log('========================================');
+    console.log(`🎉 Database Seeding Completed in ${duration}s!`);
+    console.log('========================================');
   } catch (error) {
-    console.error('Error during seeding:', error);
+    console.error('\n❌ Error during database seeding:', error);
+    process.exitCode = 1;
   } finally {
     if (dataSource.isInitialized) {
       await dataSource.destroy();
-      console.log('Database connection closed.');
+      console.log('✓ Database connection closed.');
     }
   }
 }
 
-seed();
+void seed();

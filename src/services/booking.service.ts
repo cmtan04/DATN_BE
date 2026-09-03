@@ -10,6 +10,10 @@ import {
   GetAvailableRoomsRequestDto,
   GetAvailableRoomsResponseDto,
   CancelBookingRequestDto,
+  GetUserBookingsRequestDto,
+  GetUserBookingsResponseDto,
+  UserBookingItemDto,
+  RawBookingData,
 } from '@/dtos/booking.dto';
 import { BookingStatus } from '@/assets/enum/payment.enum';
 import { getDateRange, formatDateString } from '@/utils/date.util';
@@ -24,6 +28,56 @@ export class BookingService {
     private readonly bookingRepository: BookingRepository,
     private readonly dataSource: DataSource,
   ) {}
+
+  public async getUserBookings(
+    userId: number,
+    query: GetUserBookingsRequestDto,
+  ): Promise<GetUserBookingsResponseDto> {
+    const {
+      data: rawData,
+      totalCount,
+      summary,
+    } = await this.bookingRepository.getUserBookings(userId, query);
+
+    const mappedData: UserBookingItemDto[] = rawData.map(
+      (b: RawBookingData) => ({
+        id: Number(b.id),
+        bookingCode: String(b.bookingCode),
+        startDate: b.startDate,
+        endDate: b.endDate,
+        roomNumber: Number(b.roomNumber),
+        note: b.note,
+        status: b.status,
+        totalAmount: Number(b.totalAmount),
+        currency: String(b.currency),
+        createdAt: b.createdAt,
+        location: {
+          id: Number(b.locationId),
+          name: String(b.locationName),
+          price: Number(b.price),
+          priceUnit: String(b.priceUnit),
+          area: Number(b.area),
+          address: String(b.fullAddress),
+          thumbnailUrl: String(b.thumbnailUrl),
+        },
+      }),
+    );
+
+    const limit = query.limit || 6;
+    const page = query.page || 1;
+    const totalPages = Math.ceil(totalCount / limit);
+
+    return {
+      data: mappedData,
+      meta: {
+        page,
+        limit,
+        total: totalCount,
+        totalPages,
+      },
+      summary,
+    };
+  }
 
   public async createBooking(
     userId: number,
@@ -134,10 +188,6 @@ export class BookingService {
   public validateBookingCanBeCancelled(status: BookingStatus): void {
     if (status === BookingStatus.CANCELLED) {
       throw new BadRequestException('Đặt phòng đã bị hủy trước đó');
-    }
-
-    if (status === BookingStatus.EXPIRED) {
-      throw new BadRequestException('Đặt phòng đã hết hạn');
     }
   }
 

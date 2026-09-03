@@ -1,0 +1,67 @@
+[
+  {
+    "email": "admin@test.com",
+    "userRole": 0,
+    "status": 0,
+    "isEmailVerified": true,
+    "isApplyingForOwner": false,
+    "ownerRequestStatus": 0,
+    "profile": {
+      "fullName": "Admin Test",
+      "avatarUrl": "https://i.pravatar.cc/300?u=admin-test",
+      "phoneNumber": "0900000001"
+    }
+  },
+  {
+    "email": "owner@test.com",
+    "userRole": 1,
+    "status": 0,
+    "isEmailVerified": true,
+    "isApplyingForOwner": false,
+    "ownerRequestStatus": 2,
+    "profile": {
+      "fullName": "Owner Test",
+      "avatarUrl": "https://i.pravatar.cc/300?u=owner-test",
+      "phoneNumber": "0900000002"
+    }
+  },
+  {
+    "email": "user@test.com",
+    "userRole": 2,
+    "status": 0,
+    "isEmailVerified": true,
+    "isApplyingForOwner": false,
+    "ownerRequestStatus": 2,
+    "profile": {
+      "fullName": "User Test",
+      "avatarUrl": "https://i.pravatar.cc/300?u=user-test",
+      "phoneNumber": "0900000003"
+    }
+  },
+  {
+    "email": "caotan@test.com",
+    "userRole": 1,
+    "status": 0,
+    "isEmailVerified": false,
+    "isApplyingForOwner": false,
+    "ownerRequestStatus": 2,
+    "profile": {
+      "fullName": "Cao Tân",
+      "avatarUrl": null,
+      "phoneNumber": "0123456789"
+    }
+  },
+  {
+    "email": "caotancaotan2206@gmail.com",
+    "userRole": 2,
+    "status": 0,
+    "isEmailVerified": true,
+    "isApplyingForOwner": false,
+    "ownerRequestStatus": 0,
+    "profile": {
+      "fullName": "Cao Mạnh Tân",
+      "avatarUrl": "https://i.pravatar.cc/300?u=admin-test",
+      "phoneNumber": "0335072781"
+    }
+  }
+]

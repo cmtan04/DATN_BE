@@ -3,19 +3,11 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import {
-  GetUserBookingsRequestDto,
-  GetUserBookingsResponseDto,
-  RawBookingData,
-  UpdateCurrentUserRequestDto,
-  User,
-  UserBookingItemDto,
-} from '@/dtos/user/user.dto';
+import { UpdateCurrentUserRequestDto, User } from '@/dtos/user/user.dto';
 import {
   UpdateUserProfileData,
   UserRepository,
 } from '@/repositories/user.repository';
-import { BookingRepository } from '@/repositories/booking.repository';
 import { NotificationService } from './notification.service';
 import { OwnerRequestStatus, UserRole } from '@assets/enum/user.enum';
 import { AuthService } from './auth.service';
@@ -25,7 +17,6 @@ import { ChangePasswordDto } from '@/dtos/auth/changePassword.dto';
 export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly bookingRepository: BookingRepository,
     private readonly notificationService: NotificationService,
     private readonly authService: AuthService,
   ) {}
@@ -151,55 +142,5 @@ export class UserService {
     userId: number,
   ) {
     return await this.authService.changePassword(changePasswordDto, userId);
-  }
-
-  public async getUserBookings(
-    userId: number,
-    query: GetUserBookingsRequestDto,
-  ): Promise<GetUserBookingsResponseDto> {
-    const {
-      data: rawData,
-      totalCount,
-      summary,
-    } = await this.bookingRepository.getUserBookings(userId, query);
-
-    const mappedData: UserBookingItemDto[] = rawData.map(
-      (b: RawBookingData) => ({
-        id: Number(b.id),
-        bookingCode: String(b.bookingCode),
-        startDate: b.startDate,
-        endDate: b.endDate,
-        roomNumber: Number(b.roomNumber),
-        note: b.note,
-        status: b.status,
-        totalAmount: Number(b.totalAmount),
-        currency: String(b.currency),
-        createdAt: b.createdAt,
-        location: {
-          id: Number(b.locationId),
-          name: String(b.locationName),
-          price: Number(b.price),
-          priceUnit: String(b.priceUnit),
-          area: Number(b.area),
-          address: String(b.fullAddress),
-          thumbnailUrl: String(b.thumbnailUrl),
-        },
-      }),
-    );
-
-    const limit = query.limit || 6;
-    const page = query.page || 1;
-    const totalPages = Math.ceil(totalCount / limit);
-
-    return {
-      data: mappedData,
-      meta: {
-        page,
-        limit,
-        total: totalCount,
-        totalPages,
-      },
-      summary,
-    };
   }
 }

@@ -25,7 +25,7 @@ export class OtpService {
 
   private async saveNewOtp(email: string): Promise<string> {
     await this.deleteOldOtps(email); // Xóa OTP cũ trước khi lưu OTP mới
-    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpCode = crypto.randomInt(100000, 999999).toString();
     const expiresAt = new Date();
     expiresAt.setMinutes(expiresAt.getMinutes() + 5);
     await this.otpRepository.saveNewOtp(email, otpCode, expiresAt);
@@ -34,7 +34,7 @@ export class OtpService {
 
   private async findValidOtp(email: string): Promise<string> {
     const validOtp = await this.otpRepository.findValidOtp(email);
-    if (!validOtp) {
+    if (!validOtp || !validOtp.otp) {
       throw new NotFoundException(
         'Không tìm thấy OTP hợp lệ cho email này hoặc đã hết hạn!',
       );
@@ -43,6 +43,7 @@ export class OtpService {
   }
 
   public async saveNewToken(email: string): Promise<string> {
+    await this.deleteOldOtps(email); // Xóa OTP cũ trước khi lưu reset token mới
     // 1. Tạo chuỗi token ngẫu nhiên bảo mật cao (độ dài 64 ký tự)
     const resetToken = crypto.randomBytes(32).toString('hex');
     // 2. Thiết lập thời gian hết hạn cho Token (Hiện tại + 5 phút)
@@ -52,16 +53,18 @@ export class OtpService {
     return resetToken;
   }
 
-  public async sendOtp(
-    email: string,
-  ): Promise<{ success: boolean; message: string }> {
-    const otpCode = await this.saveNewOtp(email);
+  public async sendOtp(email: string): Promise<{
+    success: boolean;
+    message: string;
+  }> {
+    try {
+      const otpCode = await this.saveNewOtp(email);
 
-    const mailOptions = {
-      from: `"Hệ thống Xác thực" <${process.env.NODEMAILER_USER}>`,
-      to: email,
-      subject: '[Ownerings] Mã xác thực OTP của bạn ',
-      html: `
+      const mailOptions = {
+        from: `"Hệ thống Xác thực" <${process.env.NODEMAILER_USER}>`,
+        to: email,
+        subject: '[Ownerings] Mã xác thực OTP của bạn ',
+        html: `
           <div style="font-family: Arial, sans-serif; max-width: 500px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
             <h2 style="color: #1a73e8; text-align: center;">MÃ XÁC THỰC OTP</h2>
             <p>Mã OTP của bạn là:</p>
@@ -73,22 +76,26 @@ export class OtpService {
             <p style="color: #5f6368; font-size: 13px;">⚠️ Mã chỉ có hiệu lực trong vòng <b>5 phút</b>.</p>
           </div>
         `,
-    };
-    try {
-      await this.mailService.sendMail(
-        mailOptions.to,
-        mailOptions.subject,
-        mailOptions.html,
-      );
+      };
+
+      // Gửi email ngầm trong background (fire-and-forget) để tránh block HTTP response gây timeout
+      this.mailService
+        .sendMail(mailOptions.to, mailOptions.subject, mailOptions.html)
+        .catch((error) => {
+          console.error(
+            `[Background Mail Error] Lỗi gửi OTP đến ${email}:`,
+            error,
+          );
+        });
 
       return {
         success: true,
-        message: 'Mã OTP đã được gửi thành công!',
+        message: 'Mã OTP đã được gửi đến email của bạn!',
       };
     } catch (error) {
       console.error('Lỗi sendOtp:', error);
       throw new InternalServerErrorException(
-        'Không thể gửi OTP, vui lòng thử lại sau.',
+        'Không thể tạo mã OTP, vui lòng thử lại sau.',
       );
     }
   }

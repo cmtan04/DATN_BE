@@ -5,16 +5,20 @@ import { getDateRange } from '@/utils/date.util';
 export class PaymentPricingService {
   public calculateLocationAmount(
     price: number,
-    startDate: Date,
-    endDate: Date,
+    startDate: Date | string,
+    endDate: Date | string,
     roomNumber: number,
   ): number {
-    if (!Number.isInteger(price) || price <= 0) {
+    const numPrice = Number(price);
+    if (!Number.isFinite(numPrice) || numPrice <= 0) {
       throw new BadRequestException('Location price is invalid');
     }
 
     const date = getDateRange(startDate, endDate);
+    if (date.length <= 0) {
+      throw new BadRequestException('Khoảng thời gian đặt phòng không hợp lệ');
+    }
 
-    return price * Math.max(1, Math.ceil(date.length)) * roomNumber;
+    return numPrice * date.length * roomNumber * 0.15;
   }
 }

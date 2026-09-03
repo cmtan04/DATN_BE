@@ -14,18 +14,18 @@ export class TBOTP {
   @Column()
   email: string;
 
-  @Column()
-  otp: string;
+  @Column({ nullable: true })
+  otp?: string;
 
   @CreateDateColumn()
   createdAt: Date;
 
-  @Column()
-  expiresAt: Date;
+  @Column({ nullable: true })
+  expiresAt?: Date;
 
   @Column({ nullable: true, unique: true })
-  resetToken: string;
+  resetToken?: string;
 
   @Column({ nullable: true })
-  tokenExpiresAt: Date;
+  tokenExpiresAt?: Date;
 }

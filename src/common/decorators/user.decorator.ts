@@ -15,6 +15,6 @@ export const User = createParamDecorator(
       return user;
     }
 
-    return user?.[data] as string | number | Date | undefined;
+    return user?.[data];
   },
 );

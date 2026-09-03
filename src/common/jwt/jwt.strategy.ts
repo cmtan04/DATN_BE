@@ -8,7 +8,7 @@ import { Repository } from 'typeorm';
 import { JwtPayload } from '@dtos/jwt.dto';
 import { UserDecoratorDtoResponse } from '@dtos/user/user.dto';
 import { TBUserDefault } from '@/entities/user/user_default.entity';
-import { TBUserProfile } from '@/entities/user/user_profile.entity';
+import { TBTokenBlacklist } from '@/entities/token_blacklist.entity';
 import { UserStatus } from '@/assets/enum/user.enum';
 
 @Injectable()
@@ -17,8 +17,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     configService: ConfigService,
     @InjectRepository(TBUserDefault)
     private readonly userRepository: Repository<TBUserDefault>,
-    @InjectRepository(TBUserProfile)
-    private readonly userProfileRepository: Repository<TBUserProfile>,
+    @InjectRepository(TBTokenBlacklist)
+    private readonly blacklistRepository: Repository<TBTokenBlacklist>,
   ) {
     super({
       // 1. Tự động trích xuất token từ Header "Authorization: Bearer <token>"
@@ -37,6 +37,16 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
    * Kết quả return sẽ được gán vào `req.user`.
    */
   async validate(payload: JwtPayload): Promise<UserDecoratorDtoResponse> {
+    // 0. Check if token has been blacklisted (revoked via logout)
+    if (payload.jti) {
+      const isBlacklisted = await this.blacklistRepository.exists({
+        where: { jti: payload.jti },
+      });
+      if (isBlacklisted) {
+        throw new UnauthorizedException('Token has been revoked');
+      }
+    }
+
     // 1. Tìm user trong DB để đảm bảo user vẫn tồn tại và lấy data mới nhất
     // (Optional: Có thể dùng `select` để tối ưu các cột cần lấy, tránh lấy password)
     const user = await this.userRepository.findOne({

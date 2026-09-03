@@ -10,6 +10,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from '@/common/jwt/jwt.strategy';
 import { OtpModule } from './OTP.module';
+import { TBTokenBlacklist } from '@/entities/token_blacklist.entity';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { OtpModule } from './OTP.module';
         },
       }),
     }),
-    TypeOrmModule.forFeature([TBUserDefault, TBUserProfile]),
+    TypeOrmModule.forFeature([TBUserDefault, TBUserProfile, TBTokenBlacklist]),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, AuthRepository],

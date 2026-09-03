@@ -13,4 +13,3 @@ export class LocationService {
     return await this.locationRepository.getAdminLocations(filter);
   }
 }
-

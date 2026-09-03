@@ -138,7 +138,7 @@ export class PaymentService {
       booking.endDate,
       booking.roomNumber,
     );
-    return calculatedTotal * 0.15;
+    return Math.round(calculatedTotal);
   }
 
   public async createPayment(

@@ -11,6 +11,11 @@ export class MailService {
       host: 'smtp.gmail.com',
       port: 465,
       secure: true,
+      pool: true,
+      maxConnections: 5,
+      maxMessages: 100,
+      connectionTimeout: 15000,
+      socketTimeout: 30000,
       auth: {
         user: process.env.NODEMAILER_USER,
         pass: process.env.NODEMAILER_PASS,

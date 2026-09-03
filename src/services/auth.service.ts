@@ -1,6 +1,7 @@
 import {
   ConflictException,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { SignInRequestDto, SignInResponseDto } from '@/dtos/auth/signIn.dto';
@@ -16,14 +17,19 @@ import { OtpService } from './OTP.service';
 import { ResetPasswordDto } from '@/dtos/auth/forgotPassword.dto';
 import { BadRequestException } from '@nestjs/common/exceptions';
 import { TBUserDefault } from '@/entities/user/user_default.entity';
-import { Repository } from 'typeorm';
+import { TBTokenBlacklist } from '@/entities/token_blacklist.entity';
+import { LessThan, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Cron } from '@nestjs/schedule';
+import { randomUUID } from 'crypto';
 
 const DEFAULT_USER_ROLE = UserRole.USER;
 const ROUNDS = 10;
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private readonly authRepository: AuthRepository,
     private readonly jwtService: JwtService,
@@ -31,6 +37,8 @@ export class AuthService {
     private readonly otpService: OtpService,
     @InjectRepository(TBUserDefault)
     private readonly userRepository: Repository<TBUserDefault>,
+    @InjectRepository(TBTokenBlacklist)
+    private readonly blacklistRepository: Repository<TBTokenBlacklist>,
   ) {}
 
   public async signUp(payload: SignUpRequestDto): Promise<SignUpResponseDto> {
@@ -79,6 +87,7 @@ export class AuthService {
       const rememberMe = payload.rememberMe || false;
       const accessToken = this.jwtService.sign(jwtPayload, {
         expiresIn: '1d',
+        jwtid: randomUUID(),
       });
 
       const result: SignInResponseDto = {
@@ -91,6 +100,7 @@ export class AuthService {
         const refreshToken = this.jwtService.sign(refreshTokenPayload, {
           secret: this.configService.getOrThrow<string>('JWT_REFRESH_SECRET'),
           expiresIn: '7d',
+          jwtid: randomUUID(),
         });
         result.refreshToken = refreshToken;
       }
@@ -122,6 +132,11 @@ export class AuthService {
         throw new UnauthorizedException('Invalid refresh token');
       }
 
+      // Check if refresh token has been blacklisted
+      if (decoded.jti && (await this.isTokenBlacklisted(decoded.jti))) {
+        throw new UnauthorizedException('Refresh token has been revoked');
+      }
+
       const user = await this.authRepository.findById(Number(decoded.sub));
       if (!user || user.status !== UserStatus.ACTIVE) {
         throw new UnauthorizedException('User account is not active');
@@ -137,6 +152,7 @@ export class AuthService {
 
       const accessToken = this.jwtService.sign(jwtPayload, {
         expiresIn: '1d',
+        jwtid: randomUUID(),
       });
 
       return {
@@ -214,5 +230,59 @@ export class AuthService {
 
   async pingDatabase(): Promise<void> {
     await this.authRepository.pingDatabase();
+  }
+
+  /**
+   * Logout: blacklist access token (và refresh token nếu có)
+   */
+  public async logout(
+    accessToken: string,
+    refreshToken?: string,
+  ): Promise<void> {
+    const accessPayload = this.jwtService.decode(accessToken);
+
+    if (accessPayload?.jti) {
+      await this.blacklistRepository.insert({
+        jti: accessPayload.jti,
+        userId: accessPayload.sub ?? 0,
+        expiresAt: new Date((accessPayload.exp ?? 0) * 1000),
+      });
+    }
+
+    if (refreshToken) {
+      try {
+        const refreshPayload = this.jwtService.decode(refreshToken);
+        if (refreshPayload?.jti) {
+          await this.blacklistRepository.insert({
+            jti: refreshPayload.jti,
+            userId: refreshPayload.sub ?? 0,
+            expiresAt: new Date((refreshPayload.exp ?? 0) * 1000),
+          });
+        }
+      } catch {
+        // Refresh token decode failed — ignore, might be invalid/expired
+      }
+    }
+  }
+
+  /**
+   * Check if a token jti has been blacklisted
+   */
+  public async isTokenBlacklisted(jti: string): Promise<boolean> {
+    const count = await this.blacklistRepository.count({ where: { jti } });
+    return count > 0;
+  }
+
+  /**
+   * Cleanup expired blacklist entries daily at 3 AM
+   */
+  @Cron('0 3 * * *')
+  async cleanupExpiredBlacklistTokens(): Promise<void> {
+    const result = await this.blacklistRepository.delete({
+      expiresAt: LessThan(new Date()),
+    });
+    this.logger.log(
+      `Cleaned up ${result.affected ?? 0} expired blacklist entries`,
+    );
   }
 }

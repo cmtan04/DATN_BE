@@ -20,7 +20,8 @@ export const ADMIN_OWNER_SORT_BY_VALUES: AdminOwnerSortBy[] = [
   'ownerRequestStatus',
 ];
 export const ADMIN_OWNER_SORT_ORDER_VALUES = ['ASC', 'DESC'] as const;
-export type AdminOwnerSortOrder = (typeof ADMIN_OWNER_SORT_ORDER_VALUES)[number];
+export type AdminOwnerSortOrder =
+  (typeof ADMIN_OWNER_SORT_ORDER_VALUES)[number];
 
 export class AdminOwnerListQueryDto {
   @ApiPropertyOptional({ description: 'Số trang', default: 1 })

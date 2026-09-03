@@ -1,1437 +1,3709 @@
 [
   {
+    "name": "Hanoi Central Guesthouse",
+    "description": "Guesthouse trung tâm, ngay sát Hồ Gươm.",
+    "price": 350000,
+    "priceUnit": "VND",
+    "area": 20,
+    "maxGuestCount": 2,
+    "quantity": 10,
+    "averageRating": 4.5,
+    "isActive": true,
+    "ownerEmail": "owner@test.com",
     "typeCode": "guesthouse",
-    "loc": {
-      "name": "Hanoi Central Guesthouse",
-      "description": "Guesthouse trung tâm, ngay sát Hồ Gươm.",
-      "price": 350000,
-      "priceUnit": "VND",
-      "area": 20,
-      "maxGuestCount": 2,
-      "quantity": 10,
-      "averageRating": 4.5
-    },
     "addr": {
-      "normalFullAddress": "15 Tạ Hiện, Hoàn Kiếm, Hà Nội",
       "fullAddress": "15 Tạ Hiện, Hàng Buồm, Hoàn Kiếm, Hà Nội, Việt Nam",
       "province": "Hà Nội",
       "district": "Hoàn Kiếm",
-      "region": "Miền Bắc",
       "country": "Việt Nam",
       "lat": 21.03354,
-      "lng": 105.852188
+      "lng": 105.852188,
+      "normalFullAddress": "15 ta hien, hang buom, hoan kiem, ha noi, viet nam"
     },
-    "mediaUrls": [
-      "https://upload.wikimedia.org/wikipedia/commons/c/c7/Hotelo_Hang_Nga_18.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/a/a8/Hotelo_Hang_Nga_09.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/a/a5/Hotelo_Hang_Nga_29.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/a/a7/Hang_Nga_guesthouse_1.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/9/96/Hang_Nga_guesthouse_2.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/0/09/Hotelo_Hang_Nga_01.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/b/bb/HangNgaCrazyHouse2.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/e/ea/Hang_Nga_guesthouse_02.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/1/11/Hotelo_Hang_Nga_38.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/3/3b/Hotelo_Hang_Nga_02.jpg"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/c/c7/Hotelo_Hang_Nga_18.jpg",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/a/a8/Hotelo_Hang_Nga_09.jpg",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Hotelo_Hang_Nga_29.jpg",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/a/a7/Hang_Nga_guesthouse_1.jpg",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/9/96/Hang_Nga_guesthouse_2.jpg",
+        "displayOrder": 5
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/0/09/Hotelo_Hang_Nga_01.jpg",
+        "displayOrder": 6
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/b/bb/HangNgaCrazyHouse2.jpg",
+        "displayOrder": 7
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/e/ea/Hang_Nga_guesthouse_02.jpg",
+        "displayOrder": 8
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/1/11/Hotelo_Hang_Nga_38.jpg",
+        "displayOrder": 9
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/3/3b/Hotelo_Hang_Nga_02.jpg",
+        "displayOrder": 10
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Memory Hostel & Guesthouse",
+    "description": "Phong cách retro, view sông Hàn.",
+    "price": 400000,
+    "priceUnit": "VND",
+    "area": 25,
+    "maxGuestCount": 3,
+    "quantity": 8,
+    "averageRating": 4.3,
+    "isActive": true,
+    "ownerEmail": "caotan@test.com",
     "typeCode": "guesthouse",
-    "loc": {
-      "name": "Memory Hostel & Guesthouse",
-      "description": "Phong cách retro, view sông Hàn.",
-      "price": 400000,
-      "priceUnit": "VND",
-      "area": 25,
-      "maxGuestCount": 3,
-      "quantity": 8,
-      "averageRating": 4.3
-    },
     "addr": {
-      "normalFullAddress": "03 Trần Quốc Toản, Hải Châu, Đà Nẵng",
       "fullAddress": "03 Trần Quốc Toản, Phước Ninh, Hải Châu, Đà Nẵng, Việt Nam",
       "province": "Đà Nẵng",
       "district": "Hải Châu",
-      "region": "Miền Trung",
       "country": "Việt Nam",
       "lat": 16.064512,
-      "lng": 108.225129
+      "lng": 108.225129,
+      "normalFullAddress": "03 tran quoc toan, phuoc ninh, hai chau, da nang, viet nam"
     },
-    "mediaUrls": [
-      "https://upload.wikimedia.org/wikipedia/commons/1/11/Hotelo_Hang_Nga_38.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/0/0f/Hotelo_Hang_Nga_03.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/a/a7/Hang_Nga_guesthouse_1.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/4/40/Hotelo_Hang_Nga_31.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/9/96/Hang_Nga_guesthouse_2.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/a/a5/Hotelo_Hang_Nga_29.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/c/c7/Hotelo_Hang_Nga_18.jpg"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/1/11/Hotelo_Hang_Nga_38.jpg",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/0/0f/Hotelo_Hang_Nga_03.jpg",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/a/a7/Hang_Nga_guesthouse_1.jpg",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/4/40/Hotelo_Hang_Nga_31.jpg",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/9/96/Hang_Nga_guesthouse_2.jpg",
+        "displayOrder": 5
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Hotelo_Hang_Nga_29.jpg",
+        "displayOrder": 6
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/c/c7/Hotelo_Hang_Nga_18.jpg",
+        "displayOrder": 7
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Spa & Massage",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Dalat Note Hostel & Guesthouse",
+    "description": "Guesthouse giá rẻ, góc sống ảo cực chất.",
+    "price": 250000,
+    "priceUnit": "VND",
+    "area": 18,
+    "maxGuestCount": 2,
+    "quantity": 15,
+    "averageRating": 4.6,
+    "isActive": true,
+    "ownerEmail": "owner@test.com",
     "typeCode": "guesthouse",
-    "loc": {
-      "name": "Dalat Note Hostel & Guesthouse",
-      "description": "Guesthouse giá rẻ, góc sống ảo cực chất.",
-      "price": 250000,
-      "priceUnit": "VND",
-      "area": 18,
-      "maxGuestCount": 2,
-      "quantity": 15,
-      "averageRating": 4.6
-    },
     "addr": {
-      "normalFullAddress": "3/2 Thông Thiên Học, Đà Lạt, Lâm Đồng",
       "fullAddress": "3/2 Thông Thiên Học, Phường 2, Thành phố Đà Lạt, Lâm Đồng, Việt Nam",
       "province": "Lâm Đồng",
       "district": "Đà Lạt",
-      "region": "Tây Nguyên",
       "country": "Việt Nam",
       "lat": 11.937242,
-      "lng": 108.434272
+      "lng": 108.434272,
+      "normalFullAddress": "32 thong thien hoc, phuong 2, thanh pho da lat, lam dong, viet nam"
     },
-    "mediaUrls": [
-      "https://upload.wikimedia.org/wikipedia/commons/4/48/Vietnam_-_panoramio_%28109%29.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/6/6d/Vietnam_-_panoramio_%28103%29.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/7/76/Vietnam_-_panoramio_%28104%29.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/2/2e/Vietnam_-_panoramio_%28114%29.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/5/54/Vietnam_-_panoramio_%28100%29.jpg",
-      "https://picsum.photos/seed/DalatNoteHostel&Guesthouse_5/800/600",
-      "https://picsum.photos/seed/DalatNoteHostel&Guesthouse_6/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/4/48/Vietnam_-_panoramio_%28109%29.jpg",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Vietnam_-_panoramio_%28103%29.jpg",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/7/76/Vietnam_-_panoramio_%28104%29.jpg",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/2/2e/Vietnam_-_panoramio_%28114%29.jpg",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/5/54/Vietnam_-_panoramio_%28100%29.jpg",
+        "displayOrder": 5
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/DalatNoteHostel&Guesthouse_5/800/600",
+        "displayOrder": 6
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/DalatNoteHostel&Guesthouse_6/800/600",
+        "displayOrder": 7
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Phòng Gym",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Spa & Massage",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Mojzo Inn Boutique",
+    "description": "Nằm trong khu phố Tây sầm uất.",
+    "price": 500000,
+    "priceUnit": "VND",
+    "area": 30,
+    "maxGuestCount": 4,
+    "quantity": 12,
+    "averageRating": 4.7,
+    "isActive": true,
+    "ownerEmail": "caotan@test.com",
     "typeCode": "guesthouse",
-    "loc": {
-      "name": "Mojzo Inn Boutique",
-      "description": "Nằm trong khu phố Tây sầm uất.",
-      "price": 500000,
-      "priceUnit": "VND",
-      "area": 30,
-      "maxGuestCount": 4,
-      "quantity": 12,
-      "averageRating": 4.7
-    },
     "addr": {
-      "normalFullAddress": "65/7 Nguyễn Thiện Thuật, Nha Trang, Khánh Hòa",
       "fullAddress": "65/7 Nguyễn Thiện Thuật, Lộc Thọ, Nha Trang, Khánh Hòa, Việt Nam",
       "province": "Khánh Hòa",
       "district": "Nha Trang",
-      "region": "Miền Trung",
       "country": "Việt Nam",
       "lat": 12.239213,
-      "lng": 109.194206
+      "lng": 109.194206,
+      "normalFullAddress": "657 nguyen thien thuat, loc tho, nha trang, khanh hoa, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/MojzoInnBoutique_0/800/600",
-      "https://picsum.photos/seed/MojzoInnBoutique_1/800/600",
-      "https://picsum.photos/seed/MojzoInnBoutique_2/800/600",
-      "https://picsum.photos/seed/MojzoInnBoutique_3/800/600",
-      "https://picsum.photos/seed/MojzoInnBoutique_4/800/600",
-      "https://picsum.photos/seed/MojzoInnBoutique_5/800/600",
-      "https://picsum.photos/seed/MojzoInnBoutique_6/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/MojzoInnBoutique_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/MojzoInnBoutique_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/MojzoInnBoutique_2/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/MojzoInnBoutique_3/800/600",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/MojzoInnBoutique_4/800/600",
+        "displayOrder": 5
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/MojzoInnBoutique_5/800/600",
+        "displayOrder": 6
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/MojzoInnBoutique_6/800/600",
+        "displayOrder": 7
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Wifi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Gecko Guesthouse",
+    "description": "Không gian yên tĩnh, nhân viên thân thiện.",
+    "price": 300000,
+    "priceUnit": "VND",
+    "area": 22,
+    "maxGuestCount": 2,
+    "quantity": 10,
+    "averageRating": 4.4,
+    "isActive": true,
+    "ownerEmail": "owner@test.com",
     "typeCode": "guesthouse",
-    "loc": {
-      "name": "Gecko Guesthouse",
-      "description": "Không gian yên tĩnh, nhân viên thân thiện.",
-      "price": 300000,
-      "priceUnit": "VND",
-      "area": 22,
-      "maxGuestCount": 2,
-      "quantity": 10,
-      "averageRating": 4.4
-    },
     "addr": {
-      "normalFullAddress": "75 Trần Hưng Đạo, Dương Đông, Phú Quốc",
       "fullAddress": "75 Trần Hưng Đạo, Dương Đông, Phú Quốc, Kiên Giang, Việt Nam",
       "province": "Kiên Giang",
       "district": "Phú Quốc",
-      "region": "Miền Nam",
       "country": "Việt Nam",
       "lat": 10.188648,
-      "lng": 103.972686
+      "lng": 103.972686,
+      "normalFullAddress": "75 tran hung dao, duong dong, phu quoc, kien giang, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/GeckoGuesthouse_0/800/600",
-      "https://picsum.photos/seed/GeckoGuesthouse_1/800/600",
-      "https://picsum.photos/seed/GeckoGuesthouse_2/800/600",
-      "https://picsum.photos/seed/GeckoGuesthouse_3/800/600",
-      "https://picsum.photos/seed/GeckoGuesthouse_4/800/600",
-      "https://picsum.photos/seed/GeckoGuesthouse_5/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/GeckoGuesthouse_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/GeckoGuesthouse_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/GeckoGuesthouse_2/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/GeckoGuesthouse_3/800/600",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/GeckoGuesthouse_4/800/600",
+        "displayOrder": 5
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/GeckoGuesthouse_5/800/600",
+        "displayOrder": 6
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Sofitel Legend Metropole Hanoi",
+    "description": "Khách sạn 5 sao mang kiến trúc Pháp cổ điển.",
+    "price": 5500000,
+    "priceUnit": "VND",
+    "area": 50,
+    "maxGuestCount": 2,
+    "quantity": 364,
+    "averageRating": 4.9,
+    "isActive": true,
+    "ownerEmail": "caotan@test.com",
     "typeCode": "hotel",
-    "loc": {
-      "name": "Sofitel Legend Metropole Hanoi",
-      "description": "Khách sạn 5 sao mang kiến trúc Pháp cổ điển.",
-      "price": 5500000,
-      "priceUnit": "VND",
-      "area": 50,
-      "maxGuestCount": 2,
-      "quantity": 364,
-      "averageRating": 4.9
-    },
     "addr": {
-      "normalFullAddress": "15 Ngô Quyền, Hoàn Kiếm, Hà Nội",
       "fullAddress": "15 Ngô Quyền, Tràng Tiền, Hoàn Kiếm, Hà Nội, Việt Nam",
       "province": "Hà Nội",
       "district": "Hoàn Kiếm",
-      "region": "Miền Bắc",
       "country": "Việt Nam",
       "lat": 21.025628,
-      "lng": 105.855576
+      "lng": 105.855576,
+      "normalFullAddress": "15 ngo quyen, trang tien, hoan kiem, ha noi, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/SofitelLegendMetropoleHanoi_0/800/600",
-      "https://picsum.photos/seed/SofitelLegendMetropoleHanoi_1/800/600",
-      "https://picsum.photos/seed/SofitelLegendMetropoleHanoi_2/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SofitelLegendMetropoleHanoi_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SofitelLegendMetropoleHanoi_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SofitelLegendMetropoleHanoi_2/800/600",
+        "displayOrder": 3
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Wifi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Phòng Gym",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Spa & Massage",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Novotel Danang Premier Han River",
+    "description": "Khách sạn sang trọng với view toàn cảnh sông Hàn.",
+    "price": 2800000,
+    "priceUnit": "VND",
+    "area": 40,
+    "maxGuestCount": 2,
+    "quantity": 323,
+    "averageRating": 4.7,
+    "isActive": true,
+    "ownerEmail": "owner@test.com",
     "typeCode": "hotel",
-    "loc": {
-      "name": "Novotel Danang Premier Han River",
-      "description": "Khách sạn sang trọng với view toàn cảnh sông Hàn.",
-      "price": 2800000,
-      "priceUnit": "VND",
-      "area": 40,
-      "maxGuestCount": 2,
-      "quantity": 323,
-      "averageRating": 4.7
-    },
     "addr": {
-      "normalFullAddress": "36 Bạch Đằng, Hải Châu, Đà Nẵng",
       "fullAddress": "36 Bạch Đằng, Thạch Thang, Hải Châu, Đà Nẵng, Việt Nam",
       "province": "Đà Nẵng",
       "district": "Hải Châu",
-      "region": "Miền Trung",
       "country": "Việt Nam",
       "lat": 16.077412,
-      "lng": 108.223631
+      "lng": 108.223631,
+      "normalFullAddress": "36 bach dang, thach thang, hai chau, da nang, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/NovotelDanangPremierHanRiver_0/800/600",
-      "https://picsum.photos/seed/NovotelDanangPremierHanRiver_1/800/600",
-      "https://picsum.photos/seed/NovotelDanangPremierHanRiver_2/800/600",
-      "https://picsum.photos/seed/NovotelDanangPremierHanRiver_3/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/NovotelDanangPremierHanRiver_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/NovotelDanangPremierHanRiver_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/NovotelDanangPremierHanRiver_2/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/NovotelDanangPremierHanRiver_3/800/600",
+        "displayOrder": 4
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Wifi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Phòng Gym",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Hotel Colline Dalat",
+    "description": "Khách sạn phong cách hiện đại ngay trung tâm Đà Lạt.",
+    "price": 1800000,
+    "priceUnit": "VND",
+    "area": 35,
+    "maxGuestCount": 2,
+    "quantity": 150,
+    "averageRating": 4.6,
+    "isActive": true,
+    "ownerEmail": "caotan@test.com",
     "typeCode": "hotel",
-    "loc": {
-      "name": "Hotel Colline Dalat",
-      "description": "Khách sạn phong cách hiện đại ngay trung tâm Đà Lạt.",
-      "price": 1800000,
-      "priceUnit": "VND",
-      "area": 35,
-      "maxGuestCount": 2,
-      "quantity": 150,
-      "averageRating": 4.6
-    },
     "addr": {
-      "normalFullAddress": "10 Phan Bội Châu, Đà Lạt, Lâm Đồng",
       "fullAddress": "10 Phan Bội Châu, Phường 1, Thành phố Đà Lạt, Lâm Đồng, Việt Nam",
       "province": "Lâm Đồng",
       "district": "Đà Lạt",
-      "region": "Tây Nguyên",
       "country": "Việt Nam",
       "lat": 11.943948,
-      "lng": 108.438102
+      "lng": 108.438102,
+      "normalFullAddress": "10 phan boi chau, phuong 1, thanh pho da lat, lam dong, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/HotelCollineDalat_0/800/600",
-      "https://picsum.photos/seed/HotelCollineDalat_1/800/600",
-      "https://picsum.photos/seed/HotelCollineDalat_2/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/HotelCollineDalat_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/HotelCollineDalat_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/HotelCollineDalat_2/800/600",
+        "displayOrder": 3
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Spa & Massage",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "InterContinental Nha Trang",
+    "description": "Khách sạn 5 sao đẳng cấp quốc tế ven biển.",
+    "price": 4200000,
+    "priceUnit": "VND",
+    "area": 55,
+    "maxGuestCount": 2,
+    "quantity": 279,
+    "averageRating": 4.8,
+    "isActive": true,
+    "ownerEmail": "owner@test.com",
     "typeCode": "hotel",
-    "loc": {
-      "name": "InterContinental Nha Trang",
-      "description": "Khách sạn 5 sao đẳng cấp quốc tế ven biển.",
-      "price": 4200000,
-      "priceUnit": "VND",
-      "area": 55,
-      "maxGuestCount": 2,
-      "quantity": 279,
-      "averageRating": 4.8
-    },
     "addr": {
-      "normalFullAddress": "32-34 Trần Phú, Nha Trang, Khánh Hòa",
       "fullAddress": "32-34 Trần Phú, Lộc Thọ, Nha Trang, Khánh Hòa, Việt Nam",
       "province": "Khánh Hòa",
       "district": "Nha Trang",
-      "region": "Miền Trung",
       "country": "Việt Nam",
       "lat": 12.245011,
-      "lng": 109.19603
+      "lng": 109.19603,
+      "normalFullAddress": "32 34 tran phu, loc tho, nha trang, khanh hoa, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/InterContinentalNhaTrang_0/800/600",
-      "https://picsum.photos/seed/InterContinentalNhaTrang_1/800/600",
-      "https://picsum.photos/seed/InterContinentalNhaTrang_2/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/InterContinentalNhaTrang_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/InterContinentalNhaTrang_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/InterContinentalNhaTrang_2/800/600",
+        "displayOrder": 3
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Phòng Gym",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Spa & Massage",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "The Imperial Hotel Vung Tau",
+    "description": "Khách sạn mang phong cách hoàng gia Châu Âu.",
+    "price": 3100000,
+    "priceUnit": "VND",
+    "area": 45,
+    "maxGuestCount": 2,
+    "quantity": 144,
+    "averageRating": 4.7,
+    "isActive": true,
+    "ownerEmail": "caotan@test.com",
     "typeCode": "hotel",
-    "loc": {
-      "name": "The Imperial Hotel Vung Tau",
-      "description": "Khách sạn mang phong cách hoàng gia Châu Âu.",
-      "price": 3100000,
-      "priceUnit": "VND",
-      "area": 45,
-      "maxGuestCount": 2,
-      "quantity": 144,
-      "averageRating": 4.7
-    },
     "addr": {
-      "normalFullAddress": "159 Thùy Vân, Vũng Tàu, Bà Rịa - Vũng Tàu",
       "fullAddress": "159 Thùy Vân, Thắng Tam, Thành phố Vũng Tàu, Bà Rịa - Vũng Tàu, Việt Nam",
       "province": "Bà Rịa - Vũng Tàu",
       "district": "Vũng Tàu",
-      "region": "Miền Nam",
       "country": "Việt Nam",
       "lat": 10.343964,
-      "lng": 107.094963
+      "lng": 107.094963,
+      "normalFullAddress": "159 thuy van, thang tam, thanh pho vung tau, ba ria vung tau, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/TheImperialHotelVungTau_0/800/600",
-      "https://picsum.photos/seed/TheImperialHotelVungTau_1/800/600",
-      "https://picsum.photos/seed/TheImperialHotelVungTau_2/800/600",
-      "https://picsum.photos/seed/TheImperialHotelVungTau_3/800/600",
-      "https://picsum.photos/seed/TheImperialHotelVungTau_4/800/600",
-      "https://picsum.photos/seed/TheImperialHotelVungTau_5/800/600",
-      "https://picsum.photos/seed/TheImperialHotelVungTau_6/800/600",
-      "https://picsum.photos/seed/TheImperialHotelVungTau_7/800/600",
-      "https://picsum.photos/seed/TheImperialHotelVungTau_8/800/600",
-      "https://picsum.photos/seed/TheImperialHotelVungTau_9/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheImperialHotelVungTau_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheImperialHotelVungTau_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheImperialHotelVungTau_2/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheImperialHotelVungTau_3/800/600",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheImperialHotelVungTau_4/800/600",
+        "displayOrder": 5
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheImperialHotelVungTau_5/800/600",
+        "displayOrder": 6
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheImperialHotelVungTau_6/800/600",
+        "displayOrder": 7
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheImperialHotelVungTau_7/800/600",
+        "displayOrder": 8
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheImperialHotelVungTau_8/800/600",
+        "displayOrder": 9
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheImperialHotelVungTau_9/800/600",
+        "displayOrder": 10
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Wifi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Phòng Gym",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Spa & Massage",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "An Nhiên House Hanoi",
+    "description": "Nhà nguyên căn yên tĩnh giữa lòng Hà Nội.",
+    "price": 1500000,
+    "priceUnit": "VND",
+    "area": 80,
+    "maxGuestCount": 6,
+    "quantity": 1,
+    "averageRating": 4.8,
+    "isActive": true,
+    "ownerEmail": "owner@test.com",
     "typeCode": "house",
-    "loc": {
-      "name": "An Nhiên House Hanoi",
-      "description": "Nhà nguyên căn yên tĩnh giữa lòng Hà Nội.",
-      "price": 1500000,
-      "priceUnit": "VND",
-      "area": 80,
-      "maxGuestCount": 6,
-      "quantity": 1,
-      "averageRating": 4.8
-    },
     "addr": {
-      "normalFullAddress": "Ngõ 200 Âu Cơ, Tây Hồ, Hà Nội",
       "fullAddress": "Ngõ 200 Âu Cơ, Tứ Liên, Tây Hồ, Hà Nội, Việt Nam",
       "province": "Hà Nội",
       "district": "Tây Hồ",
-      "region": "Miền Bắc",
       "country": "Việt Nam",
       "lat": 21.036198,
-      "lng": 105.743362
+      "lng": 105.743362,
+      "normalFullAddress": "ngo 200 au co, tu lien, tay ho, ha noi, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/AnNhiênHouseHanoi_0/800/600",
-      "https://picsum.photos/seed/AnNhiênHouseHanoi_1/800/600",
-      "https://picsum.photos/seed/AnNhiênHouseHanoi_2/800/600",
-      "https://picsum.photos/seed/AnNhiênHouseHanoi_3/800/600",
-      "https://picsum.photos/seed/AnNhiênHouseHanoi_4/800/600",
-      "https://picsum.photos/seed/AnNhiênHouseHanoi_5/800/600",
-      "https://picsum.photos/seed/AnNhiênHouseHanoi_6/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/AnNhiênHouseHanoi_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/AnNhiênHouseHanoi_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/AnNhiênHouseHanoi_2/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/AnNhiênHouseHanoi_3/800/600",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/AnNhiênHouseHanoi_4/800/600",
+        "displayOrder": 5
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/AnNhiênHouseHanoi_5/800/600",
+        "displayOrder": 6
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/AnNhiênHouseHanoi_6/800/600",
+        "displayOrder": 7
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Phòng Gym",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Mộc House Danang",
+    "description": "Nhà 3 tầng thiết kế tối giản gần bãi biển Mỹ Khê.",
+    "price": 2000000,
+    "priceUnit": "VND",
+    "area": 120,
+    "maxGuestCount": 8,
+    "quantity": 1,
+    "averageRating": 4.9,
+    "isActive": true,
+    "ownerEmail": "caotan@test.com",
     "typeCode": "house",
-    "loc": {
-      "name": "Mộc House Danang",
-      "description": "Nhà 3 tầng thiết kế tối giản gần bãi biển Mỹ Khê.",
-      "price": 2000000,
-      "priceUnit": "VND",
-      "area": 120,
-      "maxGuestCount": 8,
-      "quantity": 1,
-      "averageRating": 4.9
-    },
     "addr": {
-      "normalFullAddress": "45 An Thượng 2, Ngũ Hành Sơn, Đà Nẵng",
       "fullAddress": "45 An Thượng 2, Mỹ An, Ngũ Hành Sơn, Đà Nẵng, Việt Nam",
       "province": "Đà Nẵng",
       "district": "Ngũ Hành Sơn",
-      "region": "Miền Trung",
       "country": "Việt Nam",
       "lat": 16.062912,
-      "lng": 108.243829
+      "lng": 108.243829,
+      "normalFullAddress": "45 an thuong 2, my an, ngu hanh son, da nang, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/MộcHouseDanang_0/800/600",
-      "https://picsum.photos/seed/MộcHouseDanang_1/800/600",
-      "https://picsum.photos/seed/MộcHouseDanang_2/800/600",
-      "https://picsum.photos/seed/MộcHouseDanang_3/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/MộcHouseDanang_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/MộcHouseDanang_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/MộcHouseDanang_2/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/MộcHouseDanang_3/800/600",
+        "displayOrder": 4
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Phòng Gym",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Spa & Massage",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "The Wooden House Dalat",
+    "description": "Nhà gỗ ấm cúng giữa đồi thông xanh.",
+    "price": 2500000,
+    "priceUnit": "VND",
+    "area": 150,
+    "maxGuestCount": 10,
+    "quantity": 1,
+    "averageRating": 4.7,
+    "isActive": true,
+    "ownerEmail": "owner@test.com",
     "typeCode": "house",
-    "loc": {
-      "name": "The Wooden House Dalat",
-      "description": "Nhà gỗ ấm cúng giữa đồi thông xanh.",
-      "price": 2500000,
-      "priceUnit": "VND",
-      "area": 150,
-      "maxGuestCount": 10,
-      "quantity": 1,
-      "averageRating": 4.7
-    },
     "addr": {
-      "normalFullAddress": "Vòng Lâm Viên, Phường 8, Đà Lạt, Lâm Đồng",
       "fullAddress": "Vòng Lâm Viên, Phường 8, Thành phố Đà Lạt, Lâm Đồng, Việt Nam",
       "province": "Lâm Đồng",
       "district": "Đà Lạt",
-      "region": "Tây Nguyên",
       "country": "Việt Nam",
       "lat": 11.927232,
-      "lng": 108.46321
+      "lng": 108.46321,
+      "normalFullAddress": "vong lam vien, phuong 8, thanh pho da lat, lam dong, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/TheWoodenHouseDalat_0/800/600",
-      "https://picsum.photos/seed/TheWoodenHouseDalat_1/800/600",
-      "https://picsum.photos/seed/TheWoodenHouseDalat_2/800/600",
-      "https://picsum.photos/seed/TheWoodenHouseDalat_3/800/600",
-      "https://picsum.photos/seed/TheWoodenHouseDalat_4/800/600",
-      "https://picsum.photos/seed/TheWoodenHouseDalat_5/800/600",
-      "https://picsum.photos/seed/TheWoodenHouseDalat_6/800/600",
-      "https://picsum.photos/seed/TheWoodenHouseDalat_7/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheWoodenHouseDalat_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheWoodenHouseDalat_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheWoodenHouseDalat_2/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheWoodenHouseDalat_3/800/600",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheWoodenHouseDalat_4/800/600",
+        "displayOrder": 5
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheWoodenHouseDalat_5/800/600",
+        "displayOrder": 6
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheWoodenHouseDalat_6/800/600",
+        "displayOrder": 7
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheWoodenHouseDalat_7/800/600",
+        "displayOrder": 8
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Phòng Gym",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Spa & Massage",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Nha Trang Beach House",
+    "description": "Nhà phố hiện đại chỉ cách biển 5 phút.",
+    "price": 2200000,
+    "priceUnit": "VND",
+    "area": 100,
+    "maxGuestCount": 6,
+    "quantity": 1,
+    "averageRating": 4.6,
+    "isActive": true,
+    "ownerEmail": "caotan@test.com",
     "typeCode": "house",
-    "loc": {
-      "name": "Nha Trang Beach House",
-      "description": "Nhà phố hiện đại chỉ cách biển 5 phút.",
-      "price": 2200000,
-      "priceUnit": "VND",
-      "area": 100,
-      "maxGuestCount": 6,
-      "quantity": 1,
-      "averageRating": 4.6
-    },
     "addr": {
-      "normalFullAddress": "20 Hòn Chồng, Nha Trang, Khánh Hòa",
       "fullAddress": "20 Hòn Chồng, Vĩnh Phước, Nha Trang, Khánh Hòa, Việt Nam",
       "province": "Khánh Hòa",
       "district": "Nha Trang",
-      "region": "Miền Trung",
       "country": "Việt Nam",
       "lat": 12.23718,
-      "lng": 109.196136
+      "lng": 109.196136,
+      "normalFullAddress": "20 hon chong, vinh phuoc, nha trang, khanh hoa, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/NhaTrangBeachHouse_0/800/600",
-      "https://picsum.photos/seed/NhaTrangBeachHouse_1/800/600",
-      "https://picsum.photos/seed/NhaTrangBeachHouse_2/800/600",
-      "https://picsum.photos/seed/NhaTrangBeachHouse_3/800/600",
-      "https://picsum.photos/seed/NhaTrangBeachHouse_4/800/600",
-      "https://picsum.photos/seed/NhaTrangBeachHouse_5/800/600",
-      "https://picsum.photos/seed/NhaTrangBeachHouse_6/800/600",
-      "https://picsum.photos/seed/NhaTrangBeachHouse_7/800/600",
-      "https://picsum.photos/seed/NhaTrangBeachHouse_8/800/600",
-      "https://picsum.photos/seed/NhaTrangBeachHouse_9/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/NhaTrangBeachHouse_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/NhaTrangBeachHouse_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/NhaTrangBeachHouse_2/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/NhaTrangBeachHouse_3/800/600",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/NhaTrangBeachHouse_4/800/600",
+        "displayOrder": 5
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/NhaTrangBeachHouse_5/800/600",
+        "displayOrder": 6
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/NhaTrangBeachHouse_6/800/600",
+        "displayOrder": 7
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/NhaTrangBeachHouse_7/800/600",
+        "displayOrder": 8
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/NhaTrangBeachHouse_8/800/600",
+        "displayOrder": 9
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/NhaTrangBeachHouse_9/800/600",
+        "displayOrder": 10
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Phòng Gym",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Phu Quoc Family House",
+    "description": "Nhà sân vườn rộng thích hợp cho gia đình.",
+    "price": 1800000,
+    "priceUnit": "VND",
+    "area": 200,
+    "maxGuestCount": 8,
+    "quantity": 1,
+    "averageRating": 4.8,
+    "isActive": true,
+    "ownerEmail": "owner@test.com",
     "typeCode": "house",
-    "loc": {
-      "name": "Phu Quoc Family House",
-      "description": "Nhà sân vườn rộng thích hợp cho gia đình.",
-      "price": 1800000,
-      "priceUnit": "VND",
-      "area": 200,
-      "maxGuestCount": 8,
-      "quantity": 1,
-      "averageRating": 4.8
-    },
     "addr": {
-      "normalFullAddress": "Khu phố 6, An Thới, Phú Quốc",
       "fullAddress": "Khu phố 6, An Thới, Thành phố Phú Quốc, Kiên Giang, Việt Nam",
       "province": "Kiên Giang",
       "district": "Phú Quốc",
-      "region": "Miền Nam",
       "country": "Việt Nam",
       "lat": 10.01092,
-      "lng": 104.044296
+      "lng": 104.044296,
+      "normalFullAddress": "khu pho 6, an thoi, thanh pho phu quoc, kien giang, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/PhuQuocFamilyHouse_0/800/600",
-      "https://picsum.photos/seed/PhuQuocFamilyHouse_1/800/600",
-      "https://picsum.photos/seed/PhuQuocFamilyHouse_2/800/600",
-      "https://picsum.photos/seed/PhuQuocFamilyHouse_3/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/PhuQuocFamilyHouse_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/PhuQuocFamilyHouse_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/PhuQuocFamilyHouse_2/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/PhuQuocFamilyHouse_3/800/600",
+        "displayOrder": 4
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Wifi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Phòng Gym",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Sapa Clay House",
+    "description": "Homestay sinh thái tuyệt đẹp giữa bản Tả Van.",
+    "price": 1200000,
+    "priceUnit": "VND",
+    "area": 35,
+    "maxGuestCount": 2,
+    "quantity": 10,
+    "averageRating": 4.9,
+    "isActive": true,
+    "ownerEmail": "caotan@test.com",
     "typeCode": "homestay",
-    "loc": {
-      "name": "Sapa Clay House",
-      "description": "Homestay sinh thái tuyệt đẹp giữa bản Tả Van.",
-      "price": 1200000,
-      "priceUnit": "VND",
-      "area": 35,
-      "maxGuestCount": 2,
-      "quantity": 10,
-      "averageRating": 4.9
-    },
     "addr": {
-      "normalFullAddress": "Bản Tả Van, Sa Pa, Lào Cai",
       "fullAddress": "Bản Tả Van, Xã Tả Van, Sa Pa, Lào Cai, Việt Nam",
       "province": "Lào Cai",
       "district": "Sa Pa",
-      "region": "Miền Bắc",
       "country": "Việt Nam",
       "lat": 22.318926,
-      "lng": 103.857702
+      "lng": 103.857702,
+      "normalFullAddress": "ban ta van, xa ta van, sa pa, lao cai, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/SapaClayHouse_0/800/600",
-      "https://picsum.photos/seed/SapaClayHouse_1/800/600",
-      "https://picsum.photos/seed/SapaClayHouse_2/800/600",
-      "https://picsum.photos/seed/SapaClayHouse_3/800/600",
-      "https://picsum.photos/seed/SapaClayHouse_4/800/600",
-      "https://picsum.photos/seed/SapaClayHouse_5/800/600",
-      "https://picsum.photos/seed/SapaClayHouse_6/800/600",
-      "https://picsum.photos/seed/SapaClayHouse_7/800/600",
-      "https://picsum.photos/seed/SapaClayHouse_8/800/600",
-      "https://picsum.photos/seed/SapaClayHouse_9/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SapaClayHouse_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SapaClayHouse_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SapaClayHouse_2/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SapaClayHouse_3/800/600",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SapaClayHouse_4/800/600",
+        "displayOrder": 5
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SapaClayHouse_5/800/600",
+        "displayOrder": 6
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SapaClayHouse_6/800/600",
+        "displayOrder": 7
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SapaClayHouse_7/800/600",
+        "displayOrder": 8
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SapaClayHouse_8/800/600",
+        "displayOrder": 9
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SapaClayHouse_9/800/600",
+        "displayOrder": 10
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Phòng Gym",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "The Hangout Homestay Dalat",
+    "description": "Homestay nhỏ xinh phong cách vintage.",
+    "price": 600000,
+    "priceUnit": "VND",
+    "area": 25,
+    "maxGuestCount": 2,
+    "quantity": 5,
+    "averageRating": 4.8,
+    "isActive": true,
+    "ownerEmail": "owner@test.com",
     "typeCode": "homestay",
-    "loc": {
-      "name": "The Hangout Homestay Dalat",
-      "description": "Homestay nhỏ xinh phong cách vintage.",
-      "price": 600000,
-      "priceUnit": "VND",
-      "area": 25,
-      "maxGuestCount": 2,
-      "quantity": 5,
-      "averageRating": 4.8
-    },
     "addr": {
-      "normalFullAddress": "71 Hoàng Diệu, Đà Lạt, Lâm Đồng",
       "fullAddress": "71 Hoàng Diệu, Phường 5, Thành phố Đà Lạt, Lâm Đồng, Việt Nam",
       "province": "Lâm Đồng",
       "district": "Đà Lạt",
-      "region": "Tây Nguyên",
       "country": "Việt Nam",
       "lat": 11.949045,
-      "lng": 108.434675
+      "lng": 108.434675,
+      "normalFullAddress": "71 hoang dieu, phuong 5, thanh pho da lat, lam dong, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/TheHangoutHomestayDalat_0/800/600",
-      "https://picsum.photos/seed/TheHangoutHomestayDalat_1/800/600",
-      "https://picsum.photos/seed/TheHangoutHomestayDalat_2/800/600",
-      "https://picsum.photos/seed/TheHangoutHomestayDalat_3/800/600",
-      "https://picsum.photos/seed/TheHangoutHomestayDalat_4/800/600",
-      "https://picsum.photos/seed/TheHangoutHomestayDalat_5/800/600",
-      "https://picsum.photos/seed/TheHangoutHomestayDalat_6/800/600",
-      "https://picsum.photos/seed/TheHangoutHomestayDalat_7/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheHangoutHomestayDalat_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheHangoutHomestayDalat_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheHangoutHomestayDalat_2/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheHangoutHomestayDalat_3/800/600",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheHangoutHomestayDalat_4/800/600",
+        "displayOrder": 5
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheHangoutHomestayDalat_5/800/600",
+        "displayOrder": 6
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheHangoutHomestayDalat_6/800/600",
+        "displayOrder": 7
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TheHangoutHomestayDalat_7/800/600",
+        "displayOrder": 8
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Wifi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Spa & Massage",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Mina House Homestay",
+    "description": "Homestay có hồ bơi nhỏ giáp Hội An.",
+    "price": 800000,
+    "priceUnit": "VND",
+    "area": 30,
+    "maxGuestCount": 3,
+    "quantity": 8,
+    "averageRating": 4.7,
+    "isActive": true,
+    "ownerEmail": "caotan@test.com",
     "typeCode": "homestay",
-    "loc": {
-      "name": "Mina House Homestay",
-      "description": "Homestay có hồ bơi nhỏ giáp Hội An.",
-      "price": 800000,
-      "priceUnit": "VND",
-      "area": 30,
-      "maxGuestCount": 3,
-      "quantity": 8,
-      "averageRating": 4.7
-    },
     "addr": {
-      "normalFullAddress": "Cẩm Thanh, Hội An, Quảng Nam",
       "fullAddress": "Xã Cẩm Thanh, Thành phố Hội An, Quảng Nam, Việt Nam",
       "province": "Quảng Nam",
       "district": "Hội An",
-      "region": "Miền Trung",
       "country": "Việt Nam",
       "lat": 15.879416,
-      "lng": 108.374173
+      "lng": 108.374173,
+      "normalFullAddress": "xa cam thanh, thanh pho hoi an, quang nam, viet nam"
     },
-    "mediaUrls": [
-      "https://upload.wikimedia.org/wikipedia/commons/1/1d/Vietnam_08_-_094_-_the_other_side_of_my_%22homestay%22_%283184893860%29.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/3/33/Wetlands_Van_Long_Nature_Reserve_%2845169%29.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/7/7a/Wetlands_Van_Long_Nature_Reserve_%2874622%29.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/c/c9/Wetlands_Van_Long_Nature_Reserve_%2887143%29.jpg"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/1/1d/Vietnam_08_-_094_-_the_other_side_of_my_%22homestay%22_%283184893860%29.jpg",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/3/33/Wetlands_Van_Long_Nature_Reserve_%2845169%29.jpg",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/7/7a/Wetlands_Van_Long_Nature_Reserve_%2874622%29.jpg",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Wetlands_Van_Long_Nature_Reserve_%2887143%29.jpg",
+        "displayOrder": 4
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Wifi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Spa & Massage",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Santorini Homestay Vũng Tàu",
+    "description": "Thiết kế tone xanh trắng chuẩn Santorini.",
+    "price": 500000,
+    "priceUnit": "VND",
+    "area": 20,
+    "maxGuestCount": 2,
+    "quantity": 6,
+    "averageRating": 4.6,
+    "isActive": true,
+    "ownerEmail": "owner@test.com",
     "typeCode": "homestay",
-    "loc": {
-      "name": "Santorini Homestay Vũng Tàu",
-      "description": "Thiết kế tone xanh trắng chuẩn Santorini.",
-      "price": 500000,
-      "priceUnit": "VND",
-      "area": 20,
-      "maxGuestCount": 2,
-      "quantity": 6,
-      "averageRating": 4.6
-    },
     "addr": {
-      "normalFullAddress": "139/24 Phan Chu Trinh, Vũng Tàu",
       "fullAddress": "139/24 Phan Chu Trinh, Phường 2, Thành phố Vũng Tàu, Bà Rịa - Vũng Tàu, Việt Nam",
       "province": "Bà Rịa - Vũng Tàu",
       "district": "Vũng Tàu",
-      "region": "Miền Nam",
       "country": "Việt Nam",
       "lat": 10.331868,
-      "lng": 107.086199
+      "lng": 107.086199,
+      "normalFullAddress": "13924 phan chu trinh, phuong 2, thanh pho vung tau, ba ria vung tau, viet nam"
     },
-    "mediaUrls": [
-      "https://upload.wikimedia.org/wikipedia/commons/9/94/Vietnam_08_-_082_-_My_smiling_tour_saleswoman_%283184027481%29.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/3/3f/Pac_Ngoi_homestay.JPG",
-      "https://upload.wikimedia.org/wikipedia/commons/d/d7/Vietnam_08_-_093_-_garden_of_my_homestay_%283184891576%29.jpg",
-      "https://picsum.photos/seed/SantoriniHomestayVũngTàu_3/800/600",
-      "https://picsum.photos/seed/SantoriniHomestayVũngTàu_4/800/600",
-      "https://picsum.photos/seed/SantoriniHomestayVũngTàu_5/800/600",
-      "https://picsum.photos/seed/SantoriniHomestayVũngTàu_6/800/600",
-      "https://picsum.photos/seed/SantoriniHomestayVũngTàu_7/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/9/94/Vietnam_08_-_082_-_My_smiling_tour_saleswoman_%283184027481%29.jpg",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Pac_Ngoi_homestay.JPG",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/d/d7/Vietnam_08_-_093_-_garden_of_my_homestay_%283184891576%29.jpg",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SantoriniHomestayVũngTàu_3/800/600",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SantoriniHomestayVũngTàu_4/800/600",
+        "displayOrder": 5
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SantoriniHomestayVũngTàu_5/800/600",
+        "displayOrder": 6
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SantoriniHomestayVũngTàu_6/800/600",
+        "displayOrder": 7
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SantoriniHomestayVũngTàu_7/800/600",
+        "displayOrder": 8
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Spa & Massage",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Eco Homestay Ninh Bình",
+    "description": "Bungalow giữa đầm sen lãng mạn.",
+    "price": 900000,
+    "priceUnit": "VND",
+    "area": 35,
+    "maxGuestCount": 2,
+    "quantity": 10,
+    "averageRating": 4.9,
+    "isActive": true,
+    "ownerEmail": "caotan@test.com",
     "typeCode": "homestay",
-    "loc": {
-      "name": "Eco Homestay Ninh Bình",
-      "description": "Bungalow giữa đầm sen lãng mạn.",
-      "price": 900000,
-      "priceUnit": "VND",
-      "area": 35,
-      "maxGuestCount": 2,
-      "quantity": 10,
-      "averageRating": 4.9
-    },
     "addr": {
-      "normalFullAddress": "Tràng An, Hoa Lư, Ninh Bình",
       "fullAddress": "Thôn Tràng An, Xã Trường Yên, Hoa Lư, Ninh Bình, Việt Nam",
       "province": "Ninh Bình",
       "district": "Hoa Lư",
-      "region": "Miền Bắc",
       "country": "Việt Nam",
       "lat": 20.217993,
-      "lng": 105.94579
+      "lng": 105.94579,
+      "normalFullAddress": "thon trang an, xa truong yen, hoa lu, ninh binh, viet nam"
     },
-    "mediaUrls": [
-      "https://upload.wikimedia.org/wikipedia/commons/0/0f/Wetlands_Van_Long_Nature_Reserve_%2891315%29.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/3/3f/Pac_Ngoi_homestay.JPG",
-      "https://upload.wikimedia.org/wikipedia/commons/b/b7/Homestay_in_Khe_Ran_Village%2C_Con_Cuong%2C_Nghe_An%2C_Vietnam.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/2/2f/Formal_tea_set_and_incense_at_my_homestay_in_Vietnam_%283185111762%29.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/c/c0/Wetlands_Van_Long_Nature_Reserve_%2855851%29.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/1/1f/Vietnam_08_-_100_-_biking_An_Binh_Island_%283184134415%29.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/e/e5/Vietnam_08_-_091_-_my_homestay_%283184886982%29.jpg"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/0/0f/Wetlands_Van_Long_Nature_Reserve_%2891315%29.jpg",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Pac_Ngoi_homestay.JPG",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/b/b7/Homestay_in_Khe_Ran_Village%2C_Con_Cuong%2C_Nghe_An%2C_Vietnam.jpg",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Formal_tea_set_and_incense_at_my_homestay_in_Vietnam_%283185111762%29.jpg",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/c/c0/Wetlands_Van_Long_Nature_Reserve_%2855851%29.jpg",
+        "displayOrder": 5
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/1/1f/Vietnam_08_-_100_-_biking_An_Binh_Island_%283184134415%29.jpg",
+        "displayOrder": 6
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/e/e5/Vietnam_08_-_091_-_my_homestay_%283184886982%29.jpg",
+        "displayOrder": 7
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Wifi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Phòng Gym",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Tropical eGlamping",
+    "description": "Trải nghiệm lều Mông Cổ sát hồ Trị An.",
+    "price": 1200000,
+    "priceUnit": "VND",
+    "area": 500,
+    "maxGuestCount": 4,
+    "quantity": 20,
+    "averageRating": 4.8,
+    "isActive": true,
+    "ownerEmail": "caotan@test.com",
     "typeCode": "camping",
-    "loc": {
-      "name": "CampArt by #MợJen",
-      "description": "Khu glamping cao cấp bên hồ Tuyền Lâm.",
-      "price": 1500000,
-      "priceUnit": "VND",
-      "area": 400,
-      "maxGuestCount": 4,
-      "quantity": 15,
-      "averageRating": 4.9
-    },
     "addr": {
-      "normalFullAddress": "Khu du lịch Thung Lũng Vàng, Đà Lạt",
-      "fullAddress": "Khu du lịch Thung Lũng Vàng, Phường 7, Thành phố Đà Lạt, Lâm Đồng, Việt Nam",
-      "province": "Lâm Đồng",
-      "district": "Đà Lạt",
-      "region": "Tây Nguyên",
-      "country": "Việt Nam",
-      "lat": 11.996255,
-      "lng": 108.427087
-    },
-    "mediaUrls": [
-      "https://picsum.photos/seed/CampArtby#MợJen_0/800/600",
-      "https://picsum.photos/seed/CampArtby#MợJen_1/800/600",
-      "https://picsum.photos/seed/CampArtby#MợJen_2/800/600",
-      "https://picsum.photos/seed/CampArtby#MợJen_3/800/600",
-      "https://picsum.photos/seed/CampArtby#MợJen_4/800/600",
-      "https://picsum.photos/seed/CampArtby#MợJen_5/800/600",
-      "https://picsum.photos/seed/CampArtby#MợJen_6/800/600"
-    ]
-  },
-  {
-    "typeCode": "camping",
-    "loc": {
-      "name": "Tropical eGlamping",
-      "description": "Trải nghiệm lều Mông Cổ sát hồ Trị An.",
-      "price": 1200000,
-      "priceUnit": "VND",
-      "area": 500,
-      "maxGuestCount": 4,
-      "quantity": 20,
-      "averageRating": 4.8
-    },
-    "addr": {
-      "normalFullAddress": "La Ngà, Định Quán, Đồng Nai",
       "fullAddress": "Xã La Ngà, Huyện Định Quán, Đồng Nai, Việt Nam",
       "province": "Đồng Nai",
       "district": "Định Quán",
-      "region": "Miền Nam",
       "country": "Việt Nam",
       "lat": 11.167433,
-      "lng": 107.203028
+      "lng": 107.203028,
+      "normalFullAddress": "xa la nga, huyen dinh quan, dong nai, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/TropicaleGlamping_0/800/600",
-      "https://picsum.photos/seed/TropicaleGlamping_1/800/600",
-      "https://picsum.photos/seed/TropicaleGlamping_2/800/600",
-      "https://picsum.photos/seed/TropicaleGlamping_3/800/600",
-      "https://picsum.photos/seed/TropicaleGlamping_4/800/600",
-      "https://picsum.photos/seed/TropicaleGlamping_5/800/600",
-      "https://picsum.photos/seed/TropicaleGlamping_6/800/600",
-      "https://picsum.photos/seed/TropicaleGlamping_7/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TropicaleGlamping_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TropicaleGlamping_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TropicaleGlamping_2/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TropicaleGlamping_3/800/600",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TropicaleGlamping_4/800/600",
+        "displayOrder": 5
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TropicaleGlamping_5/800/600",
+        "displayOrder": 6
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TropicaleGlamping_6/800/600",
+        "displayOrder": 7
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/TropicaleGlamping_7/800/600",
+        "displayOrder": 8
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Wifi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Phòng Gym",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Yên Retreat",
+    "description": "Khu cắm trại thanh bình ven sông Cu Đê.",
+    "price": 1000000,
+    "priceUnit": "VND",
+    "area": 300,
+    "maxGuestCount": 4,
+    "quantity": 12,
+    "averageRating": 4.7,
+    "isActive": true,
+    "ownerEmail": "owner@test.com",
     "typeCode": "camping",
-    "loc": {
-      "name": "Yên Retreat",
-      "description": "Khu cắm trại thanh bình ven sông Cu Đê.",
-      "price": 1000000,
-      "priceUnit": "VND",
-      "area": 300,
-      "maxGuestCount": 4,
-      "quantity": 12,
-      "averageRating": 4.7
-    },
     "addr": {
-      "normalFullAddress": "Hòa Bắc, Hòa Vang, Đà Nẵng",
       "fullAddress": "Nam Yên, Hòa Bắc, Hòa Vang, Đà Nẵng, Việt Nam",
       "province": "Đà Nẵng",
       "district": "Hòa Vang",
-      "region": "Miền Trung",
       "country": "Việt Nam",
       "lat": 16.137782,
-      "lng": 108.058213
+      "lng": 108.058213,
+      "normalFullAddress": "nam yen, hoa bac, hoa vang, da nang, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/YênRetreat_0/800/600",
-      "https://picsum.photos/seed/YênRetreat_1/800/600",
-      "https://picsum.photos/seed/YênRetreat_2/800/600",
-      "https://picsum.photos/seed/YênRetreat_3/800/600",
-      "https://picsum.photos/seed/YênRetreat_4/800/600",
-      "https://picsum.photos/seed/YênRetreat_5/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/YênRetreat_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/YênRetreat_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/YênRetreat_2/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/YênRetreat_3/800/600",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/YênRetreat_4/800/600",
+        "displayOrder": 5
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/YênRetreat_5/800/600",
+        "displayOrder": 6
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Phòng Gym",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Spa & Massage",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Pi glamping",
+    "description": "Khu cắm trại rừng dương sát biển.",
+    "price": 500000,
+    "priceUnit": "VND",
+    "area": 200,
+    "maxGuestCount": 6,
+    "quantity": 30,
+    "averageRating": 4.5,
+    "isActive": true,
+    "ownerEmail": "caotan@test.com",
     "typeCode": "camping",
-    "loc": {
-      "name": "Zenna Pool Camp",
-      "description": "Khu cắm trại rừng dương sát biển.",
-      "price": 500000,
-      "priceUnit": "VND",
-      "area": 200,
-      "maxGuestCount": 6,
-      "quantity": 30,
-      "averageRating": 4.5
-    },
     "addr": {
-      "normalFullAddress": "Phước Tỉnh, Long Điền, Bà Rịa - Vũng Tàu",
       "fullAddress": "Tổ 3 Ấp Tân Phước, Phước Tỉnh, Long Điền, Bà Rịa - Vũng Tàu, Việt Nam",
       "province": "Bà Rịa - Vũng Tàu",
       "district": "Long Điền",
-      "region": "Miền Nam",
       "country": "Việt Nam",
       "lat": 10.403616,
-      "lng": 107.188997
+      "lng": 107.188997,
+      "normalFullAddress": "to 3 ap tan phuoc, phuoc tinh, long dien, ba ria vung tau, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/ZennaPoolCamp_0/800/600",
-      "https://picsum.photos/seed/ZennaPoolCamp_1/800/600",
-      "https://picsum.photos/seed/ZennaPoolCamp_2/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/ZennaPoolCamp_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/ZennaPoolCamp_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/ZennaPoolCamp_2/800/600",
+        "displayOrder": 3
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Wifi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Spa & Massage",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Sơn Tinh Camp",
+    "description": "Cắm trại team building tại Đồng Mô.",
+    "price": 300000,
+    "priceUnit": "VND",
+    "area": 1000,
+    "maxGuestCount": 10,
+    "quantity": 50,
+    "averageRating": 4.3,
+    "isActive": true,
+    "ownerEmail": "owner@test.com",
     "typeCode": "camping",
-    "loc": {
-      "name": "Sơn Tinh Camp",
-      "description": "Cắm trại team building tại Đồng Mô.",
-      "price": 300000,
-      "priceUnit": "VND",
-      "area": 1000,
-      "maxGuestCount": 10,
-      "quantity": 50,
-      "averageRating": 4.3
-    },
     "addr": {
-      "normalFullAddress": "Khu du lịch Đồng Mô, Sơn Tây, Hà Nội",
       "fullAddress": "Khu du lịch Đồng Mô, Thị xã Sơn Tây, Hà Nội, Việt Nam",
       "province": "Hà Nội",
       "district": "Sơn Tây",
-      "region": "Miền Bắc",
       "country": "Việt Nam",
       "lat": 21.048759,
-      "lng": 105.400005
+      "lng": 105.400005,
+      "normalFullAddress": "khu du lich dong mo, thi xa son tay, ha noi, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/SơnTinhCamp_0/800/600",
-      "https://picsum.photos/seed/SơnTinhCamp_1/800/600",
-      "https://picsum.photos/seed/SơnTinhCamp_2/800/600",
-      "https://picsum.photos/seed/SơnTinhCamp_3/800/600",
-      "https://picsum.photos/seed/SơnTinhCamp_4/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SơnTinhCamp_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SơnTinhCamp_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SơnTinhCamp_2/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SơnTinhCamp_3/800/600",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SơnTinhCamp_4/800/600",
+        "displayOrder": 5
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Wifi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Spa & Massage",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "InterContinental Danang Sun Peninsula Resort",
+    "description": "Resort hạng sang bậc nhất trên bán đảo Sơn Trà.",
+    "price": 15000000,
+    "priceUnit": "VND",
+    "area": 120,
+    "maxGuestCount": 2,
+    "quantity": 200,
+    "averageRating": 5,
+    "isActive": true,
+    "ownerEmail": "caotan@test.com",
     "typeCode": "resort",
-    "loc": {
-      "name": "InterContinental Danang Sun Peninsula Resort",
-      "description": "Resort hạng sang bậc nhất trên bán đảo Sơn Trà.",
-      "price": 15000000,
-      "priceUnit": "VND",
-      "area": 120,
-      "maxGuestCount": 2,
-      "quantity": 200,
-      "averageRating": 5
-    },
     "addr": {
-      "normalFullAddress": "Bãi Bắc, Sơn Trà, Đà Nẵng",
       "fullAddress": "Bãi Bắc, Bán đảo Sơn Trà, Thọ Quang, Sơn Trà, Đà Nẵng, Việt Nam",
       "province": "Đà Nẵng",
       "district": "Sơn Trà",
-      "region": "Miền Trung",
       "country": "Việt Nam",
       "lat": 16.120827,
-      "lng": 108.306215
+      "lng": 108.306215,
+      "normalFullAddress": "bai bac, ban dao son tra, tho quang, son tra, da nang, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/InterContinentalDanangSunPeninsulaResort_0/800/600",
-      "https://picsum.photos/seed/InterContinentalDanangSunPeninsulaResort_1/800/600",
-      "https://picsum.photos/seed/InterContinentalDanangSunPeninsulaResort_2/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/InterContinentalDanangSunPeninsulaResort_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/InterContinentalDanangSunPeninsulaResort_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/InterContinentalDanangSunPeninsulaResort_2/800/600",
+        "displayOrder": 3
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Phòng Gym",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Spa & Massage",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "JW Marriott Phu Quoc Emerald Bay",
+    "description": "Tuyệt tác nghỉ dưỡng do Bill Bensley thiết kế.",
+    "price": 9500000,
+    "priceUnit": "VND",
+    "area": 100,
+    "maxGuestCount": 2,
+    "quantity": 234,
+    "averageRating": 4.9,
+    "isActive": true,
+    "ownerEmail": "owner@test.com",
     "typeCode": "resort",
-    "loc": {
-      "name": "JW Marriott Phu Quoc Emerald Bay",
-      "description": "Tuyệt tác nghỉ dưỡng do Bill Bensley thiết kế.",
-      "price": 9500000,
-      "priceUnit": "VND",
-      "area": 100,
-      "maxGuestCount": 2,
-      "quantity": 234,
-      "averageRating": 4.9
-    },
     "addr": {
-      "normalFullAddress": "Bãi Kem, An Thới, Phú Quốc",
       "fullAddress": "Khu du lịch Bãi Kem, Phường An Thới, Thành phố Phú Quốc, Kiên Giang, Việt Nam",
       "province": "Kiên Giang",
       "district": "Phú Quốc",
-      "region": "Miền Nam",
       "country": "Việt Nam",
       "lat": 10.033262,
-      "lng": 104.028408
+      "lng": 104.028408,
+      "normalFullAddress": "khu du lich bai kem, phuong an thoi, thanh pho phu quoc, kien giang, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/JWMarriottPhuQuocEmeraldBay_0/800/600",
-      "https://picsum.photos/seed/JWMarriottPhuQuocEmeraldBay_1/800/600",
-      "https://picsum.photos/seed/JWMarriottPhuQuocEmeraldBay_2/800/600",
-      "https://picsum.photos/seed/JWMarriottPhuQuocEmeraldBay_3/800/600",
-      "https://picsum.photos/seed/JWMarriottPhuQuocEmeraldBay_4/800/600",
-      "https://picsum.photos/seed/JWMarriottPhuQuocEmeraldBay_5/800/600",
-      "https://picsum.photos/seed/JWMarriottPhuQuocEmeraldBay_6/800/600",
-      "https://picsum.photos/seed/JWMarriottPhuQuocEmeraldBay_7/800/600",
-      "https://picsum.photos/seed/JWMarriottPhuQuocEmeraldBay_8/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/JWMarriottPhuQuocEmeraldBay_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/JWMarriottPhuQuocEmeraldBay_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/JWMarriottPhuQuocEmeraldBay_2/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/JWMarriottPhuQuocEmeraldBay_3/800/600",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/JWMarriottPhuQuocEmeraldBay_4/800/600",
+        "displayOrder": 5
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/JWMarriottPhuQuocEmeraldBay_5/800/600",
+        "displayOrder": 6
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/JWMarriottPhuQuocEmeraldBay_6/800/600",
+        "displayOrder": 7
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/JWMarriottPhuQuocEmeraldBay_7/800/600",
+        "displayOrder": 8
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/JWMarriottPhuQuocEmeraldBay_8/800/600",
+        "displayOrder": 9
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Wifi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Six Senses Ninh Van Bay",
+    "description": "Khu nghỉ dưỡng sinh thái biệt lập đẳng cấp.",
+    "price": 18000000,
+    "priceUnit": "VND",
+    "area": 250,
+    "maxGuestCount": 2,
+    "quantity": 62,
+    "averageRating": 5,
+    "isActive": true,
+    "ownerEmail": "caotan@test.com",
     "typeCode": "resort",
-    "loc": {
-      "name": "Six Senses Ninh Van Bay",
-      "description": "Khu nghỉ dưỡng sinh thái biệt lập đẳng cấp.",
-      "price": 18000000,
-      "priceUnit": "VND",
-      "area": 250,
-      "maxGuestCount": 2,
-      "quantity": 62,
-      "averageRating": 5
-    },
     "addr": {
-      "normalFullAddress": "Vịnh Ninh Vân, Ninh Hòa, Khánh Hòa",
       "fullAddress": "Vịnh Ninh Vân, Thị xã Ninh Hòa, Khánh Hòa, Việt Nam",
       "province": "Khánh Hòa",
       "district": "Ninh Hòa",
-      "region": "Miền Trung",
       "country": "Việt Nam",
       "lat": 12.35894,
-      "lng": 109.277685
+      "lng": 109.277685,
+      "normalFullAddress": "vinh ninh van, thi xa ninh hoa, khanh hoa, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/SixSensesNinhVanBay_0/800/600",
-      "https://picsum.photos/seed/SixSensesNinhVanBay_1/800/600",
-      "https://picsum.photos/seed/SixSensesNinhVanBay_2/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SixSensesNinhVanBay_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SixSensesNinhVanBay_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SixSensesNinhVanBay_2/800/600",
+        "displayOrder": 3
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Phòng Gym",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Flamingo Dai Lai Resort",
+    "description": "Resort nổi tiếng với kiến trúc xanh.",
+    "price": 2500000,
+    "priceUnit": "VND",
+    "area": 80,
+    "maxGuestCount": 2,
+    "quantity": 300,
+    "averageRating": 4.7,
+    "isActive": true,
+    "ownerEmail": "owner@test.com",
     "typeCode": "resort",
-    "loc": {
-      "name": "Flamingo Dai Lai Resort",
-      "description": "Resort nổi tiếng với kiến trúc xanh.",
-      "price": 2500000,
-      "priceUnit": "VND",
-      "area": 80,
-      "maxGuestCount": 2,
-      "quantity": 300,
-      "averageRating": 4.7
-    },
     "addr": {
-      "normalFullAddress": "Ngọc Thanh, Phúc Yên, Vĩnh Phúc",
       "fullAddress": "Xã Ngọc Thanh, Thành phố Phúc Yên, Vĩnh Phúc, Việt Nam",
       "province": "Vĩnh Phúc",
       "district": "Phúc Yên",
-      "region": "Miền Bắc",
       "country": "Việt Nam",
       "lat": 21.343665,
-      "lng": 105.718445
+      "lng": 105.718445,
+      "normalFullAddress": "xa ngoc thanh, thanh pho phuc yen, vinh phuc, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/FlamingoDaiLaiResort_0/800/600",
-      "https://picsum.photos/seed/FlamingoDaiLaiResort_1/800/600",
-      "https://picsum.photos/seed/FlamingoDaiLaiResort_2/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/FlamingoDaiLaiResort_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/FlamingoDaiLaiResort_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/FlamingoDaiLaiResort_2/800/600",
+        "displayOrder": 3
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Phòng Gym",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Amanoi Vinh Hy",
+    "description": "Khu nghỉ dưỡng xa xỉ nằm gọn trong Vườn Quốc gia Núi Chúa.",
+    "price": 25000000,
+    "priceUnit": "VND",
+    "area": 300,
+    "maxGuestCount": 2,
+    "quantity": 36,
+    "averageRating": 5,
+    "isActive": true,
+    "ownerEmail": "caotan@test.com",
     "typeCode": "resort",
-    "loc": {
-      "name": "Amanoi Vinh Hy",
-      "description": "Khu nghỉ dưỡng xa xỉ nằm gọn trong Vườn Quốc gia Núi Chúa.",
-      "price": 25000000,
-      "priceUnit": "VND",
-      "area": 300,
-      "maxGuestCount": 2,
-      "quantity": 36,
-      "averageRating": 5
-    },
     "addr": {
-      "normalFullAddress": "Vĩnh Hải, Ninh Hải, Ninh Thuận",
       "fullAddress": "Thôn Vĩnh Hy, Xã Vĩnh Hải, Huyện Ninh Hải, Ninh Thuận, Việt Nam",
       "province": "Ninh Thuận",
       "district": "Ninh Hải",
-      "region": "Miền Trung",
       "country": "Việt Nam",
       "lat": 11.709408,
-      "lng": 109.197635
+      "lng": 109.197635,
+      "normalFullAddress": "thon vinh hy, xa vinh hai, huyen ninh hai, ninh thuan, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/AmanoiVinhHy_0/800/600",
-      "https://picsum.photos/seed/AmanoiVinhHy_1/800/600",
-      "https://picsum.photos/seed/AmanoiVinhHy_2/800/600",
-      "https://picsum.photos/seed/AmanoiVinhHy_3/800/600",
-      "https://picsum.photos/seed/AmanoiVinhHy_4/800/600",
-      "https://picsum.photos/seed/AmanoiVinhHy_5/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/AmanoiVinhHy_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/AmanoiVinhHy_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/AmanoiVinhHy_2/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/AmanoiVinhHy_3/800/600",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/AmanoiVinhHy_4/800/600",
+        "displayOrder": 5
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/AmanoiVinhHy_5/800/600",
+        "displayOrder": 6
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Wifi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "FLC Halong Bay Villa",
+    "description": "Biệt thự nghỉ dưỡng view Vịnh Hạ Long.",
+    "price": 8000000,
+    "priceUnit": "VND",
+    "area": 350,
+    "maxGuestCount": 8,
+    "quantity": 50,
+    "averageRating": 4.8,
+    "isActive": true,
+    "ownerEmail": "owner@test.com",
     "typeCode": "villa",
-    "loc": {
-      "name": "FLC Halong Bay Villa",
-      "description": "Biệt thự nghỉ dưỡng view Vịnh Hạ Long.",
-      "price": 8000000,
-      "priceUnit": "VND",
-      "area": 350,
-      "maxGuestCount": 8,
-      "quantity": 50,
-      "averageRating": 4.8
-    },
     "addr": {
-      "normalFullAddress": "Đoàn Kết, Hạ Long, Quảng Ninh",
       "fullAddress": "Ngõ 16 Nguyễn Văn Cừ, Hồng Hải, Thành phố Hạ Long, Quảng Ninh, Việt Nam",
       "province": "Quảng Ninh",
       "district": "Hạ Long",
-      "region": "Miền Bắc",
       "country": "Việt Nam",
       "lat": 20.954019,
-      "lng": 107.111993
+      "lng": 107.111993,
+      "normalFullAddress": "ngo 16 nguyen van cu, hong hai, thanh pho ha long, quang ninh, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/FLCHalongBayVilla_0/800/600",
-      "https://picsum.photos/seed/FLCHalongBayVilla_1/800/600",
-      "https://picsum.photos/seed/FLCHalongBayVilla_2/800/600",
-      "https://picsum.photos/seed/FLCHalongBayVilla_3/800/600",
-      "https://picsum.photos/seed/FLCHalongBayVilla_4/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/FLCHalongBayVilla_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/FLCHalongBayVilla_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/FLCHalongBayVilla_2/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/FLCHalongBayVilla_3/800/600",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/FLCHalongBayVilla_4/800/600",
+        "displayOrder": 5
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Vinpearl Discovery Nha Trang Villa",
+    "description": "Biệt thự hồ bơi riêng sang trọng.",
+    "price": 12000000,
+    "priceUnit": "VND",
+    "area": 400,
+    "maxGuestCount": 10,
+    "quantity": 100,
+    "averageRating": 4.8,
+    "isActive": true,
+    "ownerEmail": "caotan@test.com",
     "typeCode": "villa",
-    "loc": {
-      "name": "Vinpearl Discovery Nha Trang Villa",
-      "description": "Biệt thự hồ bơi riêng sang trọng.",
-      "price": 12000000,
-      "priceUnit": "VND",
-      "area": 400,
-      "maxGuestCount": 10,
-      "quantity": 100,
-      "averageRating": 4.8
-    },
     "addr": {
-      "normalFullAddress": "Đảo Hòn Tre, Nha Trang, Khánh Hòa",
       "fullAddress": "Đảo Hòn Tre, Vĩnh Nguyên, Nha Trang, Khánh Hòa, Việt Nam",
       "province": "Khánh Hòa",
       "district": "Nha Trang",
-      "region": "Miền Trung",
       "country": "Việt Nam",
       "lat": 12.217217,
-      "lng": 109.243519
+      "lng": 109.243519,
+      "normalFullAddress": "dao hon tre, vinh nguyen, nha trang, khanh hoa, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/VinpearlDiscoveryNhaTrangVilla_0/800/600",
-      "https://picsum.photos/seed/VinpearlDiscoveryNhaTrangVilla_1/800/600",
-      "https://picsum.photos/seed/VinpearlDiscoveryNhaTrangVilla_2/800/600",
-      "https://picsum.photos/seed/VinpearlDiscoveryNhaTrangVilla_3/800/600",
-      "https://picsum.photos/seed/VinpearlDiscoveryNhaTrangVilla_4/800/600",
-      "https://picsum.photos/seed/VinpearlDiscoveryNhaTrangVilla_5/800/600",
-      "https://picsum.photos/seed/VinpearlDiscoveryNhaTrangVilla_6/800/600",
-      "https://picsum.photos/seed/VinpearlDiscoveryNhaTrangVilla_7/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/VinpearlDiscoveryNhaTrangVilla_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/VinpearlDiscoveryNhaTrangVilla_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/VinpearlDiscoveryNhaTrangVilla_2/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/VinpearlDiscoveryNhaTrangVilla_3/800/600",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/VinpearlDiscoveryNhaTrangVilla_4/800/600",
+        "displayOrder": 5
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/VinpearlDiscoveryNhaTrangVilla_5/800/600",
+        "displayOrder": 6
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/VinpearlDiscoveryNhaTrangVilla_6/800/600",
+        "displayOrder": 7
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/VinpearlDiscoveryNhaTrangVilla_7/800/600",
+        "displayOrder": 8
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Phòng Gym",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Premier Village Phu Quoc Resort Villa",
+    "description": "Biệt thự hai mặt biển độc đáo tại Mũi Ông Đội.",
+    "price": 15000000,
+    "priceUnit": "VND",
+    "area": 500,
+    "maxGuestCount": 8,
+    "quantity": 75,
+    "averageRating": 4.9,
+    "isActive": true,
+    "ownerEmail": "owner@test.com",
     "typeCode": "villa",
-    "loc": {
-      "name": "Premier Village Phu Quoc Resort Villa",
-      "description": "Biệt thự hai mặt biển độc đáo tại Mũi Ông Đội.",
-      "price": 15000000,
-      "priceUnit": "VND",
-      "area": 500,
-      "maxGuestCount": 8,
-      "quantity": 75,
-      "averageRating": 4.9
-    },
     "addr": {
-      "normalFullAddress": "Mũi Ông Đội, An Thới, Phú Quốc",
       "fullAddress": "Mũi Ông Đội, Phường An Thới, Thành phố Phú Quốc, Kiên Giang, Việt Nam",
       "province": "Kiên Giang",
       "district": "Phú Quốc",
-      "region": "Miền Nam",
       "country": "Việt Nam",
       "lat": 10.015977,
-      "lng": 104.039222
+      "lng": 104.039222,
+      "normalFullAddress": "mui ong doi, phuong an thoi, thanh pho phu quoc, kien giang, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/PremierVillagePhuQuocResortVilla_0/800/600",
-      "https://picsum.photos/seed/PremierVillagePhuQuocResortVilla_1/800/600",
-      "https://picsum.photos/seed/PremierVillagePhuQuocResortVilla_2/800/600",
-      "https://picsum.photos/seed/PremierVillagePhuQuocResortVilla_3/800/600",
-      "https://picsum.photos/seed/PremierVillagePhuQuocResortVilla_4/800/600",
-      "https://picsum.photos/seed/PremierVillagePhuQuocResortVilla_5/800/600",
-      "https://picsum.photos/seed/PremierVillagePhuQuocResortVilla_6/800/600",
-      "https://picsum.photos/seed/PremierVillagePhuQuocResortVilla_7/800/600",
-      "https://picsum.photos/seed/PremierVillagePhuQuocResortVilla_8/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/PremierVillagePhuQuocResortVilla_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/PremierVillagePhuQuocResortVilla_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/PremierVillagePhuQuocResortVilla_2/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/PremierVillagePhuQuocResortVilla_3/800/600",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/PremierVillagePhuQuocResortVilla_4/800/600",
+        "displayOrder": 5
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/PremierVillagePhuQuocResortVilla_5/800/600",
+        "displayOrder": 6
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/PremierVillagePhuQuocResortVilla_6/800/600",
+        "displayOrder": 7
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/PremierVillagePhuQuocResortVilla_7/800/600",
+        "displayOrder": 8
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/PremierVillagePhuQuocResortVilla_8/800/600",
+        "displayOrder": 9
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Wifi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Melia Ho Tram Beach Resort Villa",
+    "description": "Biệt thự chuẩn 5 sao kề biển Hồ Tràm.",
+    "price": 11000000,
+    "priceUnit": "VND",
+    "area": 300,
+    "maxGuestCount": 6,
+    "quantity": 60,
+    "averageRating": 4.8,
+    "isActive": true,
+    "ownerEmail": "caotan@test.com",
     "typeCode": "villa",
-    "loc": {
-      "name": "Melia Ho Tram Beach Resort Villa",
-      "description": "Biệt thự chuẩn 5 sao kề biển Hồ Tràm.",
-      "price": 11000000,
-      "priceUnit": "VND",
-      "area": 300,
-      "maxGuestCount": 6,
-      "quantity": 60,
-      "averageRating": 4.8
-    },
     "addr": {
-      "normalFullAddress": "Đường Ven Biển, Xuyên Mộc, Bà Rịa - Vũng Tàu",
       "fullAddress": "Ấp Hồ Tràm, Xã Phước Thuận, Huyện Xuyên Mộc, Bà Rịa - Vũng Tàu, Việt Nam",
       "province": "Bà Rịa - Vũng Tàu",
       "district": "Xuyên Mộc",
-      "region": "Miền Nam",
       "country": "Việt Nam",
       "lat": 10.471804,
-      "lng": 107.386394
+      "lng": 107.386394,
+      "normalFullAddress": "ap ho tram, xa phuoc thuan, huyen xuyen moc, ba ria vung tau, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/MeliaHoTramBeachResortVilla_0/800/600",
-      "https://picsum.photos/seed/MeliaHoTramBeachResortVilla_1/800/600",
-      "https://picsum.photos/seed/MeliaHoTramBeachResortVilla_2/800/600",
-      "https://picsum.photos/seed/MeliaHoTramBeachResortVilla_3/800/600",
-      "https://picsum.photos/seed/MeliaHoTramBeachResortVilla_4/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/MeliaHoTramBeachResortVilla_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/MeliaHoTramBeachResortVilla_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/MeliaHoTramBeachResortVilla_2/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/MeliaHoTramBeachResortVilla_3/800/600",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/MeliaHoTramBeachResortVilla_4/800/600",
+        "displayOrder": 5
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Phòng Gym",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Dalat Edensee Lake Resort Villa",
+    "description": "Biệt thự kiến trúc Pháp cổ bên hồ Tuyền Lâm.",
+    "price": 5000000,
+    "priceUnit": "VND",
+    "area": 250,
+    "maxGuestCount": 4,
+    "quantity": 40,
+    "averageRating": 4.7,
+    "isActive": true,
+    "ownerEmail": "owner@test.com",
     "typeCode": "villa",
-    "loc": {
-      "name": "Dalat Edensee Lake Resort Villa",
-      "description": "Biệt thự kiến trúc Pháp cổ bên hồ Tuyền Lâm.",
-      "price": 5000000,
-      "priceUnit": "VND",
-      "area": 250,
-      "maxGuestCount": 4,
-      "quantity": 40,
-      "averageRating": 4.7
-    },
     "addr": {
-      "normalFullAddress": "Khu chức năng VII.2, Hồ Tuyền Lâm, Đà Lạt",
       "fullAddress": "Khu chức năng VII.2, KDL Hồ Tuyền Lâm, Phường 3, Đà Lạt, Lâm Đồng, Việt Nam",
       "province": "Lâm Đồng",
       "district": "Đà Lạt",
-      "region": "Tây Nguyên",
       "country": "Việt Nam",
       "lat": 11.886827,
-      "lng": 108.423502
+      "lng": 108.423502,
+      "normalFullAddress": "khu chuc nang vii2, kdl ho tuyen lam, phuong 3, da lat, lam dong, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/DalatEdenseeLakeResortVilla_0/800/600",
-      "https://picsum.photos/seed/DalatEdenseeLakeResortVilla_1/800/600",
-      "https://picsum.photos/seed/DalatEdenseeLakeResortVilla_2/800/600",
-      "https://picsum.photos/seed/DalatEdenseeLakeResortVilla_3/800/600",
-      "https://picsum.photos/seed/DalatEdenseeLakeResortVilla_4/800/600",
-      "https://picsum.photos/seed/DalatEdenseeLakeResortVilla_5/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/DalatEdenseeLakeResortVilla_0/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/DalatEdenseeLakeResortVilla_1/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/DalatEdenseeLakeResortVilla_2/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/DalatEdenseeLakeResortVilla_3/800/600",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/DalatEdenseeLakeResortVilla_4/800/600",
+        "displayOrder": 5
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/DalatEdenseeLakeResortVilla_5/800/600",
+        "displayOrder": 6
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Wifi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Sapa Backpackers Guesthouse",
+    "description": "Nhà nghỉ dành cho Tây ba lô, ngay trung tâm thị xã.",
+    "price": 2000,
+    "priceUnit": "VND",
+    "area": 15,
+    "maxGuestCount": 2,
+    "quantity": 10,
+    "averageRating": 4.2,
+    "isActive": true,
+    "ownerEmail": "caotan@test.com",
     "typeCode": "guesthouse",
-    "loc": {
-      "name": "Sapa Backpackers Guesthouse",
-      "description": "Nhà nghỉ dành cho Tây ba lô, ngay trung tâm thị xã.",
-      "price": 200000,
-      "priceUnit": "VND",
-      "area": 15,
-      "maxGuestCount": 2,
-      "quantity": 10,
-      "averageRating": 4.2
-    },
     "addr": {
-      "normalFullAddress": "06 Xuân Viên, Sa Pa, Lào Cai",
       "fullAddress": "06 Xuân Viên, Thị xã Sa Pa, Lào Cai, Việt Nam",
       "province": "Lào Cai",
       "district": "Sa Pa",
-      "region": "Miền Bắc",
       "country": "Việt Nam",
       "lat": 22.333842,
-      "lng": 103.842911
+      "lng": 103.842911,
+      "normalFullAddress": "06 xuan vien, thi xa sa pa, lao cai, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/SapaBackpackers1/800/600",
-      "https://picsum.photos/seed/SapaBackpackers2/800/600",
-      "https://picsum.photos/seed/SapaBackpackers3/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SapaBackpackers1/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SapaBackpackers2/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SapaBackpackers3/800/600",
+        "displayOrder": 3
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Wifi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Spa & Massage",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Hue Family Boutique Guesthouse",
+    "description": "Nhà nghỉ nhỏ nhắn, xinh xắn và hiếu khách ở Huế.",
+    "price": 350000,
+    "priceUnit": "VND",
+    "area": 22,
+    "maxGuestCount": 3,
+    "quantity": 8,
+    "averageRating": 4.6,
+    "isActive": true,
+    "ownerEmail": "owner@test.com",
     "typeCode": "guesthouse",
-    "loc": {
-      "name": "Hue Family Boutique Guesthouse",
-      "description": "Nhà nghỉ nhỏ nhắn, xinh xắn và hiếu khách ở Huế.",
-      "price": 350000,
-      "priceUnit": "VND",
-      "area": 22,
-      "maxGuestCount": 3,
-      "quantity": 8,
-      "averageRating": 4.6
-    },
     "addr": {
-      "normalFullAddress": "12 Bến Nghé, Phú Hội, Huế",
       "fullAddress": "12 Bến Nghé, Phú Hội, Thành phố Huế, Thừa Thiên Huế, Việt Nam",
       "province": "Thừa Thiên Huế",
       "district": "Huế",
-      "region": "Miền Trung",
       "country": "Việt Nam",
       "lat": 16.471913,
-      "lng": 107.595118
+      "lng": 107.595118,
+      "normalFullAddress": "12 ben nghe, phu hoi, thanh pho hue, thua thien hue, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/HueFamily1/800/600",
-      "https://picsum.photos/seed/HueFamily2/800/600",
-      "https://picsum.photos/seed/HueFamily3/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/HueFamily1/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/HueFamily2/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/HueFamily3/800/600",
+        "displayOrder": 3
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Wifi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Spa & Massage",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Muong Thanh Luxury Can Tho Hotel",
+    "description": "Khách sạn 5 sao cao nhất Cần Thơ, view cầu Cần Thơ tuyệt đẹp.",
+    "price": 1500000,
+    "priceUnit": "VND",
+    "area": 40,
+    "maxGuestCount": 2,
+    "quantity": 300,
+    "averageRating": 4.5,
+    "isActive": true,
+    "ownerEmail": "caotan@test.com",
     "typeCode": "hotel",
-    "loc": {
-      "name": "Muong Thanh Luxury Can Tho Hotel",
-      "description": "Khách sạn 5 sao cao nhất Cần Thơ, view cầu Cần Thơ tuyệt đẹp.",
-      "price": 1500000,
-      "priceUnit": "VND",
-      "area": 40,
-      "maxGuestCount": 2,
-      "quantity": 300,
-      "averageRating": 4.5
-    },
     "addr": {
-      "normalFullAddress": "Khu E1, Cái Khế, Ninh Kiều, Cần Thơ",
       "fullAddress": "Khu E1, Cồn Cái Khế, Phường Cái Khế, Quận Ninh Kiều, Cần Thơ, Việt Nam",
       "province": "Cần Thơ",
       "district": "Ninh Kiều",
-      "region": "Miền Nam",
       "country": "Việt Nam",
       "lat": 10.042486,
-      "lng": 105.790335
+      "lng": 105.790335,
+      "normalFullAddress": "khu e1, con cai khe, phuong cai khe, quan ninh kieu, can tho, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/MuongThanhCanTho1/800/600",
-      "https://picsum.photos/seed/MuongThanhCanTho2/800/600",
-      "https://picsum.photos/seed/MuongThanhCanTho3/800/600",
-      "https://picsum.photos/seed/MuongThanhCanTho4/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/MuongThanhCanTho1/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/MuongThanhCanTho2/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/MuongThanhCanTho3/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/MuongThanhCanTho4/800/600",
+        "displayOrder": 4
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "The Reverie Saigon",
+    "description": "Khách sạn sang trọng bậc nhất Sài Gòn mang phong cách hoàng gia Ý.",
+    "price": 8500000,
+    "priceUnit": "VND",
+    "area": 55,
+    "maxGuestCount": 2,
+    "quantity": 286,
+    "averageRating": 4.9,
+    "isActive": true,
+    "ownerEmail": "owner@test.com",
     "typeCode": "hotel",
-    "loc": {
-      "name": "The Reverie Saigon",
-      "description": "Khách sạn sang trọng bậc nhất Sài Gòn mang phong cách hoàng gia Ý.",
-      "price": 8500000,
-      "priceUnit": "VND",
-      "area": 55,
-      "maxGuestCount": 2,
-      "quantity": 286,
-      "averageRating": 4.9
-    },
     "addr": {
-      "normalFullAddress": "22-36 Nguyễn Huệ, Quận 1, Hồ Chí Minh",
       "fullAddress": "22-36 Nguyễn Huệ, Phường Bến Nghé, Quận 1, Hồ Chí Minh, Việt Nam",
       "province": "Hồ Chí Minh",
       "district": "Quận 1",
-      "region": "Miền Nam",
       "country": "Việt Nam",
       "lat": 10.773681,
-      "lng": 106.704652
+      "lng": 106.704652,
+      "normalFullAddress": "22 36 nguyen hue, phuong ben nghe, quan 1, ho chi minh, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/ReverieSaigon1/800/600",
-      "https://picsum.photos/seed/ReverieSaigon2/800/600",
-      "https://picsum.photos/seed/ReverieSaigon3/800/600",
-      "https://picsum.photos/seed/ReverieSaigon4/800/600",
-      "https://picsum.photos/seed/ReverieSaigon5/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/ReverieSaigon1/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/ReverieSaigon2/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/ReverieSaigon3/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/ReverieSaigon4/800/600",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/ReverieSaigon5/800/600",
+        "displayOrder": 5
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Wifi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Phòng Gym",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Hotel Royal Hoi An - MGallery",
+    "description": "Khách sạn bên bờ sông Thu Bồn kết hợp kiến trúc Nhật và Việt.",
+    "price": 3200000,
+    "priceUnit": "VND",
+    "area": 42,
+    "maxGuestCount": 2,
+    "quantity": 187,
+    "averageRating": 4.8,
+    "isActive": true,
+    "ownerEmail": "caotan@test.com",
     "typeCode": "hotel",
-    "loc": {
-      "name": "Hotel Royal Hoi An - MGallery",
-      "description": "Khách sạn bên bờ sông Thu Bồn kết hợp kiến trúc Nhật và Việt.",
-      "price": 3200000,
-      "priceUnit": "VND",
-      "area": 42,
-      "maxGuestCount": 2,
-      "quantity": 187,
-      "averageRating": 4.8
-    },
     "addr": {
-      "normalFullAddress": "39 Đào Duy Từ, Cẩm Phô, Hội An",
       "fullAddress": "39 Đào Duy Từ, Phường Cẩm Phô, Thành phố Hội An, Quảng Nam, Việt Nam",
       "province": "Quảng Nam",
       "district": "Hội An",
-      "region": "Miền Trung",
       "country": "Việt Nam",
       "lat": 15.876671,
-      "lng": 108.319842
+      "lng": 108.319842,
+      "normalFullAddress": "39 dao duy tu, phuong cam pho, thanh pho hoi an, quang nam, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/RoyalHoiAn1/800/600",
-      "https://picsum.photos/seed/RoyalHoiAn2/800/600",
-      "https://picsum.photos/seed/RoyalHoiAn3/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/RoyalHoiAn1/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/RoyalHoiAn2/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/RoyalHoiAn3/800/600",
+        "displayOrder": 3
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Phòng Gym",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Spa & Massage",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Old Town House Hoi An",
+    "description": "Căn nhà cổ truyền thống nằm ngay trung tâm phố cổ Hội An.",
+    "price": 1800000,
+    "priceUnit": "VND",
+    "area": 100,
+    "maxGuestCount": 6,
+    "quantity": 1,
+    "averageRating": 4.9,
+    "isActive": true,
+    "ownerEmail": "owner@test.com",
     "typeCode": "house",
-    "loc": {
-      "name": "Old Town House Hoi An",
-      "description": "Căn nhà cổ truyền thống nằm ngay trung tâm phố cổ Hội An.",
-      "price": 1800000,
-      "priceUnit": "VND",
-      "area": 100,
-      "maxGuestCount": 6,
-      "quantity": 1,
-      "averageRating": 4.9
-    },
     "addr": {
-      "normalFullAddress": "100 Trần Phú, Minh An, Hội An",
       "fullAddress": "100 Trần Phú, Phường Minh An, Thành phố Hội An, Quảng Nam, Việt Nam",
       "province": "Quảng Nam",
       "district": "Hội An",
-      "region": "Miền Trung",
       "country": "Việt Nam",
       "lat": 15.876482,
-      "lng": 108.327766
+      "lng": 108.327766,
+      "normalFullAddress": "100 tran phu, phuong minh an, thanh pho hoi an, quang nam, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/OldTownHoiAn1/800/600",
-      "https://picsum.photos/seed/OldTownHoiAn2/800/600",
-      "https://picsum.photos/seed/OldTownHoiAn3/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/OldTownHoiAn1/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/OldTownHoiAn2/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/OldTownHoiAn3/800/600",
+        "displayOrder": 3
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Phòng Gym",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Spa & Massage",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Phong Nha River House",
+    "description": "Nhà gỗ ven sông Son, yên bình thư thái, ngắm núi non hùng vĩ.",
+    "price": 1200000,
+    "priceUnit": "VND",
+    "area": 80,
+    "maxGuestCount": 4,
+    "quantity": 1,
+    "averageRating": 4.7,
+    "isActive": true,
+    "ownerEmail": "caotan@test.com",
     "typeCode": "house",
-    "loc": {
-      "name": "Phong Nha River House",
-      "description": "Nhà gỗ ven sông Son, yên bình thư thái, ngắm núi non hùng vĩ.",
-      "price": 1200000,
-      "priceUnit": "VND",
-      "area": 80,
-      "maxGuestCount": 4,
-      "quantity": 1,
-      "averageRating": 4.7
-    },
     "addr": {
-      "normalFullAddress": "Phong Nha, Bố Trạch, Quảng Bình",
       "fullAddress": "Xã Sơn Trạch (Phong Nha), Huyện Bố Trạch, Quảng Bình, Việt Nam",
       "province": "Quảng Bình",
       "district": "Bố Trạch",
-      "region": "Miền Trung",
       "country": "Việt Nam",
       "lat": 17.594244,
-      "lng": 106.285305
+      "lng": 106.285305,
+      "normalFullAddress": "xa son trach phong nha, huyen bo trach, quang binh, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/PhongNhaRiver1/800/600",
-      "https://picsum.photos/seed/PhongNhaRiver2/800/600",
-      "https://picsum.photos/seed/PhongNhaRiver3/800/600",
-      "https://picsum.photos/seed/PhongNhaRiver4/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/PhongNhaRiver1/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/PhongNhaRiver2/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/PhongNhaRiver3/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/PhongNhaRiver4/800/600",
+        "displayOrder": 4
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Wifi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Spa & Massage",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Lo Lo Chai Homestay",
+    "description": "Trải nghiệm văn hóa người Lô Lô dưới chân Cột cờ Lũng Cú.",
+    "price": 800000,
+    "priceUnit": "VND",
+    "area": 30,
+    "maxGuestCount": 4,
+    "quantity": 5,
+    "averageRating": 4.8,
+    "isActive": true,
+    "ownerEmail": "owner@test.com",
     "typeCode": "homestay",
-    "loc": {
-      "name": "Lo Lo Chai Homestay",
-      "description": "Trải nghiệm văn hóa người Lô Lô dưới chân Cột cờ Lũng Cú.",
-      "price": 800000,
-      "priceUnit": "VND",
-      "area": 30,
-      "maxGuestCount": 4,
-      "quantity": 5,
-      "averageRating": 4.8
-    },
     "addr": {
-      "normalFullAddress": "Bản Lô Lô Chải, Lũng Cú, Đồng Văn, Hà Giang",
       "fullAddress": "Bản Lô Lô Chải, Xã Lũng Cú, Huyện Đồng Văn, Hà Giang, Việt Nam",
       "province": "Hà Giang",
       "district": "Đồng Văn",
-      "region": "Miền Bắc",
       "country": "Việt Nam",
       "lat": 23.364369,
-      "lng": 105.30984
+      "lng": 105.30984,
+      "normalFullAddress": "ban lo lo chai, xa lung cu, huyen dong van, ha giang, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/LoLoChai1/800/600",
-      "https://picsum.photos/seed/LoLoChai2/800/600",
-      "https://picsum.photos/seed/LoLoChai3/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/LoLoChai1/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/LoLoChai2/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/LoLoChai3/800/600",
+        "displayOrder": 3
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Mai Chau Nature Lodge",
+    "description": "Nằm giữa thung lũng Bản Lác, hòa mình vào thiên nhiên.",
+    "price": 1000000,
+    "priceUnit": "VND",
+    "area": 35,
+    "maxGuestCount": 2,
+    "quantity": 10,
+    "averageRating": 4.7,
+    "isActive": true,
+    "ownerEmail": "caotan@test.com",
     "typeCode": "homestay",
-    "loc": {
-      "name": "Mai Chau Nature Lodge",
-      "description": "Nằm giữa thung lũng Bản Lác, hòa mình vào thiên nhiên.",
-      "price": 1000000,
-      "priceUnit": "VND",
-      "area": 35,
-      "maxGuestCount": 2,
-      "quantity": 10,
-      "averageRating": 4.7
-    },
     "addr": {
-      "normalFullAddress": "Bản Lác, Mai Châu, Hòa Bình",
       "fullAddress": "Bản Lác, Thị trấn Mai Châu, Huyện Mai Châu, Hòa Bình, Việt Nam",
       "province": "Hòa Bình",
       "district": "Mai Châu",
-      "region": "Miền Bắc",
       "country": "Việt Nam",
       "lat": 20.653647,
-      "lng": 105.067039
+      "lng": 105.067039,
+      "normalFullAddress": "ban lac, thi tran mai chau, huyen mai chau, hoa binh, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/MaiChauNature1/800/600",
-      "https://picsum.photos/seed/MaiChauNature2/800/600",
-      "https://picsum.photos/seed/MaiChauNature3/800/600",
-      "https://picsum.photos/seed/MaiChauNature4/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/MaiChauNature1/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/MaiChauNature2/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/MaiChauNature3/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/MaiChauNature4/800/600",
+        "displayOrder": 4
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Wifi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Phòng Gym",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Spa & Massage",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Dalat Camp",
+    "description": "Khu cắm trại acoustic lãng mạn giữa rừng thông.",
+    "price": 1100000,
+    "priceUnit": "VND",
+    "area": 250,
+    "maxGuestCount": 4,
+    "quantity": 12,
+    "averageRating": 4.9,
+    "isActive": true,
+    "ownerEmail": "owner@test.com",
     "typeCode": "camping",
-    "loc": {
-      "name": "Da Lat Camp",
-      "description": "Khu cắm trại acoustic lãng mạn giữa rừng thông.",
-      "price": 1100000,
-      "priceUnit": "VND",
-      "area": 250,
-      "maxGuestCount": 4,
-      "quantity": 12,
-      "averageRating": 4.9
-    },
     "addr": {
-      "normalFullAddress": "Xã Lát, Lạc Dương, Lâm Đồng",
       "fullAddress": "Khu C, Thung Lũng Vàng, Xã Lát, Lạc Dương, Lâm Đồng, Việt Nam",
       "province": "Lâm Đồng",
       "district": "Lạc Dương",
-      "region": "Tây Nguyên",
       "country": "Việt Nam",
       "lat": 12.006523,
-      "lng": 108.343202
+      "lng": 108.343202,
+      "normalFullAddress": "khu c, thung lung vang, xa lat, lac duong, lam dong, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/DaLatCamp1/800/600",
-      "https://picsum.photos/seed/DaLatCamp2/800/600",
-      "https://picsum.photos/seed/DaLatCamp3/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/DaLatCamp1/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/DaLatCamp2/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/DaLatCamp3/800/600",
+        "displayOrder": 3
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bữa sáng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "Six Senses Con Dao",
+    "description": "Khu nghỉ dưỡng sang trọng giữa vẻ hoang sơ của Côn Đảo.",
+    "price": 16000000,
+    "priceUnit": "VND",
+    "area": 300,
+    "maxGuestCount": 2,
+    "quantity": 50,
+    "averageRating": 5,
+    "isActive": true,
+    "ownerEmail": "caotan@test.com",
     "typeCode": "resort",
-    "loc": {
-      "name": "Six Senses Con Dao",
-      "description": "Khu nghỉ dưỡng sang trọng giữa vẻ hoang sơ của Côn Đảo.",
-      "price": 16000000,
-      "priceUnit": "VND",
-      "area": 300,
-      "maxGuestCount": 2,
-      "quantity": 50,
-      "averageRating": 5
-    },
     "addr": {
-      "normalFullAddress": "Bãi Đất Dốc, Côn Đảo, Bà Rịa - Vũng Tàu",
       "fullAddress": "Bãi Đất Dốc, Thị trấn Côn Đảo, Huyện Côn Đảo, Bà Rịa - Vũng Tàu, Việt Nam",
       "province": "Bà Rịa - Vũng Tàu",
       "district": "Côn Đảo",
-      "region": "Miền Nam",
       "country": "Việt Nam",
       "lat": 8.700931,
-      "lng": 106.633948
+      "lng": 106.633948,
+      "normalFullAddress": "bai dat doc, thi tran con dao, huyen con dao, ba ria vung tau, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/SixSensesConDao1/800/600",
-      "https://picsum.photos/seed/SixSensesConDao2/800/600",
-      "https://picsum.photos/seed/SixSensesConDao3/800/600",
-      "https://picsum.photos/seed/SixSensesConDao4/800/600",
-      "https://picsum.photos/seed/SixSensesConDao5/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SixSensesConDao1/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SixSensesConDao2/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SixSensesConDao3/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SixSensesConDao4/800/600",
+        "displayOrder": 4
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/SixSensesConDao5/800/600",
+        "displayOrder": 5
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Wifi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   },
   {
+    "name": "The Ocean Villas Danang",
+    "description": "Biệt thự sát bãi biển Đà Nẵng, thiết kế không gian mở.",
+    "price": 6500000,
+    "priceUnit": "VND",
+    "area": 320,
+    "maxGuestCount": 8,
+    "quantity": 80,
+    "averageRating": 4.7,
+    "isActive": true,
+    "ownerEmail": "owner@test.com",
     "typeCode": "villa",
-    "loc": {
-      "name": "The Ocean Villas Danang",
-      "description": "Biệt thự sát bãi biển Đà Nẵng, thiết kế không gian mở.",
-      "price": 6500000,
-      "priceUnit": "VND",
-      "area": 320,
-      "maxGuestCount": 8,
-      "quantity": 80,
-      "averageRating": 4.7
-    },
     "addr": {
-      "normalFullAddress": "Hòa Hải, Ngũ Hành Sơn, Đà Nẵng",
       "fullAddress": "Đường Trường Sa, Hòa Hải, Ngũ Hành Sơn, Đà Nẵng, Việt Nam",
       "province": "Đà Nẵng",
       "district": "Ngũ Hành Sơn",
-      "region": "Miền Trung",
       "country": "Việt Nam",
       "lat": 15.974841,
-      "lng": 108.281176
+      "lng": 108.281176,
+      "normalFullAddress": "duong truong sa, hoa hai, ngu hanh son, da nang, viet nam"
     },
-    "mediaUrls": [
-      "https://picsum.photos/seed/OceanVillas1/800/600",
-      "https://picsum.photos/seed/OceanVillas2/800/600",
-      "https://picsum.photos/seed/OceanVillas3/800/600",
-      "https://picsum.photos/seed/OceanVillas4/800/600"
+    "media": [
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/OceanVillas1/800/600",
+        "displayOrder": 1
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/OceanVillas2/800/600",
+        "displayOrder": 2
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/OceanVillas3/800/600",
+        "displayOrder": 3
+      },
+      {
+        "type": "IMAGE",
+        "url": "https://picsum.photos/seed/OceanVillas4/800/600",
+        "displayOrder": 4
+      }
+    ],
+    "services": [
+      {
+        "serviceName": "Wifi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Hồ bơi",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Bãi đỗ xe",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Phòng Gym",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      },
+      {
+        "serviceName": "Dịch vụ dọn phòng",
+        "price": null,
+        "priceUnit": null,
+        "isFree": true,
+        "isActive": true
+      }
     ]
   }
 ]

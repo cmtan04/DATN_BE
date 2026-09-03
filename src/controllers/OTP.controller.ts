@@ -16,7 +16,7 @@ export class OtpController {
     if (!payload.email) {
       throw new BadRequestException('Vui lòng cung cấp email hợp lệ!');
     }
-    return this.otpService.sendOtp(payload.email);
+    return await this.otpService.sendOtp(payload.email);
   }
 
   @Post('verify')

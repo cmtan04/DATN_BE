@@ -1,3 +1,4 @@
+import { AdminLocationListResponseDto } from '@/dtos/admin/location.dto';
 import { BookingStatus, PaymentStatus } from '@/assets/enum/payment.enum';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
@@ -131,4 +132,108 @@ export class CancelBookingResponseDto {
 
   @ApiProperty({ description: 'Thông báo', example: 'Hủy booking thành công' })
   message: string;
+}
+
+export class GetUserBookingsRequestDto {
+  @ApiProperty({ description: 'Số trang', example: 1, required: false })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  page?: number = 1;
+
+  @ApiProperty({
+    description: 'Số lượng bản ghi mỗi trang',
+    example: 6,
+    required: false,
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  limit?: number = 6;
+
+  @ApiProperty({
+    description: 'Trạng thái đặt phòng',
+    example: 2,
+    required: false,
+    enum: BookingStatus,
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  status?: BookingStatus;
+
+  @ApiProperty({
+    description: 'Từ khóa tìm kiếm (tên KS, mã phòng)',
+    example: 'Hotel',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  search?: string;
+}
+
+export interface RawBookingData {
+  id: number;
+  bookingCode: string;
+  startDate: Date;
+  endDate: Date;
+  roomNumber: number;
+  note: string;
+  status: BookingStatus;
+  totalAmount: number;
+  currency: string;
+  createdAt: Date;
+  locationId: number;
+  locationName: string;
+  price: number;
+  priceUnit: string;
+  area: number;
+  fullAddress: string;
+  thumbnailUrl: string;
+}
+
+export class LocationSummaryDto {
+  id: number;
+  name: string;
+  price: number;
+  priceUnit: string;
+  area: number;
+  address: string;
+  thumbnailUrl: string;
+}
+
+export class UserBookingItemDto {
+  id: number;
+  bookingCode: string;
+  startDate: Date;
+  endDate: Date;
+  roomNumber: number;
+  note?: string;
+  status: BookingStatus;
+  totalAmount: number;
+  currency: string;
+  createdAt: Date;
+  location: LocationSummaryDto;
+}
+
+export class GetUserBookingsMetaDto {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
+export class GetUserBookingsSummaryDto {
+  allCount: number;
+  confirmedCount: number;
+  completedCount: number;
+  cancelledCount: number;
+}
+
+export class GetUserBookingsResponseDto {
+  data: UserBookingItemDto[];
+  meta: GetUserBookingsMetaDto;
+  summary: GetUserBookingsSummaryDto;
 }

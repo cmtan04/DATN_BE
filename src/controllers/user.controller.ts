@@ -1,7 +1,5 @@
-import { Body, Controller, Get, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
 import {
-  GetUserBookingsRequestDto,
-  GetUserBookingsResponseDto,
   UpdateCurrentUserRequestDto,
   User as UserDto,
 } from '@/dtos/user/user.dto';
@@ -16,14 +14,6 @@ export class UserController {
   @Get('me')
   public async getCurrentUser(@User('id') userId: number): Promise<UserDto> {
     return await this.userService.getCurrentUser(userId);
-  }
-
-  @Get('me/bookings')
-  public async getUserBookings(
-    @User('id') userId: number,
-    @Query() query: GetUserBookingsRequestDto,
-  ): Promise<GetUserBookingsResponseDto> {
-    return await this.userService.getUserBookings(userId, query);
   }
 
   @Patch('me')

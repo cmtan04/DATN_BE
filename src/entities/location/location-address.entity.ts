@@ -35,7 +35,6 @@ export class TBLocationAddress extends BaseEntity {
   })
   country: string;
 
-
   @Column({
     type: 'decimal',
     precision: 12,

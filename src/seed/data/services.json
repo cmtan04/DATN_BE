@@ -3,13 +3,34 @@
     "name": "Wifi"
   },
   {
+    "name": "Giu xe"
+  },
+  {
+    "name": "Dien"
+  },
+  {
+    "name": "Nuoc"
+  },
+  {
+    "name": "May lanh"
+  },
+  {
+    "name": "May giat"
+  },
+  {
+    "name": "Amee"
+  },
+  {
+    "name": "Wifi miễn phí"
+  },
+  {
     "name": "Hồ bơi"
   },
   {
     "name": "Bãi đỗ xe"
   },
   {
-    "name": "Bữa sáng"
+    "name": "Bữa sáng miễn phí"
   },
   {
     "name": "Phòng Gym"
@@ -19,5 +40,11 @@
   },
   {
     "name": "Dịch vụ dọn phòng"
+  },
+  {
+    "name": "Bữa sáng"
+  },
+  {
+    "name": "Xe đạp"
   }
 ]

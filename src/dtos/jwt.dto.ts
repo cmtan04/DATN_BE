@@ -5,4 +5,5 @@ export interface JwtPayload {
   status: number; // UserStatus
   role: number; // UserRole
   isEmailVerified: boolean;
+  jti?: string; // JWT ID — dùng để blacklist khi logout
 }

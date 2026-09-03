@@ -1,0 +1,44 @@
+[
+  {
+    "name": "Nhà Nghỉ",
+    "code": "guesthouse",
+    "typeUnit": "phòng",
+    "canHaveMultiRoom": true
+  },
+  {
+    "name": "Khách Sạn",
+    "code": "hotel",
+    "typeUnit": "phòng",
+    "canHaveMultiRoom": true
+  },
+  {
+    "name": "Nhà Nguyên Căn",
+    "code": "house",
+    "typeUnit": "căn",
+    "canHaveMultiRoom": false
+  },
+  {
+    "name": "Homestay",
+    "code": "homestay",
+    "typeUnit": "phòng",
+    "canHaveMultiRoom": true
+  },
+  {
+    "name": "Khu camping",
+    "code": "camping",
+    "typeUnit": "lều",
+    "canHaveMultiRoom": true
+  },
+  {
+    "name": "Resort",
+    "code": "resort",
+    "typeUnit": "căn",
+    "canHaveMultiRoom": true
+  },
+  {
+    "name": "Villa",
+    "code": "villa",
+    "typeUnit": "căn",
+    "canHaveMultiRoom": false
+  }
+]

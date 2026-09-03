@@ -5,6 +5,8 @@ import {
   CreateBookingResponseDto,
   GetAvailableRoomsRequestDto,
   GetAvailableRoomsResponseDto,
+  GetUserBookingsRequestDto,
+  GetUserBookingsResponseDto,
 } from '@/dtos/booking.dto';
 import { Public } from '@/common/decorators/public.decorator';
 import { User } from '@/common/decorators/user.decorator';
@@ -19,6 +21,14 @@ export class BookingController {
     @Query() payload: GetAvailableRoomsRequestDto,
   ): Promise<GetAvailableRoomsResponseDto> {
     return await this.bookingService.getAvailableRooms(payload);
+  }
+
+  @Get('me')
+  public async getUserBookings(
+    @User('id') userId: number,
+    @Query() query: GetUserBookingsRequestDto,
+  ): Promise<GetUserBookingsResponseDto> {
+    return await this.bookingService.getUserBookings(userId, query);
   }
 
   @Post()

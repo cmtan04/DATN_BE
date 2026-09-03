@@ -10,11 +10,7 @@ import { LocationModule } from './location.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      TBBooking,
-      TBLocationAvailability,
-      TBLocation,
-    ]),
+    TypeOrmModule.forFeature([TBBooking, TBLocationAvailability, TBLocation]),
     LocationModule,
   ],
   controllers: [BookingController],
