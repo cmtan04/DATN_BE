@@ -410,26 +410,15 @@ npm run seed:undo
 This project was developed as a **Graduation Thesis (Đồ án tốt nghiệp - DATN)**.
 
 ### Student Information
-- **Student Name**: Cao Minh Tan
-- **Student ID**: *(Your Student ID)*
+- **Student Name**: Cao Manh Tan
+- **Student ID**: *20225227*
 - **Major / Faculty**: Software Engineering / Information Technology
-- **University**: *(Your University Name)*
+- **University**: *Ha Noi University of Science & Technology (HUST)*
 - **GitHub**: [@cmtan04](https://github.com/cmtan04)
-- **Email**: *(Your Contact Email)*
-
-### Academic Supervisor
-- **Advisor**: *(Supervisor / Instructor Name)*
+- **Email**: *tan.cm225227@sis.hust.edu.vn*
 
 ---
 
-## 🔗 Related Projects
-
-The complete platform ecosystem consists of the following repositories:
-
-- **Frontend Web Application**: [GitHub Repository Placeholder](https://github.com/your-username/fe-datn)
-- **Mobile Client Application**: [GitHub Repository Placeholder](https://github.com/your-username/mobile-datn)
-
----
 
 ## 📄 License
 
