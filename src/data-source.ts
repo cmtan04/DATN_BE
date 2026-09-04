@@ -27,6 +27,10 @@ const baseDataSourceOptions: DataSourceOptions = {
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
+  ssl: {
+    ca: process.env.DB_CA,
+    rejectUnauthorized: true,
+  },
   charset: 'utf8mb4',
   timezone: 'Z',
   entities: [

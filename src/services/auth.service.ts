@@ -53,6 +53,7 @@ export class AuthService {
         password: await this.hashPassword(payload.password),
         userRole: DEFAULT_USER_ROLE,
         status: UserStatus.ACTIVE,
+        isEmailVerified: true, // Tam thoi de la true, sau nay se dung OTP
       },
       {
         fullName: payload.fullName,
